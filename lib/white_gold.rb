@@ -1,10 +1,12 @@
 require_relative 'white_gold/tgui-abi'
+require_relative 'white_gold/path/numeric.path'
 
 class Page
 
   SUPPORTED_WIDGETS = {
     button: Tgui::Button,
     checkbox: Tgui::CheckBox,
+    editbox: Tgui::EditBox,
     color_picker: Tgui::ColorPicker,
     group: Tgui::Group,
   }.freeze

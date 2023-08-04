@@ -1,7 +1,8 @@
 require 'fiddle/import'
-require_relative 'extension'
+require_relative 'path/fiddle-pointer.path'
 require_relative 'tgui-config'
 require_relative 'extern_object'
+require_relative 'extern_enum'
 
 class Tgui
 
@@ -30,6 +31,14 @@ class Tgui
       'float y'
     ]
   end
+
+  ShowEffectType = enum :fade, :scale, :slide_to_right, :slide_to_left, :slide_to_bottom,
+    :slide_to_top, slide_from_left: :slide_to_right, slide_from_right: :slide_to_left,
+    slide_from_top: :slide_to_bottom, slide_from_bottom: :slide_to_top
+
+  AnimationType = enum :move, :resize, :opacity
+
+  TextStyle = bit_enum :regular, :bold, :italic, :underlined, :strike_through
 
   class Util < ExternObject
   end
@@ -61,6 +70,81 @@ class Tgui
 
     def self.free_block_caller id
       @@callback_storage.delete(id)
+    end
+  end
+
+  class SignalBool < Signal
+    def connect &b
+      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |int|
+        b.(int.odd?)
+      end
+      id = Private.connect(@pointer, block_caller)
+      @@callback_storage[id] = block_caller
+      return id
+    end
+  end
+
+  class SignalString < Signal
+    def connect &b
+      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |str|
+        b.(str.parse('char32_t'))
+      end
+      id = Private.connect(@pointer, block_caller)
+      @@callback_storage[id] = block_caller
+      return id
+    end
+  end
+
+  class SignalColor < Signal
+    def connect &b
+      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |ptr|
+        b.(ptr.parse('Color'))
+      end
+      id = Private.connect(@pointer, block_caller)
+      @@callback_storage[id] = block_caller
+      return id
+    end
+  end
+
+  class SignalPointer < Signal
+    def connect &b
+      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP], &b)
+      id = Private.connect(@pointer, block_caller)
+      @@callback_storage[id] = block_caller
+      return id
+    end
+  end
+
+  class SignalVector2f < Signal
+    def connect &b
+      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |ptr|
+        b.(ptr.parse('Vector2f'))
+      end
+      id = Private.connect(@pointer, block_caller)
+      @@callback_storage[id] = block_caller
+      return id
+    end
+  end
+
+  class SignalShowEffect < Signal
+    def connect &b
+      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT, Fiddle::TYPE_INT]) do |show_effect_type, shown|
+        b.(ShowEffectType[int], shown.odd?)
+      end
+      id = Private.connect(@pointer, block_caller)
+      @@callback_storage[id] = block_caller
+      return id
+    end
+  end
+
+  class SignalAnimationType < Signal
+    def connect &b
+      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |animation_type|
+        b.(AnimationType[animation_type])
+      end
+      id = Private.connect(@pointer, block_caller)
+      @@callback_storage[id] = block_caller
+      return id
     end
   end
 
@@ -169,6 +253,15 @@ class Tgui
       return nil if widget.null?
       type = Widget.get_type widget
       Tgui.const_get(type).new pointer: widget
+    end
+
+    def get_widgets
+      widgets = []
+      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP]) do |pointer, type|
+        widgets << Tgui.const_get(type.utf32_to_s).new(pointer:)
+      end
+      Private.get_widgets @pointer, block_caller
+      return widgets
     end
   end
 

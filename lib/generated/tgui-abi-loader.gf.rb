@@ -12,6 +12,13 @@ class Tgui
     extern 'void* ABI_Color_fade(Color* self, float fade)'
     extern 'int ABI_Signal_connect(Signal* signal, void(*f)())'
     extern 'int ABI_Signal_disconnect(Signal* signal, int f)'
+    extern 'int ABI_SignalString_connect(SignalString* signal, void(*f)(const char32_t*))'
+    extern 'int ABI_SignalBool_connect(SignalBool* signal, void(*f)(int))'
+    extern 'int ABI_SignalPointer_connect(SignalTyped<void*>* signal, void(*f)(void*))'
+    extern 'int ABI_SignalColor_connect(SignalColor* self, void(*f)(void*))'
+    extern 'int ABI_SignalVector2f_connect(SignalVector2f* self, void(*f)(void*))'
+    extern 'int ABI_SignalShowEffect_connect(SignalShowEffect* self, void(*f)(int, int))'
+    extern 'int ABI_SignalAnimationType_connect(SignalAnimationType* self, void(*f)(int))'
     extern 'void* ABI_Window_new()'
     extern 'void ABI_Window_close(sf::WindowBase* self)'
     extern 'int ABI_Window_isOpen(sf::WindowBase* self)'
@@ -117,6 +124,7 @@ class Tgui
     extern 'void* ABI_RadioButton_onUncheck(RadioButton::Ptr* self)'
     extern 'void* ABI_RadioButton_onChange(RadioButton::Ptr* self)'
     extern 'void* ABI_CheckBox_new()'
+    extern 'void ABI_Container_get_widgets(Container::Ptr* self, void(*f)(Widget::Ptr* widget, const char32_t* type))'
     extern 'void ABI_Container_add(Container::Ptr* self, Widget::Ptr* widget, char* name)'
     extern 'void* ABI_Container_get(Container::Ptr* self, char* name)'
     extern 'int ABI_Container_remove(Container::Ptr* self, Widget::Ptr* widget)'
@@ -163,6 +171,7 @@ class Tgui
     extern 'void* ABI_ChildWindow_onMinimize(ChildWindow::Ptr* self)'
     extern 'void* ABI_ChildWindow_onMaximize(ChildWindow::Ptr* self)'
     extern 'void* ABI_ChildWindow_onEscapeKeyPress(ChildWindow::Ptr* self)'
+    extern 'void* ABI_ChildWindow_onClosing(ChildWindow::Ptr* self)'
     extern 'void* ABI_Group_new()'
     extern 'void* ABI_ColorPicker_new()'
     extern 'void ABI_ColorPicker_setColor(ColorPicker::Ptr* self, Color* color)'
@@ -187,6 +196,34 @@ class Tgui
   class Signal
     module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_Signal_connect(*a); end; end
     module Private; def self.disconnect(*a);    Abi.call_arg_map! a; Abi.ABI_Signal_disconnect(*a).odd?; end; end
+  end
+
+  class SignalString
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalString_connect(*a); end; end
+  end
+
+  class SignalBool
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalBool_connect(*a); end; end
+  end
+
+  class SignalPointer
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalPointer_connect(*a); end; end
+  end
+
+  class SignalColor
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalColor_connect(*a); end; end
+  end
+
+  class SignalVector2f
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalVector2f_connect(*a); end; end
+  end
+
+  class SignalShowEffect
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalShowEffect_connect(*a); end; end
+  end
+
+  class SignalAnimationType
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalAnimationType_connect(*a); end; end
   end
 
   class Window
@@ -233,37 +270,37 @@ class Tgui
     def focusable?(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isFocusable(@pointer, *a).odd?; end
     def can_gain_focus?(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_canGainFocus(@pointer, *a).odd?; end
     def container?(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isContainer(@pointer, *a).odd?; end
-    def on_position_change(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_Widget_onPositionChange(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_position_change=(a);    signal = Signal.new pointer: Abi.ABI_Widget_onPositionChange(@pointer), autofree: false; signal.connect(&a); end
-    def on_size_change(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_Widget_onSizeChange(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_size_change=(a);    signal = Signal.new pointer: Abi.ABI_Widget_onSizeChange(@pointer), autofree: false; signal.connect(&a); end
-    def on_focus(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_Widget_onFocus(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_focus=(a);    signal = Signal.new pointer: Abi.ABI_Widget_onFocus(@pointer), autofree: false; signal.connect(&a); end
-    def on_unfocus(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_Widget_onUnfocus(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_unfocus=(a);    signal = Signal.new pointer: Abi.ABI_Widget_onUnfocus(@pointer), autofree: false; signal.connect(&a); end
-    def on_mouse_enter(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_Widget_onMouseEnter(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_mouse_enter=(a);    signal = Signal.new pointer: Abi.ABI_Widget_onMouseEnter(@pointer), autofree: false; signal.connect(&a); end
-    def on_mouse_leave(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_Widget_onMouseLeave(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_mouse_leave=(a);    signal = Signal.new pointer: Abi.ABI_Widget_onMouseLeave(@pointer), autofree: false; signal.connect(&a); end
-    def on_show_effect_finish(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_Widget_onShowEffectFinish(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_show_effect_finish=(a);    signal = Signal.new pointer: Abi.ABI_Widget_onShowEffectFinish(@pointer), autofree: false; signal.connect(&a); end
-    def on_animation_finish(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_Widget_onAnimationFinish(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_animation_finish=(a);    signal = Signal.new pointer: Abi.ABI_Widget_onAnimationFinish(@pointer), autofree: false; signal.connect(&a); end
+    def on_position_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Widget_onPositionChange(@pointer, *a).parse('SignalVector2f'); block_given? ? signal.connect(&b) : signal; end
+    def on_position_change=(a);    signal = Abi.ABI_Widget_onPositionChange(@pointer).parse('SignalVector2f'); signal.connect(&a); end
+    def on_size_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Widget_onSizeChange(@pointer, *a).parse('SignalVector2f'); block_given? ? signal.connect(&b) : signal; end
+    def on_size_change=(a);    signal = Abi.ABI_Widget_onSizeChange(@pointer).parse('SignalVector2f'); signal.connect(&a); end
+    def on_focus(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Widget_onFocus(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_focus=(a);    signal = Abi.ABI_Widget_onFocus(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_unfocus(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Widget_onUnfocus(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_unfocus=(a);    signal = Abi.ABI_Widget_onUnfocus(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_mouse_enter(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Widget_onMouseEnter(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_mouse_enter=(a);    signal = Abi.ABI_Widget_onMouseEnter(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_mouse_leave(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Widget_onMouseLeave(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_mouse_leave=(a);    signal = Abi.ABI_Widget_onMouseLeave(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_show_effect_finish(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Widget_onShowEffectFinish(@pointer, *a).parse('SignalShowEffect'); block_given? ? signal.connect(&b) : signal; end
+    def on_show_effect_finish=(a);    signal = Abi.ABI_Widget_onShowEffectFinish(@pointer).parse('SignalShowEffect'); signal.connect(&a); end
+    def on_animation_finish(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Widget_onAnimationFinish(@pointer, *a).parse('SignalAnimationType'); block_given? ? signal.connect(&b) : signal; end
+    def on_animation_finish=(a);    signal = Abi.ABI_Widget_onAnimationFinish(@pointer).parse('SignalAnimationType'); signal.connect(&a); end
   end
 
   class ClickableWidget
-    def on_mouse_press(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_ClickableWidget_onMousePress(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_mouse_press=(a);    signal = Signal.new pointer: Abi.ABI_ClickableWidget_onMousePress(@pointer), autofree: false; signal.connect(&a); end
-    def on_mouse_release(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_ClickableWidget_onMouseRelease(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_mouse_release=(a);    signal = Signal.new pointer: Abi.ABI_ClickableWidget_onMouseRelease(@pointer), autofree: false; signal.connect(&a); end
-    def on_click(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_ClickableWidget_onClick(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_click=(a);    signal = Signal.new pointer: Abi.ABI_ClickableWidget_onClick(@pointer), autofree: false; signal.connect(&a); end
-    def on_right_mouse_press(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_ClickableWidget_onRightMousePress(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_right_mouse_press=(a);    signal = Signal.new pointer: Abi.ABI_ClickableWidget_onRightMousePress(@pointer), autofree: false; signal.connect(&a); end
-    def on_right_mouse_release(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_ClickableWidget_onRightMouseRelease(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_right_mouse_release=(a);    signal = Signal.new pointer: Abi.ABI_ClickableWidget_onRightMouseRelease(@pointer), autofree: false; signal.connect(&a); end
-    def on_right_click(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_ClickableWidget_onRightClick(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_right_click=(a);    signal = Signal.new pointer: Abi.ABI_ClickableWidget_onRightClick(@pointer), autofree: false; signal.connect(&a); end
+    def on_mouse_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ClickableWidget_onMousePress(@pointer, *a).parse('SignalVector2f'); block_given? ? signal.connect(&b) : signal; end
+    def on_mouse_press=(a);    signal = Abi.ABI_ClickableWidget_onMousePress(@pointer).parse('SignalVector2f'); signal.connect(&a); end
+    def on_mouse_release(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ClickableWidget_onMouseRelease(@pointer, *a).parse('SignalVector2f'); block_given? ? signal.connect(&b) : signal; end
+    def on_mouse_release=(a);    signal = Abi.ABI_ClickableWidget_onMouseRelease(@pointer).parse('SignalVector2f'); signal.connect(&a); end
+    def on_click(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ClickableWidget_onClick(@pointer, *a).parse('SignalVector2f'); block_given? ? signal.connect(&b) : signal; end
+    def on_click=(a);    signal = Abi.ABI_ClickableWidget_onClick(@pointer).parse('SignalVector2f'); signal.connect(&a); end
+    def on_right_mouse_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ClickableWidget_onRightMousePress(@pointer, *a).parse('SignalVector2f'); block_given? ? signal.connect(&b) : signal; end
+    def on_right_mouse_press=(a);    signal = Abi.ABI_ClickableWidget_onRightMousePress(@pointer).parse('SignalVector2f'); signal.connect(&a); end
+    def on_right_mouse_release(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ClickableWidget_onRightMouseRelease(@pointer, *a).parse('SignalVector2f'); block_given? ? signal.connect(&b) : signal; end
+    def on_right_mouse_release=(a);    signal = Abi.ABI_ClickableWidget_onRightMouseRelease(@pointer).parse('SignalVector2f'); signal.connect(&a); end
+    def on_right_click(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ClickableWidget_onRightClick(@pointer, *a).parse('SignalVector2f'); block_given? ? signal.connect(&b) : signal; end
+    def on_right_click=(a);    signal = Abi.ABI_ClickableWidget_onRightClick(@pointer).parse('SignalVector2f'); signal.connect(&a); end
   end
 
   class ButtonBase
@@ -274,8 +311,8 @@ class Tgui
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Button_new(*a)); end
     def text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Button_setText(@pointer, *a); end
     def text(*a);    Abi.call_arg_map! a; Abi.ABI_Button_getText(@pointer, *a).parse('char32_t'); end
-    def on_press(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_Button_onPress(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_press=(a);    signal = Signal.new pointer: Abi.ABI_Button_onPress(@pointer), autofree: false; signal.connect(&a); end
+    def on_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Button_onPress(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_press=(a);    signal = Abi.ABI_Button_onPress(@pointer).parse('Signal'); signal.connect(&a); end
   end
 
   class EditBox
@@ -300,12 +337,12 @@ class Tgui
     def caret_position(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getCaretPosition(@pointer, *a); end
     def suffix=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_EditBox_setSuffix(@pointer, *a); end
     def suffix(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getSuffix(@pointer, *a).parse('char32_t'); end
-    def on_text_change(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_EditBox_onTextChange(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_text_change=(a);    signal = Signal.new pointer: Abi.ABI_EditBox_onTextChange(@pointer), autofree: false; signal.connect(&a); end
-    def on_return_key_press(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_EditBox_onReturnKeyPress(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_return_key_press=(a);    signal = Signal.new pointer: Abi.ABI_EditBox_onReturnKeyPress(@pointer), autofree: false; signal.connect(&a); end
-    def on_return_or_unfocus(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_EditBox_onReturnOrUnfocus(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_return_or_unfocus=(a);    signal = Signal.new pointer: Abi.ABI_EditBox_onReturnOrUnfocus(@pointer), autofree: false; signal.connect(&a); end
+    def on_text_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_EditBox_onTextChange(@pointer, *a).parse('SignalString'); block_given? ? signal.connect(&b) : signal; end
+    def on_text_change=(a);    signal = Abi.ABI_EditBox_onTextChange(@pointer).parse('SignalString'); signal.connect(&a); end
+    def on_return_key_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_EditBox_onReturnKeyPress(@pointer, *a).parse('SignalString'); block_given? ? signal.connect(&b) : signal; end
+    def on_return_key_press=(a);    signal = Abi.ABI_EditBox_onReturnKeyPress(@pointer).parse('SignalString'); signal.connect(&a); end
+    def on_return_or_unfocus(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_EditBox_onReturnOrUnfocus(@pointer, *a).parse('SignalString'); block_given? ? signal.connect(&b) : signal; end
+    def on_return_or_unfocus=(a);    signal = Abi.ABI_EditBox_onReturnOrUnfocus(@pointer).parse('SignalString'); signal.connect(&a); end
   end
 
   class Label
@@ -336,9 +373,12 @@ class Tgui
     def checked?(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_isChecked(@pointer, *a).odd?; end
     def text_clickable=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_RadioButton_setTextClickable(@pointer, *a); end
     def text_clickable?(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_isTextClickable(@pointer, *a).odd?; end
-    def on_check(*a, &b);    Abi.call_arg_map! a; Abi.ABI_RadioButton_onCheck(@pointer, *a).parse('Signal'); end
-    def on_uncheck(*a, &b);    Abi.call_arg_map! a; Abi.ABI_RadioButton_onUncheck(@pointer, *a).parse('Signal'); end
-    def on_change(*a, &b);    Abi.call_arg_map! a; Abi.ABI_RadioButton_onChange(@pointer, *a).parse('Signal'); end
+    def on_check(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_RadioButton_onCheck(@pointer, *a).parse('SignalBool'); block_given? ? signal.connect(&b) : signal; end
+    def on_check=(a);    signal = Abi.ABI_RadioButton_onCheck(@pointer).parse('SignalBool'); signal.connect(&a); end
+    def on_uncheck(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_RadioButton_onUncheck(@pointer, *a).parse('SignalBool'); block_given? ? signal.connect(&b) : signal; end
+    def on_uncheck=(a);    signal = Abi.ABI_RadioButton_onUncheck(@pointer).parse('SignalBool'); signal.connect(&a); end
+    def on_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_RadioButton_onChange(@pointer, *a).parse('SignalBool'); block_given? ? signal.connect(&b) : signal; end
+    def on_change=(a);    signal = Abi.ABI_RadioButton_onChange(@pointer).parse('SignalBool'); signal.connect(&a); end
   end
 
   class CheckBox
@@ -346,6 +386,7 @@ class Tgui
   end
 
   class Container
+    module Private; def self.get_widgets(*a);    Abi.call_arg_map! a; Abi.ABI_Container_get_widgets(*a); end; end
     def add(*a, &b);    Abi.call_arg_map! a; Abi.ABI_Container_add(@pointer, *a); end
     module Private; def self.get(*a);    Abi.call_arg_map! a; Abi.ABI_Container_get(*a).parse('Widget::Ptr'); end; end
     def remove(*a, &b);    Abi.call_arg_map! a; Abi.ABI_Container_remove(@pointer, *a).odd?; end
@@ -390,11 +431,18 @@ class Tgui
     def position_locked?(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isPositionLocked(@pointer, *a).odd?; end
     def keep_in_parent=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ChildWindow_setKeepInParent(@pointer, *a); end
     def kept_in_parent?(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isKeptInParent(@pointer, *a).odd?; end
-    def on_mouse_press(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMousePress(@pointer, *a).parse('Signal'); end
-    def on_close(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onClose(@pointer, *a).parse('Signal'); end
-    def on_minimize(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMinimize(@pointer, *a).parse('Signal'); end
-    def on_maximize(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMaximize(@pointer, *a).parse('Signal'); end
-    def on_escape_key_press(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onEscapeKeyPress(@pointer, *a).parse('Signal'); end
+    def on_mouse_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ChildWindow_onMousePress(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_mouse_press=(a);    signal = Abi.ABI_ChildWindow_onMousePress(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_close(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ChildWindow_onClose(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_close=(a);    signal = Abi.ABI_ChildWindow_onClose(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_minimize(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ChildWindow_onMinimize(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_minimize=(a);    signal = Abi.ABI_ChildWindow_onMinimize(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_maximize(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ChildWindow_onMaximize(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_maximize=(a);    signal = Abi.ABI_ChildWindow_onMaximize(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_escape_key_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ChildWindow_onEscapeKeyPress(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_escape_key_press=(a);    signal = Abi.ABI_ChildWindow_onEscapeKeyPress(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_closing(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ChildWindow_onClosing(@pointer, *a).parse('SignalTyped<bool*>'); block_given? ? signal.connect(&b) : signal; end
+    def on_closing=(a);    signal = Abi.ABI_ChildWindow_onClosing(@pointer).parse('SignalTyped<bool*>'); signal.connect(&a); end
   end
 
   class Group
@@ -405,9 +453,9 @@ class Tgui
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ColorPicker_new(*a)); end
     def color=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ColorPicker_setColor(@pointer, *a); end
     def color(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_getColor(@pointer, *a).parse('Color'); end
-    def on_color_change(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_ColorPicker_onColorChange(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_color_change=(a);    signal = Signal.new pointer: Abi.ABI_ColorPicker_onColorChange(@pointer), autofree: false; signal.connect(&a); end
-    def on_ok_press(*a, &b);   Abi.call_arg_map! a; signal = Signal.new pointer: Abi.ABI_ColorPicker_onOkPress(@pointer, *a), autofree: false; block_given? ? signal.connect(&b) : signal; end
-    def on_ok_press=(a);    signal = Signal.new pointer: Abi.ABI_ColorPicker_onOkPress(@pointer), autofree: false; signal.connect(&a); end
+    def on_color_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ColorPicker_onColorChange(@pointer, *a).parse('SignalColor'); block_given? ? signal.connect(&b) : signal; end
+    def on_color_change=(a);    signal = Abi.ABI_ColorPicker_onColorChange(@pointer).parse('SignalColor'); signal.connect(&a); end
+    def on_ok_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ColorPicker_onOkPress(@pointer, *a).parse('SignalColor'); block_given? ? signal.connect(&b) : signal; end
+    def on_ok_press=(a);    signal = Abi.ABI_ColorPicker_onOkPress(@pointer).parse('SignalColor'); signal.connect(&a); end
   end
 end

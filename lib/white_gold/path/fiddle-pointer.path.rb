@@ -6,10 +6,14 @@ module Fiddle
         utf32_to_s
       when 'Vector2f'
         v = Tgui::Abi::Vector2f.new self
-        ObjectSpace.define_finalizer(v, ExternObject.finalizer(self))
+        ObjectSpace.define_finalizer(v, Tgui::ExternObject.finalizer(self))
         v
       when 'Color'
         Tgui::Color.new pointer: self
+      when /^SignalTyped.*/
+        Tgui::SignalPointer.new pointer: self, autofree: false
+      when /^Signal\w*/
+        Tgui.const_get(type).new pointer: self, autofree: false
       else
         self
       end
@@ -26,15 +30,17 @@ module Fiddle
       raise "deleted string!" if a[0] == 572653601
       a.pack("N*").encode("UTF-8", "UTF-32BE")
     end
-  end
-end
 
-class Numeric
-  def pc
-    "#{self}%"
-  end
-
-  def px
-    "#{self}"
+    def set value
+      case value
+      when Integer
+        self[0] = value
+      when true
+        self[0] = 1
+      when false
+        self[0] = 0
+      else raise "Invalid argument #{value}"
+      end
+    end
   end
 end
