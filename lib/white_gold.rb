@@ -5,15 +5,25 @@ class Page
 
   SUPPORTED_WIDGETS = {
     button: Tgui::Button,
+    radio: Tgui::RadioButton,
     checkbox: Tgui::CheckBox,
     editbox: Tgui::EditBox,
+    combobox: Tgui::ComboBox,
     color_picker: Tgui::ColorPicker,
+    horl: Tgui::HorizontalLayout,
+    verl: Tgui::VerticalLayout,
+    horw: Tgui::HorizontalWrap,
     group: Tgui::Group,
+    rgroup: Tgui::RadioButtonGroup,
+    grid: Tgui::Grid,
   }.freeze
 
   def initialize tgui
     @tgui = tgui
     @callbacks = {}
+    @custom_data = Hash.new do |h, name|
+      h[name] = {}
+    end
     @main_container = Tgui::Group.new
     @main_container.size = [100.pc, 100.pc]
     @top_container = @main_container
@@ -24,7 +34,7 @@ class Page
     return "#{object_id}"
   end
 
-  attr :main_container, :callbacks
+  attr :main_container, :callbacks, :custom_data
 
   def go page
     @tgui.next_page_id = page
@@ -55,10 +65,14 @@ class Page
     if c < Tgui::Container
       define_method m do |name = nil, **na, &b|
         w = c.new
-        na.each do |k, v|
-          w.send("#{k}=", v)
-        end
         @top_container.add w, (name || @names.next!).to_s
+        na.each do |k, v|
+          if w.respond_to? "#{k}="
+            w.send("#{k}=", v)
+          else
+            @top_container.send(k).send("[]=", w, v)
+          end
+        end
         if b
           @top_container, vice = w, @top_container
           b.call w
@@ -69,16 +83,28 @@ class Page
     else
       define_method m do |name = nil, **na, &b|
         w = c.new
-        na.each do |k, v|
-          w.send("#{k}=", v)
-        end
         @top_container.add w, (name || @names.next!).to_s
+        na.each do |k, v|
+          if w.respond_to? "#{k}="
+            w.send("#{k}=", v)
+          else
+            @top_container.send(k).send("[]=", w, v)
+          end
+        end
         if b
           b.call w
         end
         w
       end
     end
+  end
+
+  def respond_to? name
+    super || @top_container.respond_to?(name)
+  end
+
+  def method_missing *a, **na, &b
+    @top_container.send(*a, **na, &b)
   end
 end
 
@@ -124,12 +150,14 @@ class Tgui
       @gui.add page.main_container, "main_container"
       @current_page = page
       ExternObject.callback_storage = page.callbacks
+      ExternObject.data_storage = page.custom_data
       send(page_id)
     when Class
       page = @preserved_pages[page_id] = page_id.new self
       @gui.add page.main_container, "main_container"
       @current_page = page
       ExternObject.callback_storage = page.callbacks
+      ExternObject.data_storage = page.custom_data
       page.build
     end
   end
@@ -158,5 +186,13 @@ class Tgui
     define_method m do |*a, **na, &b|
       @current_page.send(m, *a, **na, &b)
     end
+  end
+
+  def respond_to? name
+    super || @current_page.respond_to?(name)
+  end
+
+  def method_missing *a, **na, &b
+    @current_page.send(*a, **na, &b)
   end
 end

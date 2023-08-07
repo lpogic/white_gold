@@ -12,6 +12,9 @@ class Tgui
       end
     end
 
+    def initialized
+    end
+
     attr :pointer
 
     def self.finalizer pointer
@@ -21,9 +24,14 @@ class Tgui
     end
 
     @@callback_storage = {}
+    @@data_storage = {}
 
     def self.callback_storage=(callback_storage)
       @@callback_storage = callback_storage
+    end
+
+    def self.data_storage=(data_storage)
+      @@data_storage = data_storage
     end
   end
 end

@@ -1,7 +1,21 @@
+require 'optparse'
 require 'fileutils'
+require_relative '../../tgui-update.config'
 
-TGUI_CABI_HPP = ARGV[0] || "../TGUI-ABI/include/TGUI/Abi/Cabi.hpp"
-TGUI_DLL = ARGV[1] || "../TGUI-ABI/bin/lib/Release/tgui.dll"
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: tgui-update.rb [options]"
+
+  opts.on("-c", "--compile", "Compile RGUI-ABI") do |v|
+    options[:compile] = v
+  end
+end.parse!
+
+if options[:compile]
+  system BUILD_TGUI_ABI
+else
+  puts "Skipping TGUI-ABI compilation"
+end
 
 loader_file = File.new("./lib/generated/tgui-abi-loader.gf.rb", "w")
 loader_file.write <<~RUBY_
@@ -46,7 +60,7 @@ File.new(TGUI_CABI_HPP).each_line do |line|
     when "C_ABI_TESTER"
       classes[lm[3]] << "def #{method_name.delete_prefix("is_") + "?"}(*a);    Abi.call_arg_map! a; Abi.#{function_name}(@pointer, *a)#{parser}; end"
     when "C_ABI_MAKE"
-      classes[lm[3]] << "def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.#{function_name}(*a)); end"
+      classes[lm[3]] << "def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.#{function_name}(*a)); initialized(); end"
     when "C_ABI_FREE"
       classes[lm[3]] << "def self.finalizer(pointer);    proc{ Abi.#{function_name}(pointer) }; end"
     when "C_ABI_RAW"

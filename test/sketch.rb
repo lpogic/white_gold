@@ -8,16 +8,25 @@ end
 
 class MyGui < Tgui
   def main_page
-    group :gr, width: 100.pc, height: 100.pc do
-      button :btn, text: "Color", position: [80.px, 0.px]
-      button text: "Dalej", on_press: ->{ go SecondPage }
-      checkbox text: "CZEKBOKS", position: [150.px, 0.px], on_change: proc{ p _1 }
-      editbox position: [250.px, 0.px], on_text_change: proc{ go SecondPage }, on_mouse_press: proc{ p _1.x, _1.y }
+    dfl = {
+      padding: 3.px
+    }
+    grid :gr, position: [0.px, 100.px] do |gr|
+      button :b, text: "PFF", **dfl, _entered_times: 0
+
+      gr.next_row
+      combobox **dfl
+      button text: "PFFO", on_press: ->{ go SecondPage }, **dfl
     end
 
-    g[:btn].on_press do
-      p g[:gr].get_widgets
-      color_picker on_color_change: proc{ p _1 }
+    g[:b].on_mouse_enter do
+      b = g[:b]
+      b._entered_times += 1
+    end
+
+    g[:b].on_press do
+      b = g[:b]
+      b.text = b._entered_times.to_s
     end
   end
 end

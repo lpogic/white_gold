@@ -2,7 +2,7 @@ class Enum
   def initialize *keywords, **indexed_keywords
     @symbol_to_int = keywords.each_with_index.to_h
     indexed_keywords.each do |k, i|
-        @symbol_to_int[k] = i === Integer ? i : @symbol_to_int[i]
+        @symbol_to_int[k] = Integer === i ? i : @symbol_to_int[i]
     end
     @int_to_symbol = @symbol_to_int.invert
   end
