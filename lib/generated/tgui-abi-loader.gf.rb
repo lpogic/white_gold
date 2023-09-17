@@ -14,6 +14,7 @@ class Tgui
     extern 'int ABI_Signal_disconnect(Signal* signal, int f)'
     extern 'int ABI_SignalString_connect(SignalString* signal, void(*f)(const char32_t*))'
     extern 'int ABI_SignalBool_connect(SignalBool* signal, void(*f)(int))'
+    extern 'int ABI_SignalInt_connect(SignalInt* signal, void(*f)(int))'
     extern 'int ABI_SignalPointer_connect(SignalTyped<void*>* signal, void(*f)(void*))'
     extern 'int ABI_SignalColor_connect(SignalColor* self, void(*f)(void*))'
     extern 'int ABI_SignalVector2f_connect(SignalVector2f* self, void(*f)(void*))'
@@ -224,6 +225,74 @@ class Tgui
     extern 'void* ABI_Grid_getWidgetPadding(Grid::Ptr* self, Widget::Ptr* widget)'
     extern 'void ABI_Grid_setWidgetAlignment(Grid::Ptr* self, Widget::Ptr* widget, int alignment)'
     extern 'int ABI_Grid_getWidgetAlignment(Grid::Ptr* self, Widget::Ptr* widget)'
+    extern 'void* ABI_ListView_make()'
+    extern 'int ABI_ListView_addColumn(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setColumnText(ListView::Ptr* self, int index, char* text)'
+    extern 'void* ABI_ListView_getColumnText(ListView::Ptr* self, int index)'
+    extern 'void ABI_ListView_setColumnWidth(ListView::Ptr* self, int index, float width)'
+    extern 'float ABI_ListView_getColumnWidth(ListView::Ptr* self, int index)'
+    extern 'void ABI_ListView_setColumnAlignment(ListView::Ptr* self, int index, int columnAlignment)'
+    extern 'int ABI_ListView_getColumnAlignment(ListView::Ptr* self, int index)'
+    extern 'void ABI_ListView_removeAllColumns(ListView::Ptr* self)'
+    extern 'int ABI_ListView_getColumnCount(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setHeaderHeight(ListView::Ptr* self, float height)'
+    extern 'float ABI_ListView_getHeaderHeight(ListView::Ptr* self)'
+    extern 'float ABI_ListView_getCurrentHeaderHeight(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setHeaderVisible(ListView::Ptr* self, int showHeader)'
+    extern 'int ABI_ListView_headerVisible(ListView::Ptr* self)'
+    extern 'int ABI_ListView_addItem(ListView::Ptr* self, char*(*f)(void))'
+    extern 'void ABI_ListView_insertItem(ListView::Ptr* self, int index, char*(*f)(void))'
+    extern 'int ABI_ListView_changeItem(ListView::Ptr* self, int index, char*(*f)(void))'
+    extern 'int ABI_ListView_changeSubitem(ListView::Ptr* self, int index, int column, char* item)'
+    extern 'int ABI_ListView_removeItem(ListView::Ptr* self, int index)'
+    extern 'void ABI_ListView_removeAllItems(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setSelectedItem(ListView::Ptr* self, int index)'
+    extern 'void ABI_ListView_setSelectedItems(ListView::Ptr* self, int(*f)(void))'
+    extern 'void ABI_ListView_deselectItems(ListView::Ptr* self)'
+    extern 'int ABI_ListView_getSelectedItemIndex(ListView::Ptr* self)'
+    extern 'void ABI_ListView_getSelectedItemIndices(ListView::Ptr* self, void(*f)(int))'
+    extern 'void ABI_ListView_setMultiSelect(ListView::Ptr* self, int multiSelect)'
+    extern 'int ABI_ListView_multiSelect(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setItemIcon(ListView::Ptr* self, int index, Texture* texture)'
+    extern 'void* ABI_ListView_getItemIcon(ListView::Ptr* self, int index)'
+    extern 'int ABI_ListView_getItemCount(ListView::Ptr* self)'
+    extern 'void ABI_ListView_getItemRow(ListView::Ptr* self, int index, void(*f)(const char32_t*))'
+    extern 'void* ABI_ListView_getItemCell(ListView::Ptr* self, int rowIndex, int columnIndex)'
+    extern 'void ABI_ListView_getItemRows(ListView::Ptr* self, void(*f)(const char32_t*, int row))'
+    extern 'void ABI_ListView_setItemHeight(ListView::Ptr* self, int itemHeight)'
+    extern 'int ABI_ListView_getItemHeight(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setHeaderTextSize(ListView::Ptr* self, int textSize)'
+    extern 'int ABI_ListView_getHeaderTextSize(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setSeparatorWidth(ListView::Ptr* self, int width)'
+    extern 'int ABI_ListView_getSeparatorWidth(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setHeaderSeparatorHeight(ListView::Ptr* self, int height)'
+    extern 'int ABI_ListView_getHeaderSeparatorHeight(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setGridLinesWidth(ListView::Ptr* self, int width)'
+    extern 'int ABI_ListView_getGridLinesWidth(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setAutoScroll(ListView::Ptr* self, int autoScroll)'
+    extern 'int ABI_ListView_autoScroll(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setShowVerticalGridLines(ListView::Ptr* self, int showGridLines)'
+    extern 'int ABI_ListView_showVerticalGridLines(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setShowHorizontalGridLines(ListView::Ptr* self, int showGridLines)'
+    extern 'int ABI_ListView_showHorizontalGridLines(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setExpandLastColumn(ListView::Ptr* self, int expand)'
+    extern 'int ABI_ListView_expandLastColumn(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setVerticalScrollbarPolicy(ListView::Ptr* self, int policy)'
+    extern 'int ABI_ListView_getVerticalScrollbarPolicy(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setHorizontalScrollbarPolicy(ListView::Ptr* self, int policy)'
+    extern 'int ABI_ListView_getHorizontalScrollbarPolicy(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setVerticalScrollbarValue(ListView::Ptr* self, int value)'
+    extern 'int ABI_ListView_getVerticalScrollbarValue(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setHorizontalScrollbarValue(ListView::Ptr* self, int value)'
+    extern 'int ABI_ListView_getHorizontalScrollbarValue(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setFixedIconSize(ListView::Ptr* self, float width, float height)'
+    extern 'void* ABI_ListView_getFixedIconSize(ListView::Ptr* self)'
+    extern 'void ABI_ListView_setResizableColumns(ListView::Ptr* self, int resizable)'
+    extern 'int ABI_ListView_resizableColumns(ListView::Ptr* self)'
+    extern 'void* ABI_ListView_onItemSelect(ListView::Ptr* self)'
+    extern 'void* ABI_ListView_onDoubleClick(ListView::Ptr* self)'
+    extern 'void* ABI_ListView_onRightClick(ListView::Ptr* self)'
+    extern 'void* ABI_ListView_onHeaderClick(ListView::Ptr* self)'
     extern 'void* ABI_ComboBox_make()'
     extern 'void ABI_ComboBox_setItemsToDisplay(ComboBox::Ptr* self, int itemsToDisplay)'
     extern 'int ABI_ComboBox_getItemsToDisplay(ComboBox::Ptr* self)'
@@ -281,6 +350,10 @@ class Tgui
 
   class SignalBool
     module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalBool_connect(*a); end; end
+  end
+
+  class SignalInt
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalInt_connect(*a); end; end
   end
 
   class SignalPointer
@@ -612,6 +685,81 @@ class Tgui
     module Private; def self.get_widget_padding(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_getWidgetPadding(*a).parse('Outline'); end; end
     module Private; def self.set_widget_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_setWidgetAlignment(*a); end; end
     module Private; def self.get_widget_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_getWidgetAlignment(*a); end; end
+  end
+
+  class ListView
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ListView_make(*a)); initialized(); end
+    def add_column(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ListView_addColumn(@pointer, *a); end
+    def column_text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setColumnText(@pointer, *a); end
+    def column_text(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnText(@pointer, *a).parse('char32_t'); end
+    def column_width=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setColumnWidth(@pointer, *a); end
+    def column_width(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnWidth(@pointer, *a); end
+    module Private; def self.set_column_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setColumnAlignment(*a); end; end
+    module Private; def self.get_column_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnAlignment(*a); end; end
+    def remove_all_columns(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ListView_removeAllColumns(@pointer, *a); end
+    def column_count(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnCount(@pointer, *a); end
+    def header_height=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setHeaderHeight(@pointer, *a); end
+    def header_height(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getHeaderHeight(@pointer, *a); end
+    def current_header_height(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getCurrentHeaderHeight(@pointer, *a); end
+    def header_visible=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setHeaderVisible(@pointer, *a); end
+    def header_visible?(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_headerVisible(@pointer, *a).odd?; end
+    module Private; def self.add_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_addItem(*a); end; end
+    module Private; def self.insert_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_insertItem(*a); end; end
+    module Private; def self.change_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_changeItem(*a).odd?; end; end
+    module Private; def self.change_subitem(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_changeSubitem(*a).odd?; end; end
+    module Private; def self.remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_removeItem(*a).odd?; end; end
+    def remove_all_items(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ListView_removeAllItems(@pointer, *a); end
+    def selected_item=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setSelectedItem(@pointer, *a); end
+    module Private; def self.set_selected_items(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setSelectedItems(*a); end; end
+    def deselect_items(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ListView_deselectItems(@pointer, *a); end
+    def selected_item_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getSelectedItemIndex(@pointer, *a); end
+    module Private; def self.get_selected_item_indices(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getSelectedItemIndices(*a); end; end
+    def multi_select=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setMultiSelect(@pointer, *a); end
+    def multi_select?(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_multiSelect(@pointer, *a).odd?; end
+    def item_icon=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setItemIcon(@pointer, *a); end
+    def item_icon(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemIcon(@pointer, *a).parse('Texture'); end
+    def item_count(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemCount(@pointer, *a); end
+    module Private; def self.get_item_row(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemRow(*a); end; end
+    def item_cell(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemCell(@pointer, *a).parse('char32_t'); end
+    module Private; def self.get_item_rows(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemRows(*a); end; end
+    def item_height=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setItemHeight(@pointer, *a); end
+    def item_height(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemHeight(@pointer, *a); end
+    def header_text_size=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setHeaderTextSize(@pointer, *a); end
+    def header_text_size(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getHeaderTextSize(@pointer, *a); end
+    def separator_width=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setSeparatorWidth(@pointer, *a); end
+    def separator_width(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getSeparatorWidth(@pointer, *a); end
+    def header_separator_height=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setHeaderSeparatorHeight(@pointer, *a); end
+    def header_separator_height(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getHeaderSeparatorHeight(@pointer, *a); end
+    def grid_lines_width=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setGridLinesWidth(@pointer, *a); end
+    def grid_lines_width(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getGridLinesWidth(@pointer, *a); end
+    def auto_scroll=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setAutoScroll(@pointer, *a); end
+    def auto_scroll?(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_autoScroll(@pointer, *a).odd?; end
+    def show_vertical_grid_lines=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setShowVerticalGridLines(@pointer, *a); end
+    def show_vertical_grid_lines?(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_showVerticalGridLines(@pointer, *a).odd?; end
+    def show_horizontal_grid_lines=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setShowHorizontalGridLines(@pointer, *a); end
+    def show_horizontal_grid_lines?(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_showHorizontalGridLines(@pointer, *a).odd?; end
+    def expand_last_column=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setExpandLastColumn(@pointer, *a); end
+    def expand_last_column?(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_expandLastColumn(@pointer, *a).odd?; end
+    def vertical_scrollbar_policy=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setVerticalScrollbarPolicy(@pointer, *a); end
+    def vertical_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getVerticalScrollbarPolicy(@pointer, *a); end
+    def horizontal_scrollbar_policy=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setHorizontalScrollbarPolicy(@pointer, *a); end
+    def horizontal_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getHorizontalScrollbarPolicy(@pointer, *a); end
+    def vertical_scrollbar_value=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setVerticalScrollbarValue(@pointer, *a); end
+    def vertical_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getVerticalScrollbarValue(@pointer, *a); end
+    def horizontal_scrollbar_value=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setHorizontalScrollbarValue(@pointer, *a); end
+    def horizontal_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getHorizontalScrollbarValue(@pointer, *a); end
+    def fixed_icon_size=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setFixedIconSize(@pointer, *a); end
+    def fixed_icon_size(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getFixedIconSize(@pointer, *a).parse('Vector2f'); end
+    def resizable_columns=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setResizableColumns(@pointer, *a); end
+    def resizable_columns?(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_resizableColumns(@pointer, *a).odd?; end
+    def on_item_select(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ListView_onItemSelect(@pointer, *a).parse('SignalInt'); block_given? ? signal.connect(&b) : signal; end
+    def on_item_select=(a);    signal = Abi.ABI_ListView_onItemSelect(@pointer).parse('SignalInt'); signal.connect(&a); end
+    def on_double_click(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ListView_onDoubleClick(@pointer, *a).parse('SignalInt'); block_given? ? signal.connect(&b) : signal; end
+    def on_double_click=(a);    signal = Abi.ABI_ListView_onDoubleClick(@pointer).parse('SignalInt'); signal.connect(&a); end
+    def on_right_click(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ListView_onRightClick(@pointer, *a).parse('SignalInt'); block_given? ? signal.connect(&b) : signal; end
+    def on_right_click=(a);    signal = Abi.ABI_ListView_onRightClick(@pointer).parse('SignalInt'); signal.connect(&a); end
+    def on_header_click(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ListView_onHeaderClick(@pointer, *a).parse('SignalInt'); block_given? ? signal.connect(&b) : signal; end
+    def on_header_click=(a);    signal = Abi.ABI_ListView_onHeaderClick(@pointer).parse('SignalInt'); signal.connect(&a); end
   end
 
   class ComboBox

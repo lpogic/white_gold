@@ -16,6 +16,7 @@ class Page
     group: Tgui::Group,
     rgroup: Tgui::RadioButtonGroup,
     grid: Tgui::Grid,
+    list_view: Tgui::ListView
   }.freeze
 
   def initialize tgui
@@ -26,7 +27,7 @@ class Page
     end
     @main_container = Tgui::Group.new
     @main_container.size = [100.pc, 100.pc]
-    @top_container = @main_container
+    @top_widget = @main_container
     @names = "@/"
   end
 
@@ -62,49 +63,31 @@ class Page
   end
 
   SUPPORTED_WIDGETS.each do |m, c|
-    if c < Tgui::Container
-      define_method m do |name = nil, **na, &b|
-        w = c.new
-        @top_container.add w, (name || @names.next!).to_s
-        na.each do |k, v|
-          if w.respond_to? "#{k}="
-            w.send("#{k}=", v)
-          else
-            @top_container.send(k).send("[]=", w, v)
-          end
+    define_method m do |name = nil, **na, &b|
+      w = c.new
+      @top_widget.add w, (name || @names.next!).to_s
+      na.each do |k, v|
+        if w.respond_to? "#{k}="
+          w.send("#{k}=", v)
+        else
+          @top_widget.send(k).send("[]=", w, v)
         end
-        if b
-          @top_container, vice = w, @top_container
-          b.call w
-          @top_container = vice
-        end
-        w
       end
-    else
-      define_method m do |name = nil, **na, &b|
-        w = c.new
-        @top_container.add w, (name || @names.next!).to_s
-        na.each do |k, v|
-          if w.respond_to? "#{k}="
-            w.send("#{k}=", v)
-          else
-            @top_container.send(k).send("[]=", w, v)
-          end
-        end
-        if b
-          b.call w
-        end
-        w
+      if b
+        @top_widget, vice = w, @top_widget
+        b.call w
+        @top_widget = vice
       end
+      w
     end
   end
 
   def respond_to? name
-    super || @top_container.respond_to?(name)
+    super || @top_widget.respond_to?(name)
   end
 
   def method_missing *a, **na, &b
-    @top_container.send(*a, **na, &b)
+    @top_widget.send(*a, **na, &b)
   end
 end
 

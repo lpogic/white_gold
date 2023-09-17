@@ -8,26 +8,23 @@ end
 
 class MyGui < Tgui
   def main_page
-    dfl = {
-      padding: 3.px
-    }
-    grid :gr, position: [0.px, 100.px] do |gr|
-      button :b, text: "PFF", **dfl, _entered_times: 0
-
-      gr.next_row
-      combobox **dfl
-      button text: "PFFO", on_press: ->{ go SecondPage }, **dfl
+    lw = list_view size: [100.pc, 80.pc], resizable_columns: true, multi_select: true, item_height: 30, header_text_size: 20,
+      separator_width: 10, header_separator_height: 10, grid_lines_width: 2, auto_scroll: false, show_vertical_grid_lines: false,
+      show_horizontal_grid_lines: true, expand_last_column: true do |l|
+      column text: "A", width: 100
+      column text: "B", width: 100
+      column text: "C", width: 100
+      column text: "D", width: 100
+      column text: "E", width: 100
+      (1..10).each do |i|
+        item data: ["A#{i}", "B#{i}", "C#{i}", "D#{i}"]
+      end
     end
 
-    g[:b].on_mouse_enter do
-      b = g[:b]
-      b._entered_times += 1
-    end
-
-    g[:b].on_press do
-      b = g[:b]
-      b.text = b._entered_times.to_s
-    end
+    button position: [12.px, 90.pc], text: "Add item", on_press: ->{ lw.item data: ["XD"] }
+    button position: [100.px, 90.pc], text: "Add column", on_press: ->{ lw.items[:selected].each{ p _1.data } }
+    button position: [200.px, 90.pc], text: "DO IT", on_press: ->{ lw.items[1].selected = true }
+    # button position: [300.px, 90.pc], text: "DO IT", on_press: ->{ p lw.items[:selected] }
   end
 end
 
