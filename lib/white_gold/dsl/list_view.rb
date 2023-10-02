@@ -76,6 +76,14 @@ class Tgui
         selected_item_indices = selected ? @list_view.selected_item_indices + [index] : @list_view.selected_item_indices.except(index)
         @list_view.set_selected_item_indices selected_item_indices
       end
+
+      def icon=(icon)
+        @list_view.set_item_icon index, Texture.produce(icon)
+      end
+
+      def icon
+        @list_view.item_icon index
+      end
     end
 
     def column **na, &b

@@ -10,12 +10,13 @@ class Tgui
     extern 'int ABI_Color_get_blue(Color* self)'
     extern 'int ABI_Color_get_alpha(Color* self)'
     extern 'void* ABI_Color_fade(Color* self, float fade)'
-    extern 'int ABI_Signal_connect(Signal* signal, void(*f)())'
-    extern 'int ABI_Signal_disconnect(Signal* signal, int f)'
-    extern 'int ABI_SignalString_connect(SignalString* signal, void(*f)(const char32_t*))'
-    extern 'int ABI_SignalBool_connect(SignalBool* signal, void(*f)(int))'
-    extern 'int ABI_SignalInt_connect(SignalInt* signal, void(*f)(int))'
-    extern 'int ABI_SignalPointer_connect(SignalTyped<void*>* signal, void(*f)(void*))'
+    extern 'int ABI_Signal_connect(Signal* self, void(*f)())'
+    extern 'int ABI_Signal_disconnect(Signal* self, int f)'
+    extern 'int ABI_SignalString_connect(SignalString* self, void(*f)(const char32_t*))'
+    extern 'int ABI_SignalBool_connect(SignalBool* self, void(*f)(int))'
+    extern 'int ABI_SignalInt_connect(SignalInt* self, void(*f)(int))'
+    extern 'int ABI_SignalFloat_connect(SignalFloat* self, void(*f)(float))'
+    extern 'int ABI_SignalPointer_connect(SignalTyped<void*>* self, void(*f)(void*))'
     extern 'int ABI_SignalColor_connect(SignalColor* self, void(*f)(void*))'
     extern 'int ABI_SignalVector2f_connect(SignalVector2f* self, void(*f)(void*))'
     extern 'int ABI_SignalShowEffect_connect(SignalShowEffect* self, void(*f)(int, int))'
@@ -34,6 +35,13 @@ class Tgui
     extern 'void ABI_Gui_mainLoop(Gui* self)'
     extern 'void* ABI_Gui_getWidget(Gui* self, const char* name)'
     extern 'void ABI_Theme_setDefault(char* theme)'
+    extern 'void* ABI_Texture_new(char* id, int partRectX, int partRectY, int partRectW, int partRectH, int middlePartX, int middlePartY, int middlePartW, int middlePartH, int smooth)'
+    extern 'void* ABI_Texture_getId(Texture* self)'
+    extern 'void* ABI_Texture_getImageSize(Texture* self)'
+    extern 'void* ABI_Texture_getPartRect(Texture* self)'
+    extern 'void ABI_Texture_setColor(Texture* self, int red, int green, int blue)'
+    extern 'void* ABI_Texture_getColor(Texture* self)'
+    extern 'int ABI_Texture_isSmooth(Texture* self)'
     extern 'void ABI_Widget_free(std::shared_ptr<Widget>* pointer)'
     extern 'void* ABI_Widget_getUnshared(std::shared_ptr<Widget>* pointer)'
     extern 'void* ABI_Widget_getType(Widget::Ptr* self)'
@@ -75,6 +83,11 @@ class Tgui
     extern 'void ABI_Button_setText(Button::Ptr* self, const char* text)'
     extern 'void* ABI_Button_getText(Button::Ptr* self)'
     extern 'void* ABI_Button_onPress(Button::Ptr* self)'
+    extern 'void* ABI_BitmapButton_new()'
+    extern 'void ABI_BitmapButton_setImage(BitmapButton::Ptr* self, Texture* texture)'
+    extern 'void* ABI_BitmapButton_getImage(BitmapButton::Ptr* self)'
+    extern 'void ABI_BitmapButton_setImageScaling(BitmapButton::Ptr* self, float relativeHeight)'
+    extern 'float ABI_BitmapButton_getImageScaling(BitmapButton::Ptr* self)'
     extern 'void* ABI_EditBox_new()'
     extern 'void ABI_EditBox_setText(EditBox::Ptr* self, const char* text)'
     extern 'void* ABI_EditBox_getText(EditBox::Ptr* self)'
@@ -127,6 +140,20 @@ class Tgui
     extern 'void* ABI_RadioButton_onUncheck(RadioButton::Ptr* self)'
     extern 'void* ABI_RadioButton_onChange(RadioButton::Ptr* self)'
     extern 'void* ABI_CheckBox_new()'
+    extern 'void* ABI_Knob_new()'
+    extern 'void ABI_Knob_setStartRotation(Knob::Ptr* self, float startRotation)'
+    extern 'float ABI_Knob_getStartRotation(Knob::Ptr* self)'
+    extern 'void ABI_Knob_setEndRotation(Knob::Ptr* self, float endRotation)'
+    extern 'float ABI_Knob_getEndRotation(Knob::Ptr* self)'
+    extern 'void ABI_Knob_setMinimum(Knob::Ptr* self, float minimum)'
+    extern 'float ABI_Knob_getMinimum(Knob::Ptr* self)'
+    extern 'void ABI_Knob_setMaximum(Knob::Ptr* self, float maximum)'
+    extern 'float ABI_Knob_getMaximum(Knob::Ptr* self)'
+    extern 'void ABI_Knob_setValue(Knob::Ptr* self, float value)'
+    extern 'float ABI_Knob_getValue(Knob::Ptr* self)'
+    extern 'void ABI_Knob_setClockwiseTurning(Knob::Ptr* self, int clockwiseTurning)'
+    extern 'float ABI_Knob_getClockwiseTurning(Knob::Ptr* self)'
+    extern 'void* ABI_Knob_onValueChange(Knob::Ptr* self)'
     extern 'void ABI_Container_get_widgets(Container::Ptr* self, void(*f)(Widget::Ptr* widget, const char32_t* type))'
     extern 'void ABI_Container_add(Container::Ptr* self, Widget::Ptr* widget, char* name)'
     extern 'void* ABI_Container_get(Container::Ptr* self, char* name)'
@@ -324,6 +351,20 @@ class Tgui
     extern 'void* ABI_ColorPicker_getColor(ColorPicker::Ptr* self)'
     extern 'void* ABI_ColorPicker_onColorChange(ColorPicker::Ptr* self)'
     extern 'void* ABI_ColorPicker_onOkPress(ColorPicker::Ptr* self)'
+    extern 'void* ABI_MessageBox_new()'
+    extern 'void ABI_MessageBox_setText(MessageBox::Ptr* self, char* text)'
+    extern 'void* ABI_MessageBox_getText(MessageBox::Ptr* self)'
+    extern 'void ABI_MessageBox_addButton(MessageBox::Ptr* self, char* button)'
+    extern 'void ABI_MessageBox_getButtons(MessageBox::Ptr* self, void(*f)(const char32_t*))'
+    extern 'void ABI_MessageBox_setLabelAlignment(MessageBox::Ptr* self, int alignment)'
+    extern 'int ABI_MessageBox_getLabelAlignment(MessageBox::Ptr* self)'
+    extern 'void ABI_MessageBox_setButtonAlignment(MessageBox::Ptr* self, int alignment)'
+    extern 'int ABI_MessageBox_getButtonAlignment(MessageBox::Ptr* self)'
+    extern 'void* ABI_MessageBox_onButtonPress(MessageBox::Ptr* self)'
+    extern 'void* ABI_Picture_new(Texture* texture, int transparent)'
+    extern 'void ABI_Picture_ignoreMouseEvents(Picture::Ptr* self, int ignore)'
+    extern 'int ABI_Picture_isIgnoringMouseEvents(Picture::Ptr* self)'
+    extern 'void* ABI_Picture_onDoubleClick(Picture::Ptr* self)'
   end
 
   class Util
@@ -354,6 +395,10 @@ class Tgui
 
   class SignalInt
     module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalInt_connect(*a); end; end
+  end
+
+  class SignalFloat
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalFloat_connect(*a); end; end
   end
 
   class SignalPointer
@@ -400,6 +445,16 @@ class Tgui
 
   class Theme
     def self.set_default(*a);    Abi.call_arg_map! a; Abi.ABI_Theme_setDefault(*a); end
+  end
+
+  class Texture
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Texture_new(*a)); initialized(); end
+    def id(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getId(@pointer, *a).parse('char32_t'); end
+    def image_size(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getImageSize(@pointer, *a).parse('Vector2u'); end
+    def part_rect(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getPartRect(@pointer, *a).parse('UIntRect'); end
+    def color=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Texture_setColor(@pointer, *a); end
+    def color(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getColor(@pointer, *a).parse('Color'); end
+    def smooth?(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_isSmooth(@pointer, *a).odd?; end
   end
 
   class Widget
@@ -470,6 +525,14 @@ class Tgui
     def on_press=(a);    signal = Abi.ABI_Button_onPress(@pointer).parse('Signal'); signal.connect(&a); end
   end
 
+  class BitmapButton
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_BitmapButton_new(*a)); initialized(); end
+    module Private; def self.set_image(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_setImage(*a); end; end
+    def image(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_getImage(@pointer, *a).parse('Texture'); end
+    def image_scaling=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_BitmapButton_setImageScaling(@pointer, *a); end
+    def image_scaling(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_getImageScaling(@pointer, *a); end
+  end
+
   class EditBox
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_EditBox_new(*a)); initialized(); end
     def text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_EditBox_setText(@pointer, *a); end
@@ -538,6 +601,24 @@ class Tgui
 
   class CheckBox
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_CheckBox_new(*a)); initialized(); end
+  end
+
+  class Knob
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Knob_new(*a)); initialized(); end
+    def start_rotation=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Knob_setStartRotation(@pointer, *a); end
+    def start_rotation(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getStartRotation(@pointer, *a); end
+    def end_rotation=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Knob_setEndRotation(@pointer, *a); end
+    def end_rotation(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getEndRotation(@pointer, *a); end
+    def minimum=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Knob_setMinimum(@pointer, *a); end
+    def minimum(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getMinimum(@pointer, *a); end
+    def maximum=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Knob_setMaximum(@pointer, *a); end
+    def maximum(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getMaximum(@pointer, *a); end
+    def value=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Knob_setValue(@pointer, *a); end
+    def value(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getValue(@pointer, *a); end
+    def clockwise_turning=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Knob_setClockwiseTurning(@pointer, *a); end
+    def get_clockwise_turning?(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getClockwiseTurning(@pointer, *a); end
+    def on_value_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Knob_onValueChange(@pointer, *a).parse('SignalFloat'); block_given? ? signal.connect(&b) : signal; end
+    def on_value_change=(a);    signal = Abi.ABI_Knob_onValueChange(@pointer).parse('SignalFloat'); signal.connect(&a); end
   end
 
   class Container
@@ -716,7 +797,7 @@ class Tgui
     module Private; def self.get_selected_item_indices(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getSelectedItemIndices(*a); end; end
     def multi_select=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setMultiSelect(@pointer, *a); end
     def multi_select?(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_multiSelect(@pointer, *a).odd?; end
-    def item_icon=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ListView_setItemIcon(@pointer, *a); end
+    def set_item_icon(*a, &b);    Abi.call_arg_map! a; Abi.ABI_ListView_setItemIcon(@pointer, *a); end
     def item_icon(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemIcon(@pointer, *a).parse('Texture'); end
     def item_count(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemCount(@pointer, *a); end
     module Private; def self.get_item_row(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemRow(*a); end; end
@@ -800,5 +881,27 @@ class Tgui
     def on_color_change=(a);    signal = Abi.ABI_ColorPicker_onColorChange(@pointer).parse('SignalColor'); signal.connect(&a); end
     def on_ok_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ColorPicker_onOkPress(@pointer, *a).parse('SignalColor'); block_given? ? signal.connect(&b) : signal; end
     def on_ok_press=(a);    signal = Abi.ABI_ColorPicker_onOkPress(@pointer).parse('SignalColor'); signal.connect(&a); end
+  end
+
+  class MessageBox
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_MessageBox_new(*a)); initialized(); end
+    def text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_MessageBox_setText(@pointer, *a); end
+    def text(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getText(@pointer, *a).parse('char32_t'); end
+    module Private; def self.add_button(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_addButton(*a); end; end
+    module Private; def self.get_buttons(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getButtons(*a); end; end
+    module Private; def self.set_label_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_setLabelAlignment(*a); end; end
+    module Private; def self.get_label_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getLabelAlignment(*a); end; end
+    module Private; def self.set_button_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_setButtonAlignment(*a); end; end
+    module Private; def self.get_button_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getButtonAlignment(*a); end; end
+    def on_button_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_MessageBox_onButtonPress(@pointer, *a).parse('SignalString'); block_given? ? signal.connect(&b) : signal; end
+    def on_button_press=(a);    signal = Abi.ABI_MessageBox_onButtonPress(@pointer).parse('SignalString'); signal.connect(&a); end
+  end
+
+  class Picture
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Picture_new(*a)); initialized(); end
+    def ignore_mouse_events=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Picture_ignoreMouseEvents(@pointer, *a); end
+    def ignoring_mouse_events?(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_isIgnoringMouseEvents(@pointer, *a).odd?; end
+    def on_double_click(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Picture_onDoubleClick(@pointer, *a).parse('SignalVector2f'); block_given? ? signal.connect(&b) : signal; end
+    def on_double_click=(a);    signal = Abi.ABI_Picture_onDoubleClick(@pointer).parse('SignalVector2f'); signal.connect(&a); end
   end
 end

@@ -1,6 +1,2 @@
-a = [1,2,3]
-b = a.each
-p b.next
-p b.next
-p b.next
-p b.next
+x = {a: [[1], [2]]}
+p x.dig(:a, 2, 0)

@@ -30,6 +30,18 @@ class Tgui
       'float x',
       'float y'
     ]
+
+    Vector2u = struct [
+      'int x',
+      'int y'
+    ]
+
+    UIntRect = struct [
+      'int left',
+      'int top',
+      'int width',
+      'int height'
+    ]
   end
 
   ShowEffectType = enum :fade, :scale, :slide_to_right, :slide_to_left, :slide_to_bottom,

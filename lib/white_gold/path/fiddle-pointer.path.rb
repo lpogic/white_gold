@@ -8,12 +8,22 @@ module Fiddle
         v = Tgui::Abi::Vector2f.new self
         ObjectSpace.define_finalizer(v, Tgui::ExternObject.finalizer(self))
         v
+      when 'Vector2u'
+        v = Tgui::Abi::Vector2u.new self
+        ObjectSpace.define_finalizer(v, Tgui::ExternObject.finalizer(self))
+        v
+      when 'UIntRect'
+        v = Tgui::Abi::UIntRect.new self
+        ObjectSpace.define_finalizer(v, Tgui::ExternObject.finalizer(self))
+        v
       when 'Color'
         Tgui::Color.new pointer: self
       when /^SignalTyped.*/
         Tgui::SignalPointer.new pointer: self, autofree: false
       when /^Signal\w*/
         Tgui.const_get(type).new pointer: self, autofree: false
+      when 'Texture'
+        Tgui::Texture.new pointer: self
       else
         self
       end

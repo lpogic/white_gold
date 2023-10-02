@@ -3,20 +3,24 @@ require_relative 'white_gold/path/numeric.path'
 
 class Page
 
-  SUPPORTED_WIDGETS = {
+  WIDGETS_COLLECTION = {
     button: Tgui::Button,
     radio: Tgui::RadioButton,
     checkbox: Tgui::CheckBox,
     editbox: Tgui::EditBox,
     combobox: Tgui::ComboBox,
     color_picker: Tgui::ColorPicker,
-    horl: Tgui::HorizontalLayout,
-    verl: Tgui::VerticalLayout,
-    horw: Tgui::HorizontalWrap,
+    hola: Tgui::HorizontalLayout,
+    vela: Tgui::VerticalLayout,
+    howr: Tgui::HorizontalWrap,
     group: Tgui::Group,
-    rgroup: Tgui::RadioButtonGroup,
+    radio_group: Tgui::RadioButtonGroup,
     grid: Tgui::Grid,
-    list_view: Tgui::ListView
+    list_view: Tgui::ListView,
+    picture: false, # dont define defult method
+    bitmap_button: Tgui::BitmapButton,
+    knob: Tgui::Knob,
+    message_box: Tgui::MessageBox,
   }.freeze
 
   def initialize tgui
@@ -62,24 +66,41 @@ class Page
     self
   end
 
-  SUPPORTED_WIDGETS.each do |m, c|
-    define_method m do |name = nil, **na, &b|
-      w = c.new
-      @top_widget.add w, (name || @names.next!).to_s
+  def common_widget_post_iniatialize widget, name, **na, &b
+    @top_widget.add widget, (name || @names.next!).to_s
       na.each do |k, v|
-        if w.respond_to? "#{k}="
-          w.send("#{k}=", v)
+        if widget.respond_to? "#{k}="
+          widget.send("#{k}=", v)
         else
-          @top_widget.send(k).send("[]=", w, v)
+          @top_widget.send(k).send("[]=", widget, v)
         end
       end
       if b
-        @top_widget, vice = w, @top_widget
-        b.call w
+        @top_widget, vice = widget, @top_widget
+        b.call widget
         @top_widget = vice
       end
-      w
+      widget
     end
+
+  WIDGETS_COLLECTION.each do |m, c|
+    define_method m do |name = nil, **na, &b|
+      common_widget_post_iniatialize c.new, name, **na, &b
+    end
+  end
+
+  def picture name = nil, **na, &b
+    texture = na[:texture] || Texture.produce([
+      na[:url],
+      na.dig(:part_rect, 0),
+      na.dig(:part_rect, 1),
+      na.dig(:part_rect, 2),
+      na.dig(:part_rect, 3),
+      na[:smooth]
+    ])
+    transparent = na[:transparent] || false
+    pic = Tgui::Picture.new texture, transparent
+    common_widget_post_iniatialize pic, name, **na.except(:url, :part_rect, :smooth, :transparent), &b
   end
 
   def respond_to? name
@@ -165,7 +186,7 @@ class Tgui
     l.auto_size = true
   end
 
-  Page::SUPPORTED_WIDGETS.each do |m, c|
+  Page::WIDGETS_COLLECTION.each do |m, c|
     define_method m do |*a, **na, &b|
       @current_page.send(m, *a, **na, &b)
     end
