@@ -19,12 +19,27 @@ class Tgui
       end
     end
 
+    def button(text:, on_press: nil)
+      (@button_press_callbacks[text] ||= []) << on_press.to_proc if on_press
+      Private.add_button @pointer, text
+    end
+
+    def remove_buttons
+      self.buttons = {}
+    end
+
     def buttons=(buttons)
-      buttons.each do |key, action|
+      @button_press_callbacks = {}
+      it = buttons.each
+      block_caller = Fiddle::Closure::BlockCaller.new(Fiddle::TYPE_CONST_STRING, [0]) do
+        key, action = it.next
         name = key.to_s
-        Private.add_button @pointer, name
         (@button_press_callbacks[name] ||= []) << action
+        name
+      rescue StopIteration
+        ""
       end
+      Private.change_buttons @pointer, buttons.size, block_caller
     end
 
     class Buttons

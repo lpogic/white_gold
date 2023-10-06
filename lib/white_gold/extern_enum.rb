@@ -24,12 +24,12 @@ class Enum
   end
 end
 
-class Object
-  def self.enum *keywords, **indexed_keywords
+module Kernel
+  def enum *keywords, **indexed_keywords
     Enum.new *keywords, **indexed_keywords
   end
 
-  def self.bit_enum zero, *keywords, **indexed_keywords
+  def bit_enum zero, *keywords, **indexed_keywords
     Enum.new zero, **(keywords.each_with_index.map{[_1, 1 << _2]}.to_h), **indexed_keywords
   end
 end

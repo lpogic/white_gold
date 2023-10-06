@@ -355,6 +355,7 @@ class Tgui
     extern 'void ABI_MessageBox_setText(MessageBox::Ptr* self, char* text)'
     extern 'void* ABI_MessageBox_getText(MessageBox::Ptr* self)'
     extern 'void ABI_MessageBox_addButton(MessageBox::Ptr* self, char* button)'
+    extern 'void ABI_MessageBox_changeButtons(MessageBox::Ptr* self, int size, char*(*f)(void))'
     extern 'void ABI_MessageBox_getButtons(MessageBox::Ptr* self, void(*f)(const char32_t*))'
     extern 'void ABI_MessageBox_setLabelAlignment(MessageBox::Ptr* self, int alignment)'
     extern 'int ABI_MessageBox_getLabelAlignment(MessageBox::Ptr* self)'
@@ -888,6 +889,7 @@ class Tgui
     def text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_MessageBox_setText(@pointer, *a); end
     def text(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getText(@pointer, *a).parse('char32_t'); end
     module Private; def self.add_button(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_addButton(*a); end; end
+    module Private; def self.change_buttons(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_changeButtons(*a); end; end
     module Private; def self.get_buttons(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getButtons(*a); end; end
     module Private; def self.set_label_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_setLabelAlignment(*a); end; end
     module Private; def self.get_label_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getLabelAlignment(*a); end; end
