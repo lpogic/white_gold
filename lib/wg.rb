@@ -8,7 +8,8 @@ require_relative 'white_gold'
   end
 end
 
-class << self
+class << self  
+
   def respond_to? name
     super || (name.end_with?("!") && @gui.respond_to?(name))
   end
@@ -23,6 +24,10 @@ class << self
   def go page
     method(page).unbind.bind(@gui) if Symbol === page && !@gui.respond_to?(page)
     @gui.go page
+  end
+
+  def top widget, &b
+    @gui.top widget, &b
   end
 end
 

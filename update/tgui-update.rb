@@ -59,6 +59,7 @@ File.new(TGUI_CABI_HPP).each_line do |line|
       classes[lm[3]] << "def self.#{method_name}(*a);    Abi.call_arg_map! a; Abi.#{function_name}(*a)#{parser}; end"
     when "C_ABI_SETTER"
       classes[lm[3]] << "def #{method_name.delete_prefix("set_") + "="}(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.#{function_name}(@pointer, *a)#{parser}; end"
+      classes[lm[3]] << "def #{method_name.delete_prefix("set_") + "!"}(*a);    Abi.call_arg_map! a; Abi.#{function_name}(@pointer, *a)#{parser}; end"
     when "C_ABI_GETTER"
       classes[lm[3]] << "def #{method_name.delete_prefix("get_")}(*a);    Abi.call_arg_map! a; Abi.#{function_name}(@pointer, *a)#{parser}; end"
     when "C_ABI_TESTER"

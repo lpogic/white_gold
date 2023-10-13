@@ -1,3 +1,6 @@
 MessageBox:
   onButtonPress is called twice when happen
-  
+  malformed signal string when FileDialog::file_type_filters= called in callback
+
+FileDialog:
+  getFileTypeFilterIndex broken if *.* given

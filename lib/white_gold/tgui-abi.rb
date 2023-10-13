@@ -57,5 +57,6 @@ dsl_dir = File.dirname(__FILE__) + "/dsl"
 Dir.each_child dsl_dir do |filename|
   require_relative "dsl/#{filename}"
 end
-# ABI loader should be required last
+# ABI loader should be required after dsl directory files because of class hierarchy
 require_relative '../generated/tgui-abi-loader.gf'
+require_relative 'convention/container_widgets'

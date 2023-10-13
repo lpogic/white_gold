@@ -30,6 +30,10 @@ class Tgui
       @@callback_storage = callback_storage
     end
 
+    def self.callback_storage
+      @@callback_storage
+    end
+
     def self.data_storage=(data_storage)
       @@data_storage = data_storage
     end

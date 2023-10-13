@@ -1,2 +1,5 @@
 /.vscode
 /white_gold-0.0.1.gem
+/test/*
+/progress.txt
+/todo.txt

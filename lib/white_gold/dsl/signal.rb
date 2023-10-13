@@ -15,9 +15,5 @@ class Tgui
       @@callback_storage.delete(id) if success
       return success
     end
-
-    def self.free_block_caller id
-      @@callback_storage.delete(id)
-    end
   end
 end

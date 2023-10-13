@@ -1,10 +1,12 @@
 require_relative '../extern_object'
+require_relative '../convention/bang_nested_caller'
 
 class Tgui
   class Widget < ExternObject
+    include BangNestedCaller
 
     def respond_to? name
-      super || name.start_with?("_")
+      super || name.start_with?("_") || bang_respond_to?(name)
     end
 
     def method_missing name, *a, **na, &b
@@ -15,7 +17,7 @@ class Tgui
           @@data_storage[Widget.get_unshared(@pointer).to_i][name.to_s]
         end
       else
-        super
+        bang_method_missing name, *a, **na, &b
       end
     end
   end
