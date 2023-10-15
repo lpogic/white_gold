@@ -1,35 +1,13 @@
 require_relative '../lib/wg'
-  
-m = menu! minimum_sub_menu_width: 100, on_menu_item_click: proc{ p _1 } do
-  item! text: "XD" do
-    item! text: "DALD" do
-      item! text: "DA"
-      item! text: "DAa" do
-        on_press! do
-          @i1.text = @i1.text + "A"
-        end
-      end
-    end
-  end
-  item! text: "DALD" do
-    @i1 = item! text: "DA"
-  end
-  @i1 = item! text: "Zamknij"
-end
 
-panel_list_box! position: [50.pc, 50.pc] do
-  item! do
-    picture! url: "app.jpg"
-  end
-  item! do
-    button! text: "But"
-    on_double_click! do
-      p "Agila w bereecie!"
-    end
+tabs! do
+  item! text: "Pierwsza"
+  item! text: "Druga"
+  item! text: "Trzecia"
+  on_tab_select! do
+    p _1
   end
 end
-
-# m["DALD"].enabled = false
 
 # require_relative '../lib/white_gold'
 

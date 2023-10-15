@@ -23,7 +23,15 @@ class Tgui
       file_dialog: Tgui::FileDialog,
       list_box: Tgui::ListBox,
       menu: Tgui::MenuBar,
-      panel_list_box: Tgui::PanelListBox
+      panel_list_box: Tgui::PanelListBox,
+      progress_bar: Tgui::ProgressBar,
+      range_slider: Tgui::RangeSlider,
+      rich_text_label: Tgui::RichTextLabel,
+      separator_line: Tgui::SeparatorLine,
+      slider: Tgui::Slider,
+      spin_button: Tgui::SpinButton,
+      spin_control: Tgui::SpinControl,
+      tabs: Tgui::Tabs
     }.freeze
 
     def common_widget_post_initialize widget, name, **na, &b

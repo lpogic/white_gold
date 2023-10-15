@@ -16,8 +16,9 @@ class Tgui
         else
           @@data_storage[Widget.get_unshared(@pointer).to_i][name.to_s]
         end
-      else
+      elsif name.end_with? "!"
         bang_method_missing name, *a, **na, &b
+      else super
       end
     end
   end

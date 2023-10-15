@@ -15,7 +15,7 @@ class << self
   end
 
   def method_missing name, *a, **na, &b
-    if name.end_with?("!") && @gui.respond_to?(name)
+    if name.end_with?("!")
       @gui.send(name, *a, **na, &b)
     else super
     end
