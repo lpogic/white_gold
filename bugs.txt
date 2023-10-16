@@ -4,3 +4,6 @@ MessageBox:
 
 FileDialog:
   getFileTypeFilterIndex broken if *.* given
+
+TabContainer:
+  tab lose focus even if disabled tab is clicked

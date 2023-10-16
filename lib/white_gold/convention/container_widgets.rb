@@ -31,7 +31,9 @@ class Tgui
       slider: Tgui::Slider,
       spin_button: Tgui::SpinButton,
       spin_control: Tgui::SpinControl,
-      tabs: Tgui::Tabs
+      tabs: Tgui::Tabs,
+      tab_container: Tgui::TabContainer,
+      text_area: Tgui::TextArea,
     }.freeze
 
     def common_widget_post_initialize widget, name, **na, &b
@@ -59,6 +61,14 @@ class Tgui
       transparent = na[:transparent] || false
       pic = Tgui::Picture.new texture, transparent
       common_widget_post_initialize pic, name, **na.except(:url, :part_rect, :smooth, :transparent), &b
+    end
+  end
+
+  class TabContainer
+    WIDGETS_COLLECTION.each do |m, c|
+      define_method m do |name = nil, **na, &b|
+        raise NoMethodError.new("Method `#{m}` should be called on Panel from TabContainer, not TabContainer itself")
+      end
     end
   end
 end

@@ -18,7 +18,7 @@ module Fiddle
         v
       when 'Color'
         Tgui::Color.new pointer: self
-      when /^SignalTyped.*/
+      when /^SignalTyped<.*/
         Tgui::SignalPointer.new pointer: self, autofree: false
       when /^Signal\w*/
         Tgui.const_get(type).new pointer: self, autofree: false
@@ -41,7 +41,7 @@ module Fiddle
       a.pack("N*").encode("UTF-8", "UTF-32BE")
     end
 
-    def set value
+    def set value = true
       case value
       when Integer
         self[0] = value
@@ -51,6 +51,10 @@ module Fiddle
         self[0] = 0
       else raise "Invalid argument #{value}"
       end
+    end
+
+    def unset
+      set false
     end
   end
 end

@@ -92,12 +92,6 @@ class Tgui
   #   l.auto_size = true
   # end
 
-  Page::WIDGETS_COLLECTION.each do |m, c|
-    define_method m do |*a, **na, &b|
-      @current_page.send(m, *a, **na, &b)
-    end
-  end
-
   def respond_to? name
     super || @current_page.respond_to?(name)
   end

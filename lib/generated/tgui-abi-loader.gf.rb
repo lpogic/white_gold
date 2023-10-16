@@ -26,6 +26,7 @@ class Tgui
     extern 'int ABI_SignalItem_connect(SignalItem* self, void(*f)(const char32_t*, const char32_t*))'
     extern 'int ABI_SignalItemHierarchy_connect(SignalItemHierarchy* self, void(*f)(void*))'
     extern 'void ABI_SignalItemHierarchy_fetchPath(std::vector< String >* load, void(*f)(const char32_t*))'
+    extern 'int ABI_SignalTypedIntBoolPtr_connect(SignalTypedIntBoolPtr* self, void(*f)(int, bool*))'
     extern 'void* ABI_Window_new()'
     extern 'void ABI_Window_close(sf::WindowBase* self)'
     extern 'int ABI_Window_isOpen(sf::WindowBase* self)'
@@ -581,6 +582,60 @@ class Tgui
     extern 'float ABI_Tabs_getMinimumTabWidth(Tabs::Ptr* self)'
     extern 'int ABI_Tabs_getTabsCount(Tabs::Ptr* self)'
     extern 'void* ABI_Tabs_onTabSelect(Tabs::Ptr* self)'
+    extern 'void* ABI_TabContainer_new()'
+    extern 'void ABI_TabContainer_setTabsHeight(TabContainer::Ptr* self, char* height)'
+    extern 'void* ABI_TabContainer_addTab(TabContainer::Ptr* self, char* name, int select)'
+    extern 'void* ABI_TabContainer_insertTab(TabContainer::Ptr* self, int index, char* name, int select)'
+    extern 'int ABI_TabContainer_removeTab(TabContainer::Ptr* self, char* text)'
+    extern 'int ABI_TabContainer_removeTabByIndex(TabContainer::Ptr* self, int index)'
+    extern 'void ABI_TabContainer_select(TabContainer::Ptr* self, int index)'
+    extern 'int ABI_TabContainer_getPanelCount(TabContainer::Ptr* self)'
+    extern 'int ABI_TabContainer_getIndex(TabContainer::Ptr* self, Panel::Ptr* ptr)'
+    extern 'void* ABI_TabContainer_getSelected(TabContainer::Ptr* self)'
+    extern 'int ABI_TabContainer_getSelectedIndex(TabContainer::Ptr* self)'
+    extern 'void* ABI_TabContainer_getPanel(TabContainer::Ptr* self, int index)'
+    extern 'void* ABI_TabContainer_getTabs(TabContainer::Ptr* self)'
+    extern 'void* ABI_TabContainer_getTabText(TabContainer::Ptr* self, int index)'
+    extern 'int ABI_TabContainer_changeTabText(TabContainer::Ptr* self, int index, char* text)'
+    extern 'void ABI_TabContainer_setTabAlignment(TabContainer::Ptr* self, int align)'
+    extern 'int ABI_TabContainer_getTabAlignment(TabContainer::Ptr* self)'
+    extern 'void ABI_TabContainer_setTabFixedSize(TabContainer::Ptr* self, float fixedSize)'
+    extern 'float ABI_TabContainer_getTabFixedSize(TabContainer::Ptr* self)'
+    extern 'void* ABI_TabContainer_onSelectionChange(TabContainer::Ptr* self)'
+    extern 'void* ABI_TabContainer_onSelectionChanging(TabContainer::Ptr* self)'
+    extern 'void* ABI_TextArea_new()'
+    extern 'void ABI_TextArea_setText(TextArea::Ptr* self, char* text)'
+    extern 'void ABI_TextArea_addText(TextArea::Ptr* self, char* text)'
+    extern 'void* ABI_TextArea_getText(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_setDefaultText(TextArea::Ptr* self, char* text)'
+    extern 'void* ABI_TextArea_getDefaultText(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_setSelectedText(TextArea::Ptr* self, int selectionStartIndex, int selectionEndIndex)'
+    extern 'void* ABI_TextArea_getSelectedText(TextArea::Ptr* self)'
+    extern 'int ABI_TextArea_getSelectionStart(TextArea::Ptr* self)'
+    extern 'int ABI_TextArea_getSelectionEnd(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_setMaximumCharacters(TextArea::Ptr* self, int maxChars)'
+    extern 'int ABI_TextArea_getMaximumCharacters(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_setTabString(TextArea::Ptr* self, char* tabText)'
+    extern 'void* ABI_TextArea_getTabString(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_setCaretPosition(TextArea::Ptr* self, int charactersBeforeCaret)'
+    extern 'int ABI_TextArea_getCaretPosition(TextArea::Ptr* self)'
+    extern 'int ABI_TextArea_getCaretLine(TextArea::Ptr* self)'
+    extern 'int ABI_TextArea_getCaretColumn(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_setReadOnly(TextArea::Ptr* self, int readOnly)'
+    extern 'int ABI_TextArea_isReadOnly(TextArea::Ptr* self)'
+    extern 'int ABI_TextArea_getLinesCount(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_enableMonospacedFontOptimization(TextArea::Ptr* self, int enable)'
+    extern 'void ABI_TextArea_setVerticalScrollbarPolicy(TextArea::Ptr* self, int policy)'
+    extern 'int ABI_TextArea_getVerticalScrollbarPolicy(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_setHorizontalScrollbarPolicy(TextArea::Ptr* self, int policy)'
+    extern 'int ABI_TextArea_getHorizontalScrollbarPolicy(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_setVerticalScrollbarValue(TextArea::Ptr* self, int value)'
+    extern 'int ABI_TextArea_getVerticalScrollbarValue(TextArea::Ptr* self)'
+    extern 'void ABI_TextArea_setHorizontalScrollbarValue(TextArea::Ptr* self, int value)'
+    extern 'int ABI_TextArea_getHorizontalScrollbarValue(TextArea::Ptr* self)'
+    extern 'void* ABI_TextArea_onTextChange(TextArea::Ptr* self)'
+    extern 'void* ABI_TextArea_onSelectionChange(TextArea::Ptr* self)'
+    extern 'void* ABI_TextArea_onCaretPositionChange(TextArea::Ptr* self)'
   end
 
   class Util
@@ -652,6 +707,10 @@ class Tgui
   class SignalItemHierarchy
     module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalItemHierarchy_connect(*a); end; end
     def self.fetch_path(*a);    Abi.call_arg_map! a; Abi.ABI_SignalItemHierarchy_fetchPath(*a); end
+  end
+
+  class SignalTypedIntBoolPtr
+    module Private; def self.connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalTypedIntBoolPtr_connect(*a); end; end
   end
 
   class Window
@@ -1536,5 +1595,84 @@ class Tgui
     def tabs_count(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getTabsCount(@pointer, *a); end
     def on_tab_select(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Tabs_onTabSelect(@pointer, *a).parse('SignalString'); block_given? ? signal.connect(&b) : signal; end
     def on_tab_select=(a);    signal = Abi.ABI_Tabs_onTabSelect(@pointer).parse('SignalString'); signal.connect(&a); end
+  end
+
+  class TabContainer
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TabContainer_new(*a)); initialized(); end
+    def tabs_height=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TabContainer_setTabsHeight(@pointer, *a); end
+    def tabs_height!(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_setTabsHeight(@pointer, *a); end
+    def add_tab(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TabContainer_addTab(@pointer, *a).parse('Panel::Ptr'); end
+    def insert_tab(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TabContainer_insertTab(@pointer, *a).parse('Panel::Ptr'); end
+    def remove_tab(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TabContainer_removeTab(@pointer, *a).odd?; end
+    def remove_tab_by_index(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TabContainer_removeTabByIndex(@pointer, *a).odd?; end
+    def select(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TabContainer_select(@pointer, *a); end
+    def panel_count(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getPanelCount(@pointer, *a); end
+    def index(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getIndex(@pointer, *a); end
+    def selected(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getSelected(@pointer, *a).parse('Panel::Ptr'); end
+    def selected_index(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getSelectedIndex(@pointer, *a); end
+    def panel(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getPanel(@pointer, *a).parse('Panel::Ptr'); end
+    def tabs(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabs(@pointer, *a).parse('Tabs::Ptr'); end
+    def tab_text(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabText(@pointer, *a).parse('char32_t'); end
+    def change_tab_text(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TabContainer_changeTabText(@pointer, *a).odd?; end
+    module Private; def self.set_tab_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_setTabAlignment(*a); end; end
+    module Private; def self.get_tab_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabAlignment(*a); end; end
+    def tab_fixed_size=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TabContainer_setTabFixedSize(@pointer, *a); end
+    def tab_fixed_size!(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_setTabFixedSize(@pointer, *a); end
+    def tab_fixed_size(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabFixedSize(@pointer, *a); end
+    def on_selection_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TabContainer_onSelectionChange(@pointer, *a).parse('SignalInt'); block_given? ? signal.connect(&b) : signal; end
+    def on_selection_change=(a);    signal = Abi.ABI_TabContainer_onSelectionChange(@pointer).parse('SignalInt'); signal.connect(&a); end
+    def on_selection_changing(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TabContainer_onSelectionChanging(@pointer, *a).parse('SignalTypedIntBoolPtr'); block_given? ? signal.connect(&b) : signal; end
+    def on_selection_changing=(a);    signal = Abi.ABI_TabContainer_onSelectionChanging(@pointer).parse('SignalTypedIntBoolPtr'); signal.connect(&a); end
+  end
+
+  class TextArea
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TextArea_new(*a)); initialized(); end
+    def text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setText(@pointer, *a); end
+    def text!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setText(@pointer, *a); end
+    def add_text(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TextArea_addText(@pointer, *a); end
+    def text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getText(@pointer, *a).parse('char32_t'); end
+    def default_text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setDefaultText(@pointer, *a); end
+    def default_text!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setDefaultText(@pointer, *a); end
+    def default_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getDefaultText(@pointer, *a).parse('char32_t'); end
+    def selected_text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setSelectedText(@pointer, *a); end
+    def selected_text!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setSelectedText(@pointer, *a); end
+    def selected_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getSelectedText(@pointer, *a).parse('char32_t'); end
+    def selection_start(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getSelectionStart(@pointer, *a); end
+    def selection_end(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getSelectionEnd(@pointer, *a); end
+    def maximum_characters=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setMaximumCharacters(@pointer, *a); end
+    def maximum_characters!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setMaximumCharacters(@pointer, *a); end
+    def maximum_characters(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getMaximumCharacters(@pointer, *a); end
+    def tab_string=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setTabString(@pointer, *a); end
+    def tab_string!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setTabString(@pointer, *a); end
+    def tab_string(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getTabString(@pointer, *a).parse('char32_t'); end
+    def caret_position=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setCaretPosition(@pointer, *a); end
+    def caret_position!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setCaretPosition(@pointer, *a); end
+    def caret_position(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getCaretPosition(@pointer, *a); end
+    def caret_line(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getCaretLine(@pointer, *a); end
+    def caret_column(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getCaretColumn(@pointer, *a); end
+    def read_only=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setReadOnly(@pointer, *a); end
+    def read_only!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setReadOnly(@pointer, *a); end
+    def read_only?(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_isReadOnly(@pointer, *a).odd?; end
+    def lines_count(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getLinesCount(@pointer, *a); end
+    def enable_monospaced_font_optimization=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_enableMonospacedFontOptimization(@pointer, *a); end
+    def enable_monospaced_font_optimization!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_enableMonospacedFontOptimization(@pointer, *a); end
+    def vertical_scrollbar_policy=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setVerticalScrollbarPolicy(@pointer, *a); end
+    def vertical_scrollbar_policy!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setVerticalScrollbarPolicy(@pointer, *a); end
+    def vertical_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getVerticalScrollbarPolicy(@pointer, *a); end
+    def horizontal_scrollbar_policy=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setHorizontalScrollbarPolicy(@pointer, *a); end
+    def horizontal_scrollbar_policy!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setHorizontalScrollbarPolicy(@pointer, *a); end
+    def horizontal_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getHorizontalScrollbarPolicy(@pointer, *a); end
+    def vertical_scrollbar_value=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setVerticalScrollbarValue(@pointer, *a); end
+    def vertical_scrollbar_value!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setVerticalScrollbarValue(@pointer, *a); end
+    def vertical_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getVerticalScrollbarValue(@pointer, *a); end
+    def horizontal_scrollbar_value=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TextArea_setHorizontalScrollbarValue(@pointer, *a); end
+    def horizontal_scrollbar_value!(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setHorizontalScrollbarValue(@pointer, *a); end
+    def horizontal_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getHorizontalScrollbarValue(@pointer, *a); end
+    def on_text_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TextArea_onTextChange(@pointer, *a).parse('SignalString'); block_given? ? signal.connect(&b) : signal; end
+    def on_text_change=(a);    signal = Abi.ABI_TextArea_onTextChange(@pointer).parse('SignalString'); signal.connect(&a); end
+    def on_selection_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TextArea_onSelectionChange(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_selection_change=(a);    signal = Abi.ABI_TextArea_onSelectionChange(@pointer).parse('Signal'); signal.connect(&a); end
+    def on_caret_position_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TextArea_onCaretPositionChange(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_caret_position_change=(a);    signal = Abi.ABI_TextArea_onCaretPositionChange(@pointer).parse('Signal'); signal.connect(&a); end
   end
 end

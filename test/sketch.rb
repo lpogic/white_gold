@@ -1,10 +1,7 @@
 require_relative '../lib/wg'
 
-tabs! do
-  item! text: "Pierwsza"
-  item! text: "Druga"
-  item! text: "Trzecia"
-  on_tab_select! do
+text_area! maximum_characters: 10, default_text: "Wpisz tu co" do
+  on_text_change! do
     p _1
   end
 end
