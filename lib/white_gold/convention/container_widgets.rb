@@ -34,6 +34,9 @@ class Tgui
       tabs: Tgui::Tabs,
       tab_container: Tgui::TabContainer,
       text_area: Tgui::TextArea,
+      toggle_button: Tgui::ToggleButton,
+      tree_view: Tgui::TreeView,
+      scrollbar: Tgui::Scrollbar
     }.freeze
 
     def common_widget_post_initialize widget, name, **na, &b

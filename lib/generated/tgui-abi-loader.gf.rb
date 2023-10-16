@@ -30,6 +30,10 @@ class Tgui
     extern 'void* ABI_Window_new()'
     extern 'void ABI_Window_close(sf::WindowBase* self)'
     extern 'int ABI_Window_isOpen(sf::WindowBase* self)'
+    extern 'void ABI_BackendGui_setTextSize(BackendGui* self, int textSize)'
+    extern 'int ABI_BackendGui_getTextSize(BackendGui* self)'
+    extern 'void ABI_BackendGui_getView(BackendGui* self, void(*f)(float, float, float, float))'
+    extern 'void* ABI_BackendGui_onViewChange(BackendGui* self)'
     extern 'void* ABI_Gui_new(sf::RenderWindow* window)'
     extern 'int ABI_Gui_isActive(Gui* self)'
     extern 'void ABI_Gui_pollEvents(Gui* self)'
@@ -84,9 +88,9 @@ class Tgui
     extern 'void* ABI_ClickableWidget_onRightMouseRelease(ClickableWidget::Ptr* self)'
     extern 'void* ABI_ClickableWidget_onRightClick(ClickableWidget::Ptr* self)'
     extern 'void ABI_ButtonBase_setTextPosition(ButtonBase::Ptr* self, const char* position, const char* origin)'
+    extern 'void ABI_ButtonBase_setText(ButtonBase::Ptr* self, const char* text)'
+    extern 'void* ABI_ButtonBase_getText(ButtonBase::Ptr* self)'
     extern 'void* ABI_Button_new()'
-    extern 'void ABI_Button_setText(Button::Ptr* self, const char* text)'
-    extern 'void* ABI_Button_getText(Button::Ptr* self)'
     extern 'void* ABI_Button_onPress(Button::Ptr* self)'
     extern 'void* ABI_BitmapButton_new()'
     extern 'void ABI_BitmapButton_setImage(BitmapButton::Ptr* self, Texture* texture)'
@@ -636,6 +640,54 @@ class Tgui
     extern 'void* ABI_TextArea_onTextChange(TextArea::Ptr* self)'
     extern 'void* ABI_TextArea_onSelectionChange(TextArea::Ptr* self)'
     extern 'void* ABI_TextArea_onCaretPositionChange(TextArea::Ptr* self)'
+    extern 'void* ABI_ToggleButton_new()'
+    extern 'void ABI_ToggleButton_setDown(ToggleButton::Ptr* self, int down)'
+    extern 'int ABI_ToggleButton_isDown(ToggleButton::Ptr* self)'
+    extern 'void* ABI_ToggleButton_onToggle(ToggleButton::Ptr* self)'
+    extern 'void ABI_ToolTip_setInitialDelay(int delay)'
+    extern 'int ABI_ToolTip_getInitialDelay()'
+    extern 'void ABI_ToolTip_setDistanceToMouse(float distanceX, float distanceY)'
+    extern 'void* ABI_ToolTip_getDistanceToMouse()'
+    extern 'void ABI_ToolTip_setShowOnDisabledWidget(int show)'
+    extern 'int ABI_ToolTip_getShowOnDisabledWidget()'
+    extern 'void* ABI_TreeView_new()'
+    extern 'int ABI_TreeView_addItem(TreeView::Ptr* self, int hierarchySize, char*(*f)(void), int createParents)'
+    extern 'void ABI_TreeView_expand(TreeView::Ptr* self, int hierarchySize, char*(*f)(void))'
+    extern 'void ABI_TreeView_expandAll(TreeView::Ptr* self)'
+    extern 'void ABI_TreeView_collapse(TreeView::Ptr* self, int hierarchySize, char*(*f)(void))'
+    extern 'void ABI_TreeView_collapseAll(TreeView::Ptr* self)'
+    extern 'int ABI_TreeView_selectItem(TreeView::Ptr* self, int hierarchySize, char*(*f)(void))'
+    extern 'void ABI_TreeView_deselectItem(TreeView::Ptr* self)'
+    extern 'int ABI_TreeView_removeItem(TreeView::Ptr* self, int hierarchySize, char*(*f)(void), int removeParentsWhenEmpty)'
+    extern 'void ABI_TreeView_removeAllItems(TreeView::Ptr* self)'
+    extern 'void ABI_TreeView_getSelectedItem(TreeView::Ptr* self, void(*f)(const char32_t*))'
+    extern 'void ABI_TreeView_getNodes(TreeView::Ptr* self, void(*m)(const char32_t*, int), void(*up)())'
+    extern 'void ABI_TreeView_setItemHeight(TreeView::Ptr* self, int itemHeight)'
+    extern 'int ABI_TreeView_getItemHeight(TreeView::Ptr* self)'
+    extern 'void ABI_TreeView_setVerticalScrollbarValue(TreeView::Ptr* self, int value)'
+    extern 'int ABI_TreeView_getVerticalScrollbarValue(TreeView::Ptr* self)'
+    extern 'void ABI_TreeView_setHorizontalScrollbarValue(TreeView::Ptr* self, int value)'
+    extern 'int ABI_TreeView_getHorizontalScrollbarValue(TreeView::Ptr* self)'
+    extern 'void* ABI_TreeView_onItemSelect(TreeView::Ptr* self)'
+    extern 'void* ABI_TreeView_onDoubleClick(TreeView::Ptr* self)'
+    extern 'void* ABI_TreeView_onExpand(TreeView::Ptr* self)'
+    extern 'void* ABI_TreeView_onCollapse(TreeView::Ptr* self)'
+    extern 'void* ABI_TreeView_onRightClick(TreeView::Ptr* self)'
+    extern 'void* ABI_Scrollbar_new()'
+    extern 'void ABI_Scrollbar_setMaximum(Scrollbar::Ptr* self, int maximum)'
+    extern 'int ABI_Scrollbar_getMaximum(Scrollbar::Ptr* self)'
+    extern 'void ABI_Scrollbar_setValue(Scrollbar::Ptr* self, int value)'
+    extern 'int ABI_Scrollbar_getValue(Scrollbar::Ptr* self)'
+    extern 'void ABI_Scrollbar_setViewportSize(Scrollbar::Ptr* self, int viewport)'
+    extern 'int ABI_Scrollbar_getViewportSize(Scrollbar::Ptr* self)'
+    extern 'void ABI_Scrollbar_setScrollAmount(Scrollbar::Ptr* self, int scrollAmount)'
+    extern 'int ABI_Scrollbar_getScrollAmount(Scrollbar::Ptr* self)'
+    extern 'void ABI_Scrollbar_setAutoHide(Scrollbar::Ptr* self, int autoHide)'
+    extern 'int ABI_Scrollbar_getAutoHide(Scrollbar::Ptr* self)'
+    extern 'void ABI_Scrollbar_setVerticalScroll(Scrollbar::Ptr* self, int vertical)'
+    extern 'int ABI_Scrollbar_getVerticalScroll(Scrollbar::Ptr* self)'
+    extern 'float ABI_Scrollbar_getDefaultWidth(Scrollbar::Ptr* self)'
+    extern 'void* ABI_Scrollbar_onValueChange(Scrollbar::Ptr* self)'
   end
 
   class Util
@@ -717,6 +769,15 @@ class Tgui
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Window_new(*a)); initialized(); end
     def close(*a, &b);    Abi.call_arg_map! a; Abi.ABI_Window_close(@pointer, *a); end
     def open?(*a);    Abi.call_arg_map! a; Abi.ABI_Window_isOpen(@pointer, *a).odd?; end
+  end
+
+  class BackendGui
+    def text_size=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_BackendGui_setTextSize(@pointer, *a); end
+    def text_size!(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_setTextSize(@pointer, *a); end
+    def text_size(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_getTextSize(@pointer, *a); end
+    module Private; def self.get_view(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_getView(*a); end; end
+    def on_view_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_BackendGui_onViewChange(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
+    def on_view_change=(a);    signal = Abi.ABI_BackendGui_onViewChange(@pointer).parse('Signal'); signal.connect(&a); end
   end
 
   class Gui
@@ -812,13 +873,13 @@ class Tgui
 
   class ButtonBase
     module Private; def self.set_text_position(*a);    Abi.call_arg_map! a; Abi.ABI_ButtonBase_setTextPosition(*a); end; end
+    def text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ButtonBase_setText(@pointer, *a); end
+    def text!(*a);    Abi.call_arg_map! a; Abi.ABI_ButtonBase_setText(@pointer, *a); end
+    def text(*a);    Abi.call_arg_map! a; Abi.ABI_ButtonBase_getText(@pointer, *a).parse('char32_t'); end
   end
 
   class Button
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Button_new(*a)); initialized(); end
-    def text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Button_setText(@pointer, *a); end
-    def text!(*a);    Abi.call_arg_map! a; Abi.ABI_Button_setText(@pointer, *a); end
-    def text(*a);    Abi.call_arg_map! a; Abi.ABI_Button_getText(@pointer, *a).parse('char32_t'); end
     def on_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Button_onPress(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
     def on_press=(a);    signal = Abi.ABI_Button_onPress(@pointer).parse('Signal'); signal.connect(&a); end
   end
@@ -1674,5 +1735,82 @@ class Tgui
     def on_selection_change=(a);    signal = Abi.ABI_TextArea_onSelectionChange(@pointer).parse('Signal'); signal.connect(&a); end
     def on_caret_position_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TextArea_onCaretPositionChange(@pointer, *a).parse('Signal'); block_given? ? signal.connect(&b) : signal; end
     def on_caret_position_change=(a);    signal = Abi.ABI_TextArea_onCaretPositionChange(@pointer).parse('Signal'); signal.connect(&a); end
+  end
+
+  class ToggleButton
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ToggleButton_new(*a)); initialized(); end
+    def down=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_ToggleButton_setDown(@pointer, *a); end
+    def down!(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_setDown(@pointer, *a); end
+    def down?(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_isDown(@pointer, *a).odd?; end
+    def on_toggle(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_ToggleButton_onToggle(@pointer, *a).parse('SignalBool'); block_given? ? signal.connect(&b) : signal; end
+    def on_toggle=(a);    signal = Abi.ABI_ToggleButton_onToggle(@pointer).parse('SignalBool'); signal.connect(&a); end
+  end
+
+  class ToolTip
+    def self.set_initial_delay(*a);    Abi.call_arg_map! a; Abi.ABI_ToolTip_setInitialDelay(*a); end
+    def self.get_initial_delay(*a);    Abi.call_arg_map! a; Abi.ABI_ToolTip_getInitialDelay(*a); end
+    def self.set_distance_to_mouse(*a);    Abi.call_arg_map! a; Abi.ABI_ToolTip_setDistanceToMouse(*a); end
+    def self.get_distance_to_mouse(*a);    Abi.call_arg_map! a; Abi.ABI_ToolTip_getDistanceToMouse(*a).parse('Vector2f'); end
+    def self.set_show_on_disabled_widget(*a);    Abi.call_arg_map! a; Abi.ABI_ToolTip_setShowOnDisabledWidget(*a); end
+    def self.get_show_on_disabled_widget(*a);    Abi.call_arg_map! a; Abi.ABI_ToolTip_getShowOnDisabledWidget(*a).odd?; end
+  end
+
+  class TreeView
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TreeView_new(*a)); initialized(); end
+    module Private; def self.add_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_addItem(*a).odd?; end; end
+    module Private; def self.expand(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_expand(*a); end; end
+    def expand_all(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TreeView_expandAll(@pointer, *a); end
+    module Private; def self.collapse(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_collapse(*a); end; end
+    def collapse_all(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TreeView_collapseAll(@pointer, *a); end
+    module Private; def self.select_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_selectItem(*a).odd?; end; end
+    def deselect_item(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TreeView_deselectItem(@pointer, *a); end
+    module Private; def self.remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_removeItem(*a).odd?; end; end
+    def remove_all_items(*a, &b);    Abi.call_arg_map! a; Abi.ABI_TreeView_removeAllItems(@pointer, *a); end
+    module Private; def self.get_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_getSelectedItem(*a); end; end
+    module Private; def self.get_nodes(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_getNodes(*a); end; end
+    def item_height=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TreeView_setItemHeight(@pointer, *a); end
+    def item_height!(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_setItemHeight(@pointer, *a); end
+    def item_height(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_getItemHeight(@pointer, *a); end
+    def vertical_scrollbar_value=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TreeView_setVerticalScrollbarValue(@pointer, *a); end
+    def vertical_scrollbar_value!(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_setVerticalScrollbarValue(@pointer, *a); end
+    def vertical_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_getVerticalScrollbarValue(@pointer, *a); end
+    def horizontal_scrollbar_value=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_TreeView_setHorizontalScrollbarValue(@pointer, *a); end
+    def horizontal_scrollbar_value!(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_setHorizontalScrollbarValue(@pointer, *a); end
+    def horizontal_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_getHorizontalScrollbarValue(@pointer, *a); end
+    def on_item_select(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TreeView_onItemSelect(@pointer, *a).parse('SignalItemHierarchy'); block_given? ? signal.connect(&b) : signal; end
+    def on_item_select=(a);    signal = Abi.ABI_TreeView_onItemSelect(@pointer).parse('SignalItemHierarchy'); signal.connect(&a); end
+    def on_double_click(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TreeView_onDoubleClick(@pointer, *a).parse('SignalItemHierarchy'); block_given? ? signal.connect(&b) : signal; end
+    def on_double_click=(a);    signal = Abi.ABI_TreeView_onDoubleClick(@pointer).parse('SignalItemHierarchy'); signal.connect(&a); end
+    def on_expand(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TreeView_onExpand(@pointer, *a).parse('SignalItemHierarchy'); block_given? ? signal.connect(&b) : signal; end
+    def on_expand=(a);    signal = Abi.ABI_TreeView_onExpand(@pointer).parse('SignalItemHierarchy'); signal.connect(&a); end
+    def on_collapse(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TreeView_onCollapse(@pointer, *a).parse('SignalItemHierarchy'); block_given? ? signal.connect(&b) : signal; end
+    def on_collapse=(a);    signal = Abi.ABI_TreeView_onCollapse(@pointer).parse('SignalItemHierarchy'); signal.connect(&a); end
+    def on_right_click(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_TreeView_onRightClick(@pointer, *a).parse('SignalItemHierarchy'); block_given? ? signal.connect(&b) : signal; end
+    def on_right_click=(a);    signal = Abi.ABI_TreeView_onRightClick(@pointer).parse('SignalItemHierarchy'); signal.connect(&a); end
+  end
+
+  class Scrollbar
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Scrollbar_new(*a)); initialized(); end
+    def maximum=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Scrollbar_setMaximum(@pointer, *a); end
+    def maximum!(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setMaximum(@pointer, *a); end
+    def maximum(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getMaximum(@pointer, *a); end
+    def value=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Scrollbar_setValue(@pointer, *a); end
+    def value!(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setValue(@pointer, *a); end
+    def value(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getValue(@pointer, *a); end
+    def viewport_size=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Scrollbar_setViewportSize(@pointer, *a); end
+    def viewport_size!(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setViewportSize(@pointer, *a); end
+    def viewport_size(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getViewportSize(@pointer, *a); end
+    def scroll_amount=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Scrollbar_setScrollAmount(@pointer, *a); end
+    def scroll_amount!(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setScrollAmount(@pointer, *a); end
+    def scroll_amount(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getScrollAmount(@pointer, *a); end
+    def auto_hide=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Scrollbar_setAutoHide(@pointer, *a); end
+    def auto_hide!(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setAutoHide(@pointer, *a); end
+    def get_auto_hide?(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getAutoHide(@pointer, *a).odd?; end
+    def vertical_scroll=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_Scrollbar_setVerticalScroll(@pointer, *a); end
+    def vertical_scroll!(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setVerticalScroll(@pointer, *a); end
+    def get_vertical_scroll?(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getVerticalScroll(@pointer, *a).odd?; end
+    def default_width(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getDefaultWidth(@pointer, *a); end
+    def on_value_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_Scrollbar_onValueChange(@pointer, *a).parse('SignalUInt'); block_given? ? signal.connect(&b) : signal; end
+    def on_value_change=(a);    signal = Abi.ABI_Scrollbar_onValueChange(@pointer).parse('SignalUInt'); signal.connect(&a); end
   end
 end

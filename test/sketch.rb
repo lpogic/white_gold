@@ -1,10 +1,29 @@
 require_relative '../lib/wg'
 
-text_area! maximum_characters: 10, default_text: "Wpisz tu co" do
-  on_text_change! do
-    p _1
-  end
+def login username, password
+  puts "Username: " + username.text
+  puts "Password: " + password.text
 end
+
+def update_text_size gui
+  window_height = gui.view[3]
+  gui.text_size = (0.07 * window_height).round
+end
+
+update_text_size gui
+gui.on_view_change{ update_text_size gui }
+
+picture! url: "xubuntu_bg_aluminium.jpg", size: [100.pc, 100.pc]
+
+@edit_box_username = editbox! size: [66.67.pc, 12.5.pc], 
+  position: [16.67.pc, 16.67.pc], default_text: "Username"
+
+@edit_box_password = editbox! size: [66.67.pc, 12.5.pc],
+  position: [16.67.pc, 41.6.pc], password_character: "*",
+  default_text: "Password"
+
+@button = button! text: "Login", size: [50.pc, 16.67.pc],
+  position: [25.pc, 70.pc], on_press: proc{ login @edit_box_username, @edit_box_password }
 
 # require_relative '../lib/white_gold'
 
