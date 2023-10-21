@@ -1,6 +1,6 @@
 require_relative 'button'
 
-class Tgui
+module Tgui
   class Knob < Button
   end
 end

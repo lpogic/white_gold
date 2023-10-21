@@ -1,9 +1,16 @@
 require_relative 'button'
 
-class Tgui
+module Tgui
   class BitmapButton < Button
+
+    abi_attr :image_scaling
+
     def image=(image)
-      Private.set_image @pointer, Texture.produce(image)
+      _abi_set_image Texture.produce(image)
+    end
+
+    def image
+      _abi_get_image
     end
   end
 end

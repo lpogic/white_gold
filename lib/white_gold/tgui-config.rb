@@ -1,4 +1,4 @@
-class Tgui
+module Tgui
   module Config
     LIBS = [
       File.expand_path('../../ext/dll/openal32.dll', __dir__),

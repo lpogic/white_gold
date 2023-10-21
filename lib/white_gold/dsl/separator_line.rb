@@ -1,6 +1,6 @@
 require_relative 'clickable_widget'
 
-class Tgui
+module Tgui
   class SeparatorLine < ClickableWidget
   end
 end

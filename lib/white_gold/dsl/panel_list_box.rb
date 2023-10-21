@@ -1,6 +1,6 @@
 require_relative 'scrollable_panel'
 
-class Tgui
+module Tgui
   class PanelListBox < ScrollablePanel
     def item id: "", index: -1, **na, &b
       item = Panel.new pointer: add_item(id, index)

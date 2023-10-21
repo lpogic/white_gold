@@ -1,6 +1,6 @@
 require_relative 'signal'
 
-class Tgui
+module Tgui
   class SignalString < Signal
     def connect &b
       block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |str|
@@ -8,7 +8,7 @@ class Tgui
       rescue Encoding::InvalidByteSequenceError
         p "error"
       end
-      id = Private.connect(@pointer, block_caller)
+      id = _abi_connect(@pointer, block_caller)
       @@callback_storage[id] = block_caller
       return id
     end

@@ -1,6 +1,6 @@
 require_relative 'container'
 
-class Tgui
+module Tgui
   class RadioButtonGroup < Container
   end
 end

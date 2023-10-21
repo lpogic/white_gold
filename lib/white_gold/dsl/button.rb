@@ -1,6 +1,9 @@
 require_relative 'button_base'
 
-class Tgui
+module Tgui
   class Button < ButtonBase
+
+    abi_signal :on_press, Signal
+    
   end
 end

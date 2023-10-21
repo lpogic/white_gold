@@ -1,8 +1,8 @@
 require_relative 'widget'
 
-class Tgui
+module Tgui
   class Tabs < Widget
-    class Item
+    class Tab
       def initialize tabs, index
         @tabs = tabs
         @index = index
@@ -26,17 +26,17 @@ class Tgui
 
     end
 
-    def item text:, index: nil, **na, &b
+    def tab text:, index: nil, **na, &b
       if !index
         index = add text, false
       else
         insert index, text, false
       end
-      item = Item.new self, index
-      bang_nest item, **na, &b
+      tab = Tab.new self, index
+      bang_nest tab, **na, &b
     end
 
-    class Items
+    class Tabs
       def initialize tabs
         @tabs = tabs
       end
@@ -44,18 +44,18 @@ class Tgui
       def [](index)
         case index
         when Integer
-          Item.new @tabs, index
+          Tab.new @tabs, index
         when :selected
           selected_index = @tabs.selected_index
-          selected_index >= 0 ? Item.new(@tabs, selected_index) : nil
+          selected_index >= 0 ? Tab.new(@tabs, selected_index) : nil
         else
           raise ArgumentError("Only Integers or :selected allowed")
         end
       end
     end
 
-    def items
-      Items.new self
+    def tabs
+      Tabs.new self
     end
   end
 end

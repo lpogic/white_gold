@@ -1,16 +1,16 @@
 require_relative 'widget'
 
-class Tgui
+module Tgui
   class ListView < Widget
 
     ColumnAlignment = enum :left, :center, :right
 
     def set_column_alignment(index, ali)
-      Private.set_column_alignment(@pointer, index, ColumnAlignment[ali])
+      _abi_set_column_alignment(@pointer, index, ColumnAlignment[ali])
     end
     
     def column_alignment(index)
-      ColumnAlignment[Private.get_column_alignment @pointer, index]
+      ColumnAlignment[_abi_get_column_alignment @pointer, index]
     end
 
     class Column
@@ -109,7 +109,7 @@ class Tgui
 
     def remove_all_columns
       @columns = {}
-      Private.remove_all_columns @pointer
+      _abi_remove_all_columns @pointer
     end
 
     def columns
@@ -165,13 +165,13 @@ class Tgui
     end
 
     def remove_item index
-      Private.remove_item @pointer, index
+      _abi_remove_item @pointer, index
       @items.filter!{ _2 != index }.transform_values!{ _1 > index ? _1 - 1 : _1 }
     end
 
     def remove_all_items
       @items = {}
-      Private.remove_all_items @pointer
+      _abi_remove_all_items @pointer
     end
 
     def initialized
@@ -188,9 +188,9 @@ class Tgui
         ""
       end
       if index
-        Private.insert_item @pointer, index, block_caller
+        _abi_insert_item @pointer, index, block_caller
       else
-        Private.add_item @pointer, block_caller
+        _abi_add_item @pointer, block_caller
       end
     end
 
@@ -201,7 +201,7 @@ class Tgui
       rescue StopIteration
         ""
       end
-      Private.change_item @pointer, index, block_caller
+      _abi_change_item @pointer, index, block_caller
     end
 
     def item_data index
@@ -209,7 +209,7 @@ class Tgui
       block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |str|
         data << str.parse('char32_t')
       end
-      Private.get_item_row @pointer, index, block_caller
+      _abi_get_item_row @pointer, index, block_caller
       return data
     end
 
@@ -218,7 +218,7 @@ class Tgui
       block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |index|
         indices << index
       end
-      Private.get_selected_item_indices @pointer, block_caller
+      _abi_get_selected_item_indices @pointer, block_caller
       return indices      
     end
 
@@ -229,7 +229,7 @@ class Tgui
       rescue StopIteration
         -1
       end
-      Private.set_selected_items @pointer, block_caller
+      _abi_set_selected_items @pointer, block_caller
     end
   end
 end

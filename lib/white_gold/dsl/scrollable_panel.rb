@@ -1,6 +1,6 @@
 require_relative 'panel'
 
-class Tgui
+module Tgui
   class ScrollablePanel < Panel
   end
 end

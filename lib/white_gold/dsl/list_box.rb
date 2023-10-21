@@ -1,6 +1,6 @@
 require_relative 'widget'
 
-class Tgui
+module Tgui
   class ListBox < Widget
     TextAlignment = enum :left, :center, :right
 
@@ -49,13 +49,13 @@ class Tgui
     @@auto_id = "@/"
 
     def text_alignment=(alignment)
-      Private.set_text_alignment(@pointer, TextAlignment[alignment])
+      _abi_set_text_alignment(@pointer, TextAlignment[alignment])
     end
 
     alias_method :text_alignment!, :text_alignment=
 
     def text_alignment
-      TextAlignment[Private.get_text_alignment @pointer]
+      TextAlignment[_abi_get_text_alignment @pointer]
     end
 
     def item text:, id: nil
@@ -69,32 +69,32 @@ class Tgui
     def selected_item=(item)
       case item
       when nil, false then deselect_item
-      when Integer then Private.set_selected_item_by_index @pointer, item
-      else Private.set_selected_item_by_id @pointer, item.to_s
+      when Integer then _abi_set_selected_item_by_index @pointer, item
+      else _abi_set_selected_item_by_id @pointer, item.to_s
       end
     end
 
     alias_method :selected_item!, :selected_item=
 
     def selected_item
-      return Private.get_selected_item_id @pointer
+      return _abi_get_selected_item_id @pointer
     end
 
     def remove(item)
       case item
-      when Integer then Private.remove_item_by_index @pointer, item
-      else Private.remove_item_by_id @pointe, item.to_s
+      when Integer then _abi_remove_item_by_index @pointer, item
+      else _abi_remove_item_by_id @pointe, item.to_s
       end
     end
 
     def [](item)
       case item
       when :selected
-        Private.get_selected_item_id @pointer
+        _abi_get_selected_item_id @pointer
       when Integer
-        Private.get_item_by_index(@pointer, item)
+        _abi_get_item_by_index(@pointer, item)
       else
-        Private.get_item_by_id @pointer, item.to_s
+        _abi_get_item_by_id @pointer, item.to_s
       end
     end
 
@@ -103,26 +103,26 @@ class Tgui
       block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |id|
         ids << ids.utf32_to_s
       end
-      Private.get_item_ids @pointer, block_caller
+      _abi_get_item_ids @pointer, block_caller
       return ids
     end
 
     def contains?(id)
-      Private.contains_id @pointer, id.to_s
+      _abi_contains_id @pointer, id.to_s
     end
 
     def []=(item, value)
       case item
       when Integer
         if item < item_count
-          Private.change_item_by_index @pointer, item, value
+          _abi_change_item_by_index @pointer, item, value
         else
           add_item value, @@auto_id.next!
         end
       else
         id = item.to_s
-        if Private.contains_id @pointer, id
-          Private.change_item_by_id @pointer, id, value
+        if _abi_contains_id @pointer, id
+          _abi_change_item_by_id @pointer, id, value
         else
           add_item value, id
         end

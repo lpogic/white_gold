@@ -1,6 +1,6 @@
 require_relative 'box_layout_ratios'
 
-class Tgui
+module Tgui
   class VerticalLayout < BoxLayoutRatios
   end
 end

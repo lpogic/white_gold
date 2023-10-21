@@ -1,6 +1,6 @@
 require_relative 'radio_button'
 
-class Tgui
+module Tgui
   class CheckBox < RadioButton
   end
 end

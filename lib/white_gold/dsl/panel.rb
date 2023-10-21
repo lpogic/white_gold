@@ -1,6 +1,6 @@
 require_relative 'group'
 
-class Tgui
+module Tgui
   class Panel < Group
   end
 end

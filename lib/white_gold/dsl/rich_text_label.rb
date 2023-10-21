@@ -1,6 +1,6 @@
 require_relative 'label'
 
-class Tgui
+module Tgui
   class RichTextLabel < Label
   end
 end

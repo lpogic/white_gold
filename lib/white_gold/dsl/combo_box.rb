@@ -1,77 +1,128 @@
 require_relative 'widget'
+require_relative 'signal_item'
+require_relative '../convention/widget_like'
 
-class Tgui
+module Tgui
   class ComboBox < Widget
-    ExpandDirection = enum :up, :down, :auto
 
-    @@auto_id = "@/"
-
-    def selected=(item)
-      case item
-      when nil, false then deselect_item
-      when Integer then Private.set_selected_item_by_index @pointer, item
-      else Private.set_selected_item_by_id @pointer, item.to_s
+    class SignalItem < Tgui::SignalItem
+      def block_caller &b
+        Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP]) do |str1, str2|
+          id = str2.parse('char32_t')
+          b.(@widget.self_get_object_by_id(id))
+        end
       end
+    end
+
+    abi_attr :display_count, :items_to_display
+    abi_attr :default_text
+    abi_attr :scroll_item?, :change_item_on_scroll
+    abi_signal :on_item_select, SignalItem
+
+    ExpandDirection = enum :down, :up, :auto
+
+    @@auto_item_id = "@/"
+
+    class Item < WidgetLike
+      def initialize combo_box, id
+        @combo_box = combo_box
+        @id = id
+      end
+
+      def object=(object)
+        @combo_box.self_objects[@id] = object
+      end
+
+      def object
+        return @combo_box.self_objects[@id]
+      end
+
+      def text=(text)
+        _abi_change_item_by_id @id, text
+      end
+
+      def text
+        _abi_get_item_by_id @id
+      end
+    end
+
+    def item object = nil, **na, &b
+      @@auto_item_id = id = @@auto_item_id.next
+      _abi_add_item object.to_s, id
+      item = Item.new self, id
+      na[:object] ||= object
+      bang_nest item, **na, &b
     end
 
     def selected
-      return Private.get_selected_item_id @pointer
+      return self_objects[_abi_get_selected_item_id]
     end
 
-    def remove(item)
-      case item
-      when Integer then Private.remove_item_by_index @pointer, item
-      else Private.remove_item_by_id @pointe, item.to_s
+    def selected=(object)
+      id = self_find_id_by_object object
+      raise "`#{object}` is out of the combobox" if !id
+      _abi_set_selected_item_by_id id
+    end
+
+    abi_alias :deselect, :deselect_item
+
+    def remove object
+      id = self_find_id_by_object object
+      if id
+        _abi_remove_item_by_id id
+        self_objects.delete id
       end
     end
 
-    def [](item)
-      case item
-      when Integer
-        Private.get_item_by_id(@pointer, get_item_ids[item])
-      else
-        Private.get_item_by_id @pointer, item.to_s
-      end
-    end
-
-    def items
-      ids = []
-      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |id|
-        ids << ids.utf32_to_s
-      end
-      Private.get_item_ids @pointer, block_caller
-      return ids
-    end
-
-    def contains?(id)
-      Private.contains_id @pointer, id.to_s
-    end
-
-    def []=(item, value)
-      case item
-      when Integer
-        if item < item_count
-          Private.change_item_by_index @pointer, item, value
-        else
-          add_item value, @@auto_id.next!
-        end
-      else
-        id = item.to_s
-        if Private.contains_id @pointer, id
-          Private.change_item_by_id @pointer, id, value
-        else
-          add_item value, id
-        end
-      end
+    def remove_all
+      self_objects.clear
+      _abi_remove_all_items
     end
 
     def items=(items)
-      remove_all_items
-      items = items.map{ [_1, _1] }.to_h if Array === items
-      items.each do |id, value|
-        self[id] = value
+      remove_all
+      items.each do |item|
+        self.item item
       end
     end
     
+    def items
+      self_objects.values
+    end
+
+    def expand_direction=(direction)
+      _abi_set_expand_direction ExpandDirection[direction]
+    end
+
+    def expand_direction
+      ExpandDirection[_abi_get_expand_direction]
+    end
+
+    def displayed_count=(count)
+      self.items_to_display = count
+    end
+
+    def displayed_count
+      self.items_to_display
+    end
+
+    def [](object)
+      id = self_find_id_by_object object
+      id ? Item.new(self, id) : nil
+    end
+
+    # internal
+
+    def self_get_object_by_id id
+      return self_objects[id]
+    end
+
+    def self_find_id_by_object object
+      self_objects.find{ _2 == object }&.at(0)
+    end
+
+    def self_objects
+      self._objects ||= {}
+    end
   end
 end

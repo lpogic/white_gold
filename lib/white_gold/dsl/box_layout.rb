@@ -1,10 +1,10 @@
 require_relative 'group'
 
-class Tgui
+module Tgui
   class BoxLayout < Group
     def get i
       if Integer === i
-        widget = Private.get_by_index pointer, i
+        widget = _abi_get_by_index pointer, i
         return nil if widget.null?
         type = Widget.get_type widget
         Tgui.const_get(type).new pointer: widget
@@ -14,6 +14,7 @@ class Tgui
     end
 
     def []=(*a)
+      raise "TODO"
       if a.size == 1
         add a[0], @@auto_name.next!
       elsif a.size == 2
@@ -29,7 +30,7 @@ class Tgui
 
     def remove i
       if Integer === i
-        Private.remove_by_index(pointer, i).odd?
+        _abi_remove_by_index(pointer, i).odd?
       else
         super i
       end

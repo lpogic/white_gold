@@ -10,4 +10,10 @@ class WidgetLike
   def method_missing name, *a, **na, &b
     bang_method_missing name, *a, **na, &b
   end
+
+  def flags=(flags)
+    flags.each do |f|
+      send("#{f}=", true)
+    end
+  end
 end

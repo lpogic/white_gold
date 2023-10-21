@@ -18,10 +18,6 @@ module Fiddle
         v
       when 'Color'
         Tgui::Color.new pointer: self
-      when /^SignalTyped<.*/
-        Tgui::SignalPointer.new pointer: self, autofree: false
-      when /^Signal\w*/
-        Tgui.const_get(type).new pointer: self, autofree: false
       when 'Texture'
         Tgui::Texture.new pointer: self
       else

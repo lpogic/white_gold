@@ -1,6 +1,6 @@
 require_relative 'container'
 
-class Tgui
+module Tgui
   class Grid < Container
     Alignment = enum :center, :upper_left, :up, :upper_right, :right, :bottom_right, :botton, :bottom_left, :left
     
@@ -11,12 +11,12 @@ class Tgui
 
       def [](*a)
         widget = @grid.get *a
-        Private.get_widget_padding @grid, widget if widget
+        _abi_get_widget_padding @grid, widget if widget
       end
 
       def []=(*a, value)
         widget = @grid.get *a
-        Private.set_widget_padding @grid, widget, *value_to_padding(value) if widget
+        _abi_set_widget_padding @grid, widget, *value_to_padding(value) if widget
       end
 
       def value_to_padding v
@@ -43,12 +43,12 @@ class Tgui
 
       def [](*a)
         widget = @grid.get *a
-        Alignment[Private.get_widget_alignment @grid, widget] if widget
+        Alignment[_abi_get_widget_alignment @grid, widget] if widget
       end
 
       def []=(*a, value)
         widget = @grid.get *a
-        Private.set_widget_padding @grid, widget, Alignment[value] if widget
+        _abi_set_widget_padding @grid, widget, Alignment[value] if widget
       end
     end
 
@@ -59,7 +59,7 @@ class Tgui
 
       def []=(*a, value)
         widget = @grid.get *a
-        Private.set_widget_cell @grid, widget, *value if widget
+        _abi_set_widget_cell @grid, widget, *value if widget
       end
     end
 
@@ -84,14 +84,14 @@ class Tgui
     def get *a
       case a.size
       when 1 then super *a
-      when 2 then Private.get_widget @pointer, *a
+      when 2 then _abi_get_widget @pointer, *a
       else nil
       end
     end
 
     def add widget, name = nil
       super
-      Private.set_widget_cell @pointer, widget, @current_row, @current_column
+      _abi_set_widget_cell @pointer, widget, @current_row, @current_column
       @current_column += 1
     end
 

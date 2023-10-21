@@ -1,6 +1,6 @@
 require_relative '../extern_object'
 
-class Tgui
+module Tgui
   class Util < ExternObject
   end
 end

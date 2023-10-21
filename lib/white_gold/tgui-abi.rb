@@ -4,7 +4,7 @@ require_relative 'tgui-config'
 require_relative 'extern_object'
 require_relative 'extern_enum'
 
-class Tgui
+module Tgui
 
   module Abi
     extend Fiddle::Importer

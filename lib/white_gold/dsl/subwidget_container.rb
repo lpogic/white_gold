@@ -1,6 +1,6 @@
 require_relative 'widget'
 
-class Tgui
+module Tgui
   class SubwidgetContainer < Widget
   end
 end

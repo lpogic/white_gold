@@ -1,6 +1,6 @@
 require_relative 'box_layout'
 
-class Tgui
+module Tgui
   class BoxLayoutRatios < BoxLayout
     class Ratios
       def initialize box
@@ -10,24 +10,24 @@ class Tgui
       def [](i)
         case i
         when Integer
-          Private.get_ratio_by_index @box, i, ratio
+          _abi_get_ratio_by_index @box, i, ratio
         when Widget
-          Private.get_ratio @box, i, ratio
+          _abi_get_ratio @box, i, ratio
         else
           i = @box.get i
-          Private.get_ratio @box, i, ratio
+          _abi_get_ratio @box, i, ratio
         end
       end
 
       def []=(i, ratio)
         case i
         when Integer
-          Private.set_ratio_by_index @box, i, ratio
+          _abi_set_ratio_by_index @box, i, ratio
         when Widget
-          Private.set_ratio @box, i, ratio
+          _abi_set_ratio @box, i, ratio
         else
           i = @box.get i
-          Private.set_ratio @box, i, ratio
+          _abi_set_ratio @box, i, ratio
         end
       end
     end

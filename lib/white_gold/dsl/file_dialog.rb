@@ -1,13 +1,13 @@
 require_relative 'child_window'
 
-class Tgui
+module Tgui
   class FileDialog < ChildWindow
     def selected_paths # not empty only in onFileSelected callback
       data = []
       block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |str|
         data << str.parse('char32_t')
       end
-      Private.get_selected_paths @pointer, block_caller
+      _abi_get_selected_paths @pointer, block_caller
       return data
     end
 
@@ -24,7 +24,7 @@ class Tgui
       rescue StopIteration
         ""
       end
-      Private.set_file_type_filters @pointer, filters.size, length_block_caller, filter_block_caller, 0
+      _abi_set_file_type_filters @pointer, filters.size, length_block_caller, filter_block_caller, 0
     end
 
     def file_type_filters
@@ -32,7 +32,7 @@ class Tgui
       block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP]) do |i, b, f|
         data[b.parse('char32_t')] << f.parse('char32_t')
       end
-      Private.get_file_type_filters @pointer, block_caller
+      _abi_get_file_type_filters @pointer, block_caller
       data.default_proc = nil
       return data
     end
@@ -48,7 +48,7 @@ class Tgui
       block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |str|
         data << str.parse('char32_t')
       end
-      Private.get_list_view_column_captions @pointer, block_caller
+      _abi_get_list_view_column_captions @pointer, block_caller
       return data
     end
   end

@@ -1,6 +1,6 @@
 require_relative 'widget'
 
-class Tgui
+module Tgui
   class TreeView < Widget
 
     def self.path_block path, &b
@@ -25,7 +25,7 @@ class Tgui
 
       def expanded=(expanded)
         path_block do
-          expanded ? Private.expand(@tree_view, _1, _2) : Private.collapse(@tree_view, _1, _2)
+          expanded ? _abi_expand(@tree_view, _1, _2) : _abi_collapse(@tree_view, _1, _2)
         end
       end
 
@@ -55,7 +55,7 @@ class Tgui
       def item text:, **na, &b
         path = @path.push(text).flatten
         TreeView.path_block path do
-          Private.add_item @tree_view, _1, _2, true
+          _abi_add_item @tree_view, _1, _2, true
         end
         item = Item.new @tree_view, path
         bang_nest item, **na, &b
@@ -65,7 +65,7 @@ class Tgui
     def item text:, **na, &b
       text = [text] if not Array === text
       TreeView.path_block text do
-        Private.add_item @pointer, _1, _2, true
+        _abi_add_item @pointer, _1, _2, true
       end
       item = Item.new self, text
       bang_nest item, **na, &b

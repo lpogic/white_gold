@@ -1,15 +1,21 @@
 require_relative 'clickable_widget'
 
-class Tgui
+module Tgui
   class EditBox < ClickableWidget
     Alignment = enum :left, :center, :right
 
+    def text=(object)
+      _abi_set_text object.to_s
+    end
+
+    abi_alias :text, :get_
+
     def alignment=(ali)
-      Private.set_alignment(@pointer, Alignment[ali])
+      _abi_set_alignment(@pointer, Alignment[ali])
     end
     
     def alignment
-      Alignment[Private.get_alignment @pointer]
+      Alignment[_abi_get_alignment @pointer]
     end
   end
 end

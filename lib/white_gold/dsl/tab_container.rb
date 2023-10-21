@@ -1,17 +1,17 @@
 require_relative 'container'
 require_relative '../convention/delegate'
 
-class Tgui
+module Tgui
   class TabContainer < Container
 
     TabAlign = enum :top, :bottom
 
     def tab_alignment=(alignment)
-      Private.set_tab_alignment(@pointer, TabAlign[alignment])
+      _abi_set_tab_alignment(@pointer, TabAlign[alignment])
     end
     
     def tab_alignment
-      TabAlign[Private.get_tab_alignment @pointer]
+      TabAlign[_abi_get_tab_alignment @pointer]
     end
 
     class TabPanel < Panel
@@ -40,7 +40,7 @@ class Tgui
       end
 
       def enabled=(enabled)
-        tabs = Tabs.new pointer: Abi.ABI_TabContainer_getTabs(@tab_container.pointer)
+        tabs = Tabs.new pointer: _abi_ABI_TabContainer_getTabs(@tab_container.pointer)
         tabs.tab_enabled = [@index, enabled]
       end
     end

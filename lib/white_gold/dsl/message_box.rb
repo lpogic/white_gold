@@ -1,15 +1,15 @@
 require_relative 'button'
 
-class Tgui
+module Tgui
   class MessageBox < ChildWindow
     Alignment = enum :left, :center, :right
 
     def button_alignment=(ali)
-      Private.set_button_alignment(@pointer, Alignment[ali])
+      _abi_set_button_alignment(@pointer, Alignment[ali])
     end
     
     def button_alignment
-      Alignment[Private.get_button_alignment @pointer]
+      Alignment[_abi_get_button_alignment @pointer]
     end
 
     def initialized
@@ -21,7 +21,7 @@ class Tgui
 
     def button(text:, on_press: nil)
       (@button_press_callbacks[text] ||= []) << on_press.to_proc if on_press
-      Private.add_button @pointer, text
+      _abi_add_button @pointer, text
     end
 
     def remove_buttons
@@ -39,7 +39,7 @@ class Tgui
       rescue StopIteration
         ""
       end
-      Private.change_buttons @pointer, buttons.size, block_caller
+      _abi_change_buttons @pointer, buttons.size, block_caller
     end
 
     class Buttons

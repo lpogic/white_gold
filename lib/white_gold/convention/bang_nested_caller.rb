@@ -5,9 +5,16 @@ module BangNestedCaller
 
   def bang_method_missing name, *a, **na, &b
     return @bang_target.send(name, *a, **na, &b) if @bang_target && @bang_target.respond_to?(name)
+    if respond_to?("#{name[...-1]}=")
+      return block_given? ? send("#{name[...-1]}=", b) : send("#{name[...-1]}=", a)
+    end
     return send(name[...-1], *a, **na, &b) if respond_to?(name[...-1])
     no_method_error = NoMethodError.new("undefined bang nested method `#{name}` for #{bang_object_stack.map(&:class).join("/")}")
     raise no_method_error
+  end
+
+  def self!
+    @bang_target.respond_to?(:self!) ? @bang_target.self! : self
   end
 
   def bang_object_stack root = true
@@ -17,6 +24,7 @@ module BangNestedCaller
     stack += @bang_target.bang_object_stack(false) if @bang_target&.respond_to? :bang_object_stack
     return stack
   end
+
 
   def bang_nest item, **na, &b
     na.each do |k, v|

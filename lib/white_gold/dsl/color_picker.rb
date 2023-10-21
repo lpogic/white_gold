@@ -1,6 +1,6 @@
 require_relative 'child_window'
 
-class Tgui
+module Tgui
   class ColorPicker < ChildWindow
   end
 end

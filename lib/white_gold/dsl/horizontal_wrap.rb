@@ -1,6 +1,6 @@
 require_relative 'box_layout'
 
-class Tgui
+module Tgui
   class HorizontalWrap < BoxLayout
   end
 end

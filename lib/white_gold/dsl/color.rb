@@ -1,6 +1,6 @@
 require_relative '../extern_object'
 
-class Tgui
+module Tgui
   class Color < ExternObject
     def to_a
       [red, green, blue, alpha]
