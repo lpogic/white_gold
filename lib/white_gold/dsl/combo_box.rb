@@ -1,5 +1,5 @@
 require_relative 'widget'
-require_relative 'signal_item'
+require_relative 'signal/signal_item'
 require_relative '../convention/widget_like'
 
 module Tgui

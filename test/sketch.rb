@@ -13,7 +13,14 @@ club! Widget, {
 club! ComboBox, {
   position: :center
 }
+club! ToolTip, {
+  size: [80.px, 400.px],
+}
+club! EditBox, {
+  mouse_cursor: :text
+}
 
+ToolTip.set_distance_to_mouse 1, 1
 
 
 # button! :but, text: "Button", position: :center do
@@ -22,10 +29,20 @@ club! ComboBox, {
 #   end
 # end
 
-editbox! :in, position: [20.pc, :center]
+editbox! :in, position: [30.pc, :center], limited_text_width: true do
+  on_caret_position_change! do
+    p _1
+  end
+  tooltip! do
+    panel! size: 70.px do
+      picture! url: "app.jpg"
+      label! text: "XD"
+    end
+  end
+end
 editbox! :out, position: [62.pc, :center]
 
-combobox! do
+combobox! mouse_cursor: :hand do
   item! :square
   item! :cube
   item! :root
@@ -37,5 +54,17 @@ combobox! do
     when :root then Integer.sqrt(input)
     else ""
     end
+  end
+end
+
+button! text: "BUT" do
+  on_press! do
+    page[:in].resize 10, 10
+  end
+end
+
+button! text: "BUT1", position: [15, 2] do
+  on_press! do
+    page[:in].finish_animations
   end
 end

@@ -1,5 +1,5 @@
 require_relative 'widget'
-require_relative 'signal_vector2f'
+require_relative 'signal/signal_vector2f'
 
 module Tgui
   class ClickableWidget < Widget

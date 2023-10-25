@@ -1,5 +1,5 @@
 require_relative 'backend_gui'
-require_relative 'signal'
+require_relative 'signal/signal'
 
 module Tgui
   class Gui < BackendGui

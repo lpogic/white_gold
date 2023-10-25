@@ -1,5 +1,5 @@
 require_relative 'signal'
-require_relative '../convention/bool_property'
+require_relative '../../convention/bool_property'
 
 module Tgui
   class SignalTypedIntBoolPtr < Signal

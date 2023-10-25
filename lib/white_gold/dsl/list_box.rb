@@ -52,8 +52,6 @@ module Tgui
       _abi_set_text_alignment(@pointer, TextAlignment[alignment])
     end
 
-    alias_method :text_alignment!, :text_alignment=
-
     def text_alignment
       TextAlignment[_abi_get_text_alignment @pointer]
     end

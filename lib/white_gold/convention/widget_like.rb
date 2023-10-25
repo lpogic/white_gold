@@ -8,7 +8,10 @@ class WidgetLike
   end
 
   def method_missing name, *a, **na, &b
-    bang_method_missing name, *a, **na, &b
+    if name.end_with? "!"
+      bang_method_missing name, *a, **na, &b
+    else super
+    end
   end
 
   def flags=(flags)

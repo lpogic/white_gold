@@ -1,4 +1,4 @@
-require_relative '../extern_object'
+require_relative '../../extern_object'
 
 module Tgui
   class Signal < ExternObject

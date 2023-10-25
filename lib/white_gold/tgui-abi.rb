@@ -44,19 +44,24 @@ module Tgui
     ]
   end
 
-  ShowEffectType = enum :fade, :scale, :slide_to_right, :slide_to_left, :slide_to_bottom,
-    :slide_to_top, slide_from_left: :slide_to_right, slide_from_right: :slide_to_left,
-    slide_from_top: :slide_to_bottom, slide_from_bottom: :slide_to_top
-
-  AnimationType = enum :move, :resize, :opacity
-
   TextStyle = bit_enum :regular, :bold, :italic, :underlined, :strike_through
 end
 
-dsl_dir = File.dirname(__FILE__) + "/dsl"
-Dir.each_child dsl_dir do |filename|
-  require_relative "dsl/#{filename}"
+def each_file_ancestor base, dir, &b
+  base_dir = "#{base}/#{dir}"
+  Dir.each_child base_dir do |filename|
+    if File.directory? "#{base_dir}/#{filename}"
+      each_file_ancestor base, "#{dir}/#{filename}", &b
+    else
+      b.("#{dir}/#{filename}")
+    end
+  end
 end
+
+each_file_ancestor File.dirname(__FILE__), "dsl" do |dsl_file|
+  require_relative dsl_file
+end
+
 # ABI loader should be required after dsl directory files because of class hierarchy
 require_relative '../generated/tgui-abi-loader.gf'
 require_relative 'convention/container_widgets'

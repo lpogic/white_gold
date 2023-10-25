@@ -1,0 +1,63 @@
+Button:
+  on_press
+ButtonBase:
+  text=
+  text
+  text_position=
+ClickableWidget:
+  on_click
+  on_mouse_press
+  on_mouse_release
+  on_right_click
+  on_right_mouse_press
+  on_right_mouse_release
+ComboBox:
+  item # for adding new item
+  items= #
+  items # = [Item]
+  default_text=
+  default_text
+  expand_direction=
+  expand_direction
+  scroll_item=
+  scroll_item?
+  display_count=
+  display_count
+  selected= # Item/Object/nil
+  selected
+  deselect
+  remove # Item/Object
+  remove_all
+  []
+  on_item_select
+  Item:
+    text=
+    text
+    object=
+    object
+EditBox:
+  text=
+  text
+  default_text=
+  default_text
+  select_text
+  selected_text
+  password_character=
+  password_character
+  characters_limit=
+  characters_limit
+  limited_text_width=
+  limited_text_width?
+  read_only=
+  read_only?
+  caret_position=
+  caret_position
+  suffix=
+  suffix
+  alignment=
+  alignment
+  on_text_change
+  on_return_key_press
+  on_return_or_unfocus
+Widget:
+  

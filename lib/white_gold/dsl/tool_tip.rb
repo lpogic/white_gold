@@ -1,6 +1,8 @@
-require_relative '../extern_object'
+require_relative '../convention/widget_like'
 
 module Tgui
-  class ToolTip < ExternObject
+  class ToolTip < WidgetLike
+
+    attr_accessor :page
   end
 end

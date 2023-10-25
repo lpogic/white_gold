@@ -27,6 +27,7 @@ module Tgui
     extern 'int ABI_SignalItemHierarchy_connect(SignalItemHierarchy* self, void(*f)(void*))'
     extern 'void ABI_SignalItemHierarchy_fetchPath(std::vector< String >* load, void(*f)(const char32_t*))'
     extern 'int ABI_SignalTypedIntBoolPtr_connect(SignalTypedIntBoolPtr* self, void(*f)(int, bool*))'
+    extern 'int ABI_SignalTypedSizeT_connect(SignalTypedSizeT* self, void(*f)(int))'
     extern 'void* ABI_Window_new()'
     extern 'void ABI_Window_close(sf::WindowBase* self)'
     extern 'int ABI_Window_isOpen(sf::WindowBase* self)'
@@ -75,6 +76,19 @@ module Tgui
     extern 'int ABI_Widget_isFocusable(Widget::Ptr* self)'
     extern 'int ABI_Widget_canGainFocus(Widget::Ptr* self)'
     extern 'int ABI_Widget_isContainer(Widget::Ptr* self)'
+    extern 'void ABI_Widget_setToolTip(Widget::Ptr* self, Widget::Ptr* tooltip)'
+    extern 'void* ABI_Widget_getToolTip(Widget::Ptr* self)'
+    extern 'void ABI_Widget_setMouseCursor(Widget::Ptr* self, int cursor)'
+    extern 'int ABI_Widget_getMouseCursor(Widget::Ptr* self)'
+    extern 'int ABI_Widget_isMouseDown(Widget::Ptr* self)'
+    extern 'void ABI_Widget_showWithEffect(Widget::Ptr* self, int effect, int duration)'
+    extern 'void ABI_Widget_hideWithEffect(Widget::Ptr* self, int effect, int duration)'
+    extern 'void ABI_Widget_moveWithAnimation(Widget::Ptr* self, char* x, char* y, int duration)'
+    extern 'void ABI_Widget_resizeWithAnimation(Widget::Ptr* self, char* width, char* height, int duration)'
+    extern 'int ABI_Widget_isAnimationPlaying(Widget::Ptr* self)'
+    extern 'void ABI_Widget_moveToFront(Widget::Ptr* self)'
+    extern 'void ABI_Widget_moveToBack(Widget::Ptr* self)'
+    extern 'void ABI_Widget_finishAllAnimations(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onPositionChange(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onSizeChange(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onFocus(Widget::Ptr* self)'
@@ -123,6 +137,7 @@ module Tgui
     extern 'void* ABI_EditBox_onTextChange(EditBox::Ptr* self)'
     extern 'void* ABI_EditBox_onReturnKeyPress(EditBox::Ptr* self)'
     extern 'void* ABI_EditBox_onReturnOrUnfocus(EditBox::Ptr* self)'
+    extern 'void* ABI_EditBox_onCaretPositionChange(EditBox::Ptr* self)'
     extern 'void* ABI_Label_new()'
     extern 'void ABI_Label_setText(Label::Ptr* self, char* text)'
     extern 'void* ABI_Label_getText(Label::Ptr* self)'
@@ -767,6 +782,10 @@ module Tgui
     def _abi_connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalTypedIntBoolPtr_connect(@pointer, *a); end
   end
 
+  class SignalTypedSizeT
+    def _abi_connect(*a);    Abi.call_arg_map! a; Abi.ABI_SignalTypedSizeT_connect(@pointer, *a); end
+  end
+
   class Window
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Window_new(*a)); initialized(); end
     def close(*a, &b);    Abi.call_arg_map! a; Abi.ABI_Window_close(@pointer, *a); end
@@ -833,6 +852,19 @@ module Tgui
     def _abi_is_focusable(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isFocusable(@pointer, *a).odd?; end
     def _abi_can_gain_focus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_canGainFocus(@pointer, *a).odd?; end
     def _abi_is_container(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isContainer(@pointer, *a).odd?; end
+    def _abi_set_tool_tip(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setToolTip(@pointer, *a); end
+    def _abi_get_tool_tip(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getToolTip(@pointer, *a).parse('Widget::Ptr'); end
+    def _abi_set_mouse_cursor(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setMouseCursor(@pointer, *a); end
+    def _abi_get_mouse_cursor(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getMouseCursor(@pointer, *a); end
+    def _abi_is_mouse_down(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isMouseDown(@pointer, *a).odd?; end
+    def _abi_show_with_effect(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_showWithEffect(@pointer, *a); end
+    def _abi_hide_with_effect(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_hideWithEffect(@pointer, *a); end
+    def _abi_move_with_animation(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_moveWithAnimation(@pointer, *a); end
+    def _abi_resize_with_animation(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_resizeWithAnimation(@pointer, *a); end
+    def _abi_is_animation_playing(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isAnimationPlaying(@pointer, *a).odd?; end
+    def _abi_move_to_front(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_moveToFront(@pointer, *a); end
+    def _abi_move_to_back(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_moveToBack(@pointer, *a); end
+    def _abi_finish_all_animations(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_finishAllAnimations(@pointer, *a); end
     def _abi_on_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onPositionChange(@pointer, *a).parse('SignalVector2f'); end
     def _abi_on_size_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onSizeChange(@pointer, *a).parse('SignalVector2f'); end
     def _abi_on_focus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onFocus(@pointer, *a).parse('Signal'); end
@@ -875,37 +907,28 @@ module Tgui
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_EditBox_new(*a)); initialized(); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setText(@pointer, *a); end
     def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getText(@pointer, *a).parse('char32_t'); end
-    def default_text=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_EditBox_setDefaultText(@pointer, *a); end
-    def default_text!(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setDefaultText(@pointer, *a); end
-    def default_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getDefaultText(@pointer, *a).parse('char32_t'); end
-    def select_text(*a, &b);    Abi.call_arg_map! a; Abi.ABI_EditBox_selectText(@pointer, *a); end
-    def selected_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getSelectedText(@pointer, *a).parse('char32_t'); end
-    def password_character=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_EditBox_setPasswordCharacter(@pointer, *a); end
-    def password_character!(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setPasswordCharacter(@pointer, *a); end
-    def password_character(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getPasswordCharacter(@pointer, *a).chr; end
-    def maximum_characters=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_EditBox_setMaximumCharacters(@pointer, *a); end
-    def maximum_characters!(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setMaximumCharacters(@pointer, *a); end
-    def maximum_characters(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getMaximumCharacters(@pointer, *a); end
+    def _abi_set_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setDefaultText(@pointer, *a); end
+    def _abi_get_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getDefaultText(@pointer, *a).parse('char32_t'); end
+    def _abi_select_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_selectText(@pointer, *a); end
+    def _abi_get_selected_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getSelectedText(@pointer, *a).parse('char32_t'); end
+    def _abi_set_password_character(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setPasswordCharacter(@pointer, *a); end
+    def _abi_get_password_character(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getPasswordCharacter(@pointer, *a).chr; end
+    def _abi_set_maximum_characters(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setMaximumCharacters(@pointer, *a); end
+    def _abi_get_maximum_characters(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getMaximumCharacters(@pointer, *a); end
     def _abi_set_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setAlignment(@pointer, *a); end
     def _abi_get_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getAlignment(@pointer, *a); end
-    def limit_text_width=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_EditBox_limitTextWidth(@pointer, *a); end
-    def limit_text_width!(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_limitTextWidth(@pointer, *a); end
-    def text_width_limited?(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isTextWidthLimited(@pointer, *a).odd?; end
-    def read_only=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_EditBox_setReadOnly(@pointer, *a); end
-    def read_only!(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setReadOnly(@pointer, *a); end
-    def read_only?(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isReadOnly(@pointer, *a).odd?; end
-    def caret_position=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_EditBox_setCaretPosition(@pointer, *a); end
-    def caret_position!(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setCaretPosition(@pointer, *a); end
-    def caret_position(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getCaretPosition(@pointer, *a); end
-    def suffix=(a);    a = a.is_a?(Array) ? a : [a]; Abi.call_arg_map! a; Abi.ABI_EditBox_setSuffix(@pointer, *a); end
-    def suffix!(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setSuffix(@pointer, *a); end
-    def suffix(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getSuffix(@pointer, *a).parse('char32_t'); end
-    def on_text_change(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_EditBox_onTextChange(@pointer, *a).parse('SignalString'); block_given? ? signal.connect(self, &b) : signal; end
-    def on_text_change=(a);    signal = Abi.ABI_EditBox_onTextChange(@pointer).parse('SignalString'); signal.connect(self, &a); end
-    def on_return_key_press(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_EditBox_onReturnKeyPress(@pointer, *a).parse('SignalString'); block_given? ? signal.connect(self, &b) : signal; end
-    def on_return_key_press=(a);    signal = Abi.ABI_EditBox_onReturnKeyPress(@pointer).parse('SignalString'); signal.connect(self, &a); end
-    def on_return_or_unfocus(*a, &b);   Abi.call_arg_map! a; signal = Abi.ABI_EditBox_onReturnOrUnfocus(@pointer, *a).parse('SignalString'); block_given? ? signal.connect(self, &b) : signal; end
-    def on_return_or_unfocus=(a);    signal = Abi.ABI_EditBox_onReturnOrUnfocus(@pointer).parse('SignalString'); signal.connect(self, &a); end
+    def _abi_limit_text_width(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_limitTextWidth(@pointer, *a); end
+    def _abi_is_text_width_limited(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isTextWidthLimited(@pointer, *a).odd?; end
+    def _abi_set_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setReadOnly(@pointer, *a); end
+    def _abi_is_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isReadOnly(@pointer, *a).odd?; end
+    def _abi_set_caret_position(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setCaretPosition(@pointer, *a); end
+    def _abi_get_caret_position(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getCaretPosition(@pointer, *a); end
+    def _abi_set_suffix(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setSuffix(@pointer, *a); end
+    def _abi_get_suffix(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getSuffix(@pointer, *a).parse('char32_t'); end
+    def _abi_on_text_change(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onTextChange(@pointer, *a).parse('SignalString'); end
+    def _abi_on_return_key_press(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onReturnKeyPress(@pointer, *a).parse('SignalString'); end
+    def _abi_on_return_or_unfocus(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onReturnOrUnfocus(@pointer, *a).parse('SignalString'); end
+    def _abi_on_caret_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onCaretPositionChange(@pointer, *a).parse('SignalTypedSizeT'); end
   end
 
   class Label

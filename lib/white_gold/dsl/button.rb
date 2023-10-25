@@ -1,4 +1,5 @@
 require_relative 'button_base'
+require_relative 'signal/signal'
 
 module Tgui
   class Button < ButtonBase
