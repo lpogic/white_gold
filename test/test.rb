@@ -96,6 +96,7 @@
 # MyGui.new.run# theme: 'resource/Black.txt'
 # # MyGui.new.run SecondPage
 
+def foo a, b, *an, c:, d: 0, **na, &bl
+end
 
-xd = {a: 1, b: 2}
-p(xd.find{ _2 > 2 }&.at(0))
+p method(:foo).parameters

@@ -1,5 +1,4 @@
 require_relative 'container'
-require_relative '../convention/delegate'
 
 module Tgui
   class TabContainer < Container

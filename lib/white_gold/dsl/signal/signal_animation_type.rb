@@ -2,13 +2,12 @@ require_relative 'signal'
 
 module Tgui
   class SignalAnimationType < Signal
-    def connect &b
+
+    def block_caller
       block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |animation_type|
-        b.(AnimationType[animation_type])
+        b.(AnimationType[animation_type], @widget)
       end
-      id = _abi_connect(@pointer, block_caller)
-      @@callback_storage[id] = block_caller
-      return id
     end
+    
   end
 end

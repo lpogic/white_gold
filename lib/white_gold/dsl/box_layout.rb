@@ -2,37 +2,44 @@ require_relative 'group'
 
 module Tgui
   class BoxLayout < Group
-    def get i
-      if Integer === i
-        widget = _abi_get_by_index pointer, i
-        return nil if widget.null?
-        type = Widget.get_type widget
-        Tgui.const_get(type).new pointer: widget
-      else
-        super i
-      end
+
+    def remove widget
+      return _abi_remove_by_index widget if widget.is_a? Integer
+      widget = self[widget] if widget.is_a? Symbol
+      _abi_remove widget
     end
 
-    def []=(*a)
-      raise "TODO"
-      if a.size == 1
-        add a[0], @@auto_name.next!
-      elsif a.size == 2
-        if Integer === a[0]
-          insert a[0], a[1], @@auto_name.next!
-        else
-          add a[0], a[1].to_s
+    def get(*keys)
+      case keys
+      in [Symbol]
+        id = page.clubs[keys.first]&.members&.first
+        id && self_cast_up(_abi_get(id.to_s))
+      in [Integer]
+        self_cast_up(_abi_get_by_index keys.first)
+      else
+        Enumerator.new do |e|
+          Array(self_get_widget_name keys).flatten.compact.uniq.each do |id|
+            w = _abi_get(id.to_s)
+            e << self_cast_up(w) if w && !w.null?
+          end
         end
-      else
-        insert a[0], a[1], a[2].to_s
-      end
+      end      
     end
 
-    def remove i
-      if Integer === i
-        _abi_remove_by_index(pointer, i).odd?
+    # internal
+
+    def self_get_widget_name a
+      case a
+      when Widget
+        a.name
+      when Integer
+        w = _abi_get_by_index a
+        return nil if w.null?
+        self_cast_up(w, equip: false).name
+      when Enumerable
+        a.map{ self_get_widget_name _1 }.flatten
       else
-        super i
+        page.clubs[a]&.members
       end
     end
   end

@@ -21,6 +21,7 @@ class WhiteGold
     Theme.default = File.expand_path(theme, File.dirname($0)) if theme
     self.fps = fps if fps
     @frame_delay = 0.015 if !@frame_delay
+    @jobs = []
     @next_page_id = init_page
     load_page init_page
   end
@@ -29,19 +30,20 @@ class WhiteGold
     self.init fps: fps, theme: theme if init
 
     next_frame_time = Time.now
-    while @gui.active?
-      @gui.poll_events
+    while @gui.self_active?
+      @gui.self_poll_events
       now = Time.now
       if @current_page_id != @next_page_id
         if @current_page_id
           page = @preserved_pages[@current_page_id]
-          @gui.remove page
+          @gui.self_remove page
           @preserved_pages.delete(@current_page_id)
         end
         load_page @next_page_id
       end
+      @jobs.filter!(&:audit)
       sleep next_frame_time - now if next_frame_time > now
-      @gui.draw
+      @gui.self_draw
       next_frame_time += @frame_delay
     end
   end
@@ -51,21 +53,21 @@ class WhiteGold
     case page_id
     when Symbol
       page = @preserved_pages[page_id] = Page.new self
-      @gui.add page, "main_container"
+      @gui.self_add page, "main_container"
       @current_page = page
       ExternObject.callback_storage = page.callbacks
       ExternObject.data_storage = page.custom_data
       send(page_id)
     when Class
       page = @preserved_pages[page_id] = page_id.new self
-      @gui.add page, "main_container"
+      @gui.self_add page, "main_container"
       @current_page = page
       ExternObject.callback_storage = page.callbacks
       ExternObject.data_storage = page.custom_data
       page.build
     when Proc
       page = @preserved_pages[page_id] = Page.new self
-      @gui.add page, "main_container"
+      @gui.self_add page, "main_container"
       @current_page = page
       ExternObject.callback_storage = page.callbacks
       ExternObject.data_storage = page.custom_data
@@ -92,6 +94,62 @@ class WhiteGold
   #   l.horizontal_alignment = :center
   #   l.auto_size = true
   # end
+
+  class Job
+    NO_RESULT = Object.new
+
+    def initialize delay:, repeat:, &b
+      @repeat = repeat
+      @result = NO_RESULT
+      @thread = Thread.new do
+        sleep(delay / 1000.0) if delay
+        iteration = 1
+        case repeat
+        when false
+          result = b.(iteration, self)
+        when true
+          while @repeat
+            result = b.(iteration, self)
+            iteration += 1
+          end
+        when Integer
+          @repeat.times do
+            result = b.(iteration, self)
+            iteration += 1
+          end
+        end
+        @result = result if @result == NO_RESULT
+      end
+    end
+
+    def later &b
+      if @thread.alive?
+        @later = b
+      else
+        b.(@result)
+      end
+    end
+
+    def audit
+      if @thread.alive?
+        return true
+      else
+        @later.(@result) if @later
+        return false
+      end
+    end
+
+    def finish result = NO_RESULT
+      @repeat = false
+      @result = result if result != NO_RESULT
+    end
+  end
+
+  def job delay: nil, repeat: false, &b
+    job = Job.new delay:, repeat:, &b
+    @jobs << job
+    job
+  end
 
   def respond_to? name
     super || @current_page.respond_to?(name)

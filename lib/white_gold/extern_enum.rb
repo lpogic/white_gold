@@ -22,6 +22,10 @@ class Enum
   def unpack m
     @int_to_symbol.filter{|k, v| k != 0 and m & k == k }.map{ _1[1] }
   end
+
+  def symbols
+    @symbol_to_int
+  end
 end
 
 module Kernel

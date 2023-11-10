@@ -14,6 +14,7 @@ module Tgui
       end
     end
 
+    api_attr :objects
     abi_attr :display_count, :items_to_display
     abi_attr :default_text
     abi_attr :scroll_item?, :change_item_on_scroll
@@ -38,11 +39,11 @@ module Tgui
       end
 
       def text=(text)
-        _abi_change_item_by_id @id, text
+        @combo_box._abi_change_item_by_id @id, text
       end
 
       def text
-        _abi_get_item_by_id @id
+        @combo_box._abi_get_item_by_id @id
       end
     end
 
@@ -122,7 +123,7 @@ module Tgui
     end
 
     def self_objects
-      self._objects ||= {}
+      self.objects ||= {}
     end
   end
 end

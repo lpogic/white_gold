@@ -45,6 +45,11 @@ module Tgui
   end
 
   TextStyle = bit_enum :regular, :bold, :italic, :underlined, :strike_through
+
+  CursorType = enum :arrow, :text, :hand, :size_left, :size_right,
+  :size_top, :size_bottom, :size_top_left, :size_bottom_right,
+  :size_bottom_left, :size_top_right, :size_horizontal, :size_vertical,
+  :crosshair, :help, :not_allowed
 end
 
 def each_file_ancestor base, dir, &b

@@ -9,7 +9,9 @@ module Tgui
     end
 
     def block_caller &b
-      Fiddle::Closure::BlockCaller.new(0, [0], &b)
+      Fiddle::Closure::BlockCaller.new(0, [0]) do
+        b.(@widget)
+      end
     end
 
     def connect &b
@@ -24,5 +26,7 @@ module Tgui
       @@callback_storage.delete(id) if success
       return success
     end
+
+    abi_attr :enabled?
   end
 end

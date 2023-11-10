@@ -20,6 +20,8 @@ module Fiddle
         Tgui::Color.new pointer: self
       when 'Texture'
         Tgui::Texture.new pointer: self
+      when 'Font'
+        Tgui::Font.new pointer: self
       else
         self
       end

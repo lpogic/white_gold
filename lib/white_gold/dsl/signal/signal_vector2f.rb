@@ -5,7 +5,7 @@ module Tgui
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |ptr|
         vector = ptr.parse('Vector2f')
-        b.(vector.x, vector.y)
+        b.(vector.x, vector.y, @widget)
       end
     end
   end

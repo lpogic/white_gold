@@ -97,11 +97,6 @@ module Tgui
       end
     end
 
-    CursorType = enum :arrow, :text, :hand, :size_left, :size_right,
-      :size_top, :size_bottom, :size_top_left, :size_bottom_right,
-      :size_bottom_left, :size_top_right, :size_horizontal, :size_vertical,
-      :crosshair, :help, :not_allowed
-
     def mouse_cursor=(cursor)
       _abi_set_mouse_cursor CursorType[cursor]
     end
@@ -164,6 +159,71 @@ module Tgui
     abi_alias :finish_animations, :finish_all_animations
     abi_alias :front, :move_to_
     abi_alias :back, :move_to_
+
+    KeyCode = enum nil, :a, :b, :c, :d, :e, :f, :g, :h, :i, :j, :k, 
+      :l, :m, :n, :o, :p, :q, :r, :s, :t, :u, :v, :w, :x, :y, :z,
+      :num0, :num1, :num2, :num3, :num4, :num5, :num6, :num7, :num8, :num9,
+      :escape, :left_control, :left_shift, :left_alt, :left_system,
+      :right_control, :right_shift, :right_alt, :right_system,
+      :menu, :left_bracket, :right_bracket, :semicolon, :comma,
+      :period, :quote, :slash, :backslash, :tilde, :equal, :minus,
+      :space, :enter, :backspace, :tab, :page_up, :page_down, :end,
+      :home, :insert, :delete, :add, :substract, :multiply, :divide,
+      :left, :right, :up, :down, :numpad0, :numpad1, :numpad2, :numpad3, 
+      :numpad4, :numpad5, :numpad6, :numpad7, :numpad8, :numpad9,
+      :f1, :f2, :f3, :f4, :f5, :f6, :f7, :f8, :f9, :f10, :f11, :f12,
+      :f13, :f14, :f15, :pause
+
+    class Robot < WidgetLike
+      def initialize widget
+        @widget = widget
+      end
+
+      def mouse_move x, y
+        @widget._abi_mouse_moved x, y
+      end
+
+      def mouse_press x, y, down: false
+        @widget._abi_left_mouse_pressed x, y
+        mouse_release x, y if !down
+      end
+
+      def mouse_release x, y
+        @widget._abi_left_mouse_released x, y
+      end
+
+      def right_mouse_press x, y
+        @widget._abi_right_mouse_pressed x, y
+      end
+
+      def right_mouse_release x, y
+        @widget._abi_right_mouse_released x, y
+      end
+
+      def key_press key, alt: false, control: false, shift: false, system: false
+        @widget._abi_key_pressed KeyCode[key], alt, control, shift, system
+      end
+
+      def text text
+        text.each_codepoint do |cp|
+          @widget._abi_text_entered cp
+        end
+      end
+
+      def scroll delta, x, y, touch = false
+        @widget._abi_scrolled delta, x, y, touch
+      end
+
+      def tooltip x, y
+        @widget._abi_ask_tool_tip x, y
+      end
+    end
+
+    def robot **na, &b
+      robot = Robot.new self
+      bang_nest robot, **na, &b if block_given?
+      robot
+    end
     
     def flags=(flags)
       flags.each do |f|
@@ -171,20 +231,54 @@ module Tgui
       end
     end
 
+    def self.api_attr name, &init
+      define_method "#{name}=" do |value|
+        @@data_storage[Widget.get_unshared(@pointer).to_i][name] = value
+      end
+
+      init ||= proc{ nil }
+
+      define_method name do
+        @@data_storage[Widget.get_unshared(@pointer).to_i][name] ||= init.()
+      end
+    end
+
+
     def respond_to? name
-      super || name.start_with?("_") || bang_respond_to?(name)
+      super || bang_respond_to?(name)
     end
 
     def method_missing name, *a, **na, &b
-      if name.start_with? "_"
-        if name.end_with? "="
-          @@data_storage[Widget.get_unshared(@pointer).to_i][name[...-1]] = a[0]
-        else
-          @@data_storage[Widget.get_unshared(@pointer).to_i][name.to_s]
-        end
-      elsif name.end_with? "!"
+      if name.end_with? "!"
         bang_method_missing name, *a, **na, &b
       else super
+      end
+    end
+
+    def self_cast_up widget, type = nil, equip: true
+      return nil if widget.null?
+      type = Widget.get_type widget if !type
+      casted = Tgui.const_get(type).new pointer: widget
+      equip_child_widget casted if equip
+      casted
+    end
+
+    def self.api_child name, original_name = nil, &b
+      if block_given?
+        define_method "api_child_#{name}", &b
+      else
+        if original_name
+          if original_name.end_with? "_"
+            abi_name = "_abi_#{original_name}#{name}".delete_suffix("?").to_sym
+          else
+            abi_name = "_abi_#{original_name}".to_sym
+          end
+        else
+          abi_name = "_abi_#{name}".delete_suffix("?").to_sym
+        end
+        define_method "api_child_#{name}" do |*a|
+          send(abi_name, *a)
+        end
       end
     end
 
@@ -195,7 +289,7 @@ module Tgui
       when String then value
       when Numeric then Unit.nominate value
       when :center then "(parent.innersize - size) / 2"
-      when :begin then "size / 2"
+      when :begin then "0"
       when :end then "parent.innersize - size / 2"
       else raise "Invalid value `#{value}` given"
       end

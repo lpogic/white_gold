@@ -58,7 +58,7 @@ module Tgui
         if original_name.end_with? "_"
           abi_getter = "_abi_#{original_name}#{name}".delete_suffix("?").to_sym
         else
-          abi_getter = "_abi_#{original_name}".to_sym
+          abi_getter = "_abi_get_#{original_name}".to_sym
         end
       else
         if name.end_with? "?"

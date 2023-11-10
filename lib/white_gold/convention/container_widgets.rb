@@ -3,7 +3,7 @@ module Tgui
   WIDGETS_COLLECTION = {
     label: Tgui::Label,
     button: Tgui::Button,
-    radio: Tgui::RadioButton,
+    radio: false,
     radio_button: Tgui::RadioButton,
     checkbox: Tgui::CheckBox,
     child_window: Tgui::ChildWindow,
@@ -17,7 +17,7 @@ module Tgui
     radio_group: Tgui::RadioButtonGroup,
     grid: Tgui::Grid,
     list_view: Tgui::ListView,
-    picture: false, # dont define defult method
+    picture: false,
     bitmap_button: Tgui::BitmapButton,
     knob: Tgui::Knob,
     message_box: Tgui::MessageBox,
@@ -42,15 +42,60 @@ module Tgui
   }.freeze
 
   module WidgetOwner
+    CHILD_API_PREFIX = "api_child_".freeze
+
+    def common_widget_nest widget, *keys, id: nil, **na, &b
+      club_params = {}
+      Enumerator.new do |e|
+        cl = widget.class
+        while cl != Object
+          e << cl
+          cl = cl.superclass
+        end
+        e << Object
+      end.to_a.reverse!.each do |key|
+        if key == widget.class
+          club = page.club key
+          club.join id if id
+        else
+          club = page.club key, create_on_missing: false
+        end
+        club_params.merge! club.params if club
+      end
+  
+      keys.each do |key|
+        club = page.club key
+        club.join id if id
+        club_params.merge! club.params
+      end
+  
+      bang_nest widget, **club_params, **na, &b
+    end
+
+    def child_methods
+      methods.filter{ _1.start_with? CHILD_API_PREFIX }
+    end
+
+    def equip_child_widget widget
+      widget.page = page
+      parent = self
+      child_methods.each do |method|
+        widget.define_singleton_method method[CHILD_API_PREFIX.length..] do |*a|
+          parent.send(method, self, *a)
+        end
+      end
+      widget
+    end
+
     WIDGETS_COLLECTION.each do |m, c|
       if c
-        define_method m do |name = nil, **na, &b|
-          common_widget_post_initialize c.new, name, **na, &b
+        define_method m do |*a, **na, &b|
+          common_widget_post_initialize equip_child_widget(c.new), *a, **na, &b
         end
       end
     end
 
-    def picture name = nil, **na, &b
+    def picture *a, **na, &b
       texture = na[:texture] || Tgui::Texture.produce([
         na[:url],
         na.dig(:part_rect, 0),
@@ -61,7 +106,36 @@ module Tgui
       ])
       transparent = na[:transparent] || false
       pic = Tgui::Picture.new texture, transparent
-      common_widget_post_initialize pic, name, **na.except(:url, :part_rect, :smooth, :transparent), &b
+      equip_child_widget pic
+      common_widget_post_initialize pic, *a, **na.except(:url, :part_rect, :smooth, :transparent), &b
+    end
+
+    def radio object, *a, **na, &b
+      radio = RadioButton.new
+      equip_child_widget radio
+      radio.object = object
+      na[:text] ||= object.to_s
+      common_widget_post_initialize radio, *a, **na, &b
+    end
+
+    def msg_box text, **buttons
+      message_box text:, buttons: buttons.map do |k, v| 
+        procedure = proc do |w|
+          v.call()
+          w.close true
+        end
+        [k, procedure]
+      end
+    end
+
+    @@auto_button_name = "Button1"
+
+    def btn text = nil, **na, &on_press
+      if !text
+        text = @@auto_button_name
+        @@auto_button_name = @@auto_button_name.next
+      end
+      button text:, on_press:, **na
     end
   end
 
@@ -76,23 +150,6 @@ module Tgui
       common_widget_nest widget, *keys, id:, **na, &b
     end
 
-    def [](*keys)
-      if keys.size == 1 && keys.first.is_a?(Symbol)
-        id = page.clubs[keys.first]&.members&.first
-        return id && get(id)
-      else
-        Enumerator.new do |e|
-          keys.map{ page.clubs[_1]&.members }.compact.reduce(:+).uniq.each do |id|
-            if id.is_a? Widget
-              a << id
-            else
-              widget = get id
-              e << widget if widget
-            end
-          end
-        end
-      end
-    end
   end
 
   class TabContainer

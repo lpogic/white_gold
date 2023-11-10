@@ -1,8 +1,43 @@
 require_relative 'widget'
+require_relative 'signal/signal_item'
+require_relative 'signal/signal_u_int'
 
 module Tgui
   class ListBox < Widget
+
+    class SignalItem < Tgui::SignalItem
+      def block_caller &b
+        Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP]) do |str1, str2|
+          id = str2.parse('char32_t')
+          b.(@widget.self_get_object_by_id(id))
+        end
+      end
+    end
+
     TextAlignment = enum :left, :center, :right
+
+    @@auto_item_id = "@/"
+
+    api_attr :self_objects do
+      Hash.new
+    end
+    abi_attr :item_height
+    abi_attr :max_items, :maximum_items
+    abi_attr :auto_scroll?
+    abi_attr :scrollbar_value
+    abi_signal :on_item_select, SignalItem
+    abi_signal :on_mouse_press, SignalItem
+    abi_signal :on_mouse_release, SignalItem
+    abi_signal :on_double_click, SignalItem
+    abi_signal :on_scroll, SignalUInt
+
+    def text_alignment=(alignment)
+      _abi_set_text_alignment TextAlignment[alignment]
+    end
+
+    def text_alignment
+      TextAlignment[_abi_get_text_alignment]
+    end
 
     class Item
       def initialize list_box, id
@@ -10,129 +45,80 @@ module Tgui
         @id = id
       end
 
+      def object=(object)
+        @list_box.self_objects[@id] = object
+      end
+
+      def object
+        return @list_box.self_objects[@id]
+      end
+
       def text=(text)
-        @list_box.change_item_by_id @id, text
+        @list_box._abi_change_item_by_id @id, text
       end
 
       def remove
-        @list_box.remove_item_by_id @id
-      end
-
-      def selected=(selected)
+        @list_box._abi_remove_item_by_id @id
       end
     end
 
-    class Items
-      def initialize list_box
-        @list_box = list_box
-      end
-
-      def [](unique)
-        case unique
-        when :selected
-          id = @list_box.get_selected_item_id
-          return id != "" ?  Item.new(@list_box, id) : nil
-        when Integer
-          id = @list_box.id_by_index unique
-          return id != "" ?  Item.new(@list_box, id) : nil
-        else
-          id = unique.to_s
-          return @list_box.contains_id? ? Item.new(@list_box, id) : nil
-        end
-      end
-
-      def remove_all
-        @list_box.remove_all_items
-      end
+    def item object = nil, **na, &b
+      @@auto_item_id = id = @@auto_item_id.next
+      _abi_add_item object.to_s, id
+      item = Item.new self, id
+      na[:object] ||= object
+      bang_nest item, **na, &b
     end
 
-    @@auto_id = "@/"
-
-    def text_alignment=(alignment)
-      _abi_set_text_alignment(@pointer, TextAlignment[alignment])
+    def remove_all
+      self_objects.clear
+      _abi_remove_all_items
     end
 
-    def text_alignment
-      TextAlignment[_abi_get_text_alignment @pointer]
+    def selected
+      return self_objects[_abi_get_selected_item_id]
     end
 
-    def item text:, id: nil
-      id ||= begin
-        @@auto_id.next!
-      end
-      add_item text, id
-      Item.new self, id
+    def selected=(object)
+      id = self_find_id_by_object object
+      raise "`#{object}` is out of the listbox" if !id
+      _abi_set_selected_item_by_id id
     end
 
-    def selected_item=(item)
-      case item
-      when nil, false then deselect_item
-      when Integer then _abi_set_selected_item_by_index @pointer, item
-      else _abi_set_selected_item_by_id @pointer, item.to_s
-      end
-    end
+    abi_alias :deselect, :deselect_item
 
-    alias_method :selected_item!, :selected_item=
-
-    def selected_item
-      return _abi_get_selected_item_id @pointer
-    end
-
-    def remove(item)
-      case item
-      when Integer then _abi_remove_item_by_index @pointer, item
-      else _abi_remove_item_by_id @pointe, item.to_s
-      end
-    end
-
-    def [](item)
-      case item
-      when :selected
-        _abi_get_selected_item_id @pointer
-      when Integer
-        _abi_get_item_by_index(@pointer, item)
-      else
-        _abi_get_item_by_id @pointer, item.to_s
-      end
-    end
-
-    def items
-      ids = []
-      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |id|
-        ids << ids.utf32_to_s
-      end
-      _abi_get_item_ids @pointer, block_caller
-      return ids
-    end
-
-    def contains?(id)
-      _abi_contains_id @pointer, id.to_s
-    end
-
-    def []=(item, value)
-      case item
-      when Integer
-        if item < item_count
-          _abi_change_item_by_index @pointer, item, value
-        else
-          add_item value, @@auto_id.next!
-        end
-      else
-        id = item.to_s
-        if _abi_contains_id @pointer, id
-          _abi_change_item_by_id @pointer, id, value
-        else
-          add_item value, id
-        end
+    def remove object
+      id = self_find_id_by_object object
+      if id
+        _abi_remove_item_by_id id
+        self_objects.delete id
       end
     end
 
     def items=(items)
-      remove_all_items
-      items = items.map{ [_1, _1] }.to_h if Array === items
-      items.each do |id, value|
-        self[id] = value
+      remove_all
+      items.each do |item|
+        self.item item
       end
+    end
+    
+    def items
+      self_objects.values
+    end
+
+    def [](object)
+      id = self_find_id_by_object object
+      id ? Item.new(self, id) : nil
+    end
+    
+    # internal
+
+    def self_get_object_by_id id
+      return self_objects[id]
+    end
+
+    def self_find_id_by_object object
+      self_objects.find{ _2 == object }&.at(0)
     end
   end
 end
