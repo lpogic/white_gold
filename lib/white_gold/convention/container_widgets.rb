@@ -154,8 +154,10 @@ module Tgui
 
   class TabContainer
     WIDGETS_COLLECTION.each do |m, c|
-      define_method m do |name = nil, **na, &b|
-        raise NoMethodError.new("Method `#{m}` should be called on Panel from TabContainer, not TabContainer itself")
+      if !method_defined? m
+        define_method m do |name = nil, **na, &b|
+          raise NoMethodError.new("Method `#{m}` should be called on Panel from TabContainer, not TabContainer itself")
+        end
       end
     end
   end
