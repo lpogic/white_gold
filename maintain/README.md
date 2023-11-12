@@ -1,8 +1,9 @@
-** tgui-abi-update.rb
+tgui-abi-update.rb
+------------------
 
-Script for generating abi loader (../lib/generated/tgui-abi-loader.gf.rb).
-Requires configuration file to work. Configuration file should be located at: '../../tgui-update.config'
-Configuration file structure:
+Script for generating abi loader (../lib/generated/tgui-abi-loader.gf.rb).<br>
+Requires configuration file to work.<br>
+Configuration file should be located at: '../../tgui-update.config' with following structure:
 
 ```RUBY
 
