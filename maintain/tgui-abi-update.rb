@@ -6,7 +6,7 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: tgui-update.rb [options]"
 
-  opts.on("-c", "--compile", "Compile RGUI-ABI") do |v|
+  opts.on("-c", "--compile", "Compile TGUI-ABI") do |v|
     options[:compile] = v
   end
 end.parse!
