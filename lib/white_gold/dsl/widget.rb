@@ -263,6 +263,13 @@ module Tgui
       casted
     end
 
+    abi_static :get_type
+    abi_static :get_unshared
+
+    def self.finalizer pointer
+      _abi_finalizer pointer
+    end
+
     def self.api_child name, original_name = nil, &b
       if block_given?
         define_method "api_child_#{name}", &b

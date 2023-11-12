@@ -18,7 +18,7 @@ class WhiteGold
     @window = Window.new
     @gui = Gui.new window
     @preserved_pages = {}
-    Theme.default = File.expand_path(theme, File.dirname($0)) if theme
+    Theme.default = theme if theme
     self.fps = fps if fps
     @frame_delay = 0.015 if !@frame_delay
     @jobs = []

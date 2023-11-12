@@ -13,10 +13,8 @@ module BangNestedCaller
           end
         end
       else
-        if a.size == 1
-          if respond_to? "#{name[...-1]}="
-            return send("#{name[...-1]}=", a.first)
-          end
+        if respond_to? "#{name[...-1]}="
+          return send("#{name[...-1]}=", a)
         end
       end
     end

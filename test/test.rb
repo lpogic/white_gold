@@ -96,7 +96,17 @@
 # MyGui.new.run# theme: 'resource/Black.txt'
 # # MyGui.new.run SecondPage
 
-def foo a, b, *an, c:, d: 0, **na, &bl
+class Foo
+  def self.bar
+    p :bar
+  end
 end
 
-p method(:foo).parameters
+class Bar < Foo
+end
+
+Foo.define_singleton_method :foo do
+  send(:bar)
+end
+
+Bar.foo

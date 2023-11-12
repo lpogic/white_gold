@@ -8,7 +8,7 @@ module Tgui
         while !cl.respond_to?(:finalizer)
           cl = cl.superclass
         end
-        ObjectSpace.define_finalizer(self, cl.finalizer(pointer))
+        ObjectSpace.define_finalizer(self, cl.proc.finalizer(pointer))
       end
     end
 
@@ -18,9 +18,7 @@ module Tgui
     attr :pointer
 
     def self.finalizer pointer
-      proc do
-        Util.free(pointer)
-      end
+      Util.free(pointer)
     end
 
     @@callback_storage = {}
@@ -41,12 +39,12 @@ module Tgui
     def self.abi_alias name, original_name = nil
       if original_name
         if original_name.end_with? "_"
-          abi_name = "_abi_#{original_name}#{name}".delete_suffix("?").to_sym
+          abi_name = "_abi_#{original_name}#{name}".delete_suffix("=").delete_suffix("?").to_sym
         else
-          abi_name = "_abi_#{original_name}".to_sym
+          abi_name = "_abi_#{original_name}".delete_suffix("=").to_sym
         end
       else
-        abi_name = "_abi_#{name}".delete_suffix("?").to_sym
+        abi_name = "_abi_#{name}".delete_suffix("=").delete_suffix("?").to_sym
       end
       define_method name do |*a|
         send(abi_name, *a)
@@ -95,6 +93,21 @@ module Tgui
       define_method "#{name}=" do |a|
         send(name, &a)
       end
-    end 
+    end
+
+    def self.abi_static name, original_name = nil
+      if original_name
+        if original_name.end_with? "_"
+          abi_name = "_abi_#{original_name}#{name}".delete_suffix("=").delete_suffix("?").to_sym
+        else
+          abi_name = "_abi_#{original_name}".delete_suffix("=").to_sym
+        end
+      else
+        abi_name = "_abi_#{name}".delete_suffix("=").delete_suffix("?").to_sym
+      end
+      define_singleton_method name do |*a|
+        send(abi_name, *a)
+      end
+    end
   end
 end

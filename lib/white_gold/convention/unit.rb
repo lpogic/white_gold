@@ -2,7 +2,14 @@ class Unit
   @@default = :pc
 
   class << self
-    attr :default
+    
+    def default=(unit)
+      @@default = unit
+    end
+
+    def default
+      @@default
+    end
 
     def nominate numeric, unit = @@default
       case unit

@@ -3,10 +3,11 @@ class ProcMethodFactory
     @source = source
   end
 
-  def method_missing name
+  def method_missing name, *curry
     proc do |*a, **na, &b|
       method = @source.method name
       arity = method.arity
+      a = [*curry, *a]
       if arity >= 0
         @source.send(name, *a[...arity], **na, &b)
       else

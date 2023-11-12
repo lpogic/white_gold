@@ -14,7 +14,13 @@ module Tgui
       end
     end
 
-    api_attr :objects
+    api_attr :self_objects do
+      {}
+    end
+    api_attr :format do
+      :to_s
+    end
+
     abi_attr :display_count, :items_to_display
     abi_attr :default_text
     abi_attr :scroll_item?, :change_item_on_scroll
@@ -45,13 +51,27 @@ module Tgui
       def text
         @combo_box._abi_get_item_by_id @id
       end
+
+      def selected=(selected)
+        if selected
+          @combo_box.selected = object
+        else
+          @combo_box.deselect if selected?
+        end
+      end
+
+      def selected?
+        @combo_box.selected == object
+      end
+
     end
 
-    def item object = nil, **na, &b
+    def item object, **na, &b
+      text = object.then(&format)
       @@auto_item_id = id = @@auto_item_id.next
-      _abi_add_item object.to_s, id
+      _abi_add_item text, id
       item = Item.new self, id
-      na[:object] ||= object
+      self_objects[id] = object
       bang_nest item, **na, &b
     end
 
@@ -120,10 +140,6 @@ module Tgui
 
     def self_find_id_by_object object
       self_objects.find{ _2 == object }&.at(0)
-    end
-
-    def self_objects
-      self.objects ||= {}
     end
   end
 end

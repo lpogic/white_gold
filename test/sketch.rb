@@ -3,18 +3,20 @@ require_relative '../lib/white_gold'
 # gui.font = "AdobeGothicStd-Bold.otf"
 # gui.opacity = 0.5
 
-tab_container! do
-  tab! :A do
-    btn! do
-      p :XD
-    end
+ToolTip.set_initial_delay 1000
+
+text_area! do
+  text! "LALLWLELAWE\noawejawe"
+
+  on_caret_change! do
+    p _1.caret_position
   end
-  tab! :B do
-    label! text: "FAFAFA"
+
+  tooltip! do
+    label! text: "TOOTL"
   end
-  tabs! alignment: :bottom do
-    on_tab_select! do
-      p _1
-    end
-  end
+end
+
+btn! do
+  window.close
 end
