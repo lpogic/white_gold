@@ -213,6 +213,26 @@ module Tgui
     extern 'void ABI_Knob_setClockwiseTurning(Knob::Ptr* self, int clockwiseTurning)'
     extern 'float ABI_Knob_getClockwiseTurning(Knob::Ptr* self)'
     extern 'void* ABI_Knob_onValueChange(Knob::Ptr* self)'
+    extern 'void* ABI_ChatBox_new()'
+    extern 'void ABI_ChatBox_addLine(ChatBox::Ptr* self, char* text, Color* color, int style)'
+    extern 'void* ABI_ChatBox_getLine(ChatBox::Ptr* self, int lineIndex)'
+    extern 'void* ABI_ChatBox_getLineColor(ChatBox::Ptr* self, int lineIndex)'
+    extern 'int ABI_ChatBox_getLineTextStyle(ChatBox::Ptr* self, int lineIndex)'
+    extern 'int ABI_ChatBox_removeLine(ChatBox::Ptr* self, int lineIndex)'
+    extern 'void ABI_ChatBox_removeAllLines(ChatBox::Ptr* self)'
+    extern 'int ABI_ChatBox_getLineAmount(ChatBox::Ptr* self)'
+    extern 'void ABI_ChatBox_setLineLimit(ChatBox::Ptr* self, int maxLines)'
+    extern 'int ABI_ChatBox_getLineLimit(ChatBox::Ptr* self)'
+    extern 'void ABI_ChatBox_setTextColor(ChatBox::Ptr* self, Color* color)'
+    extern 'void* ABI_ChatBox_getTextColor(ChatBox::Ptr* self)'
+    extern 'void ABI_ChatBox_setTextStyle(ChatBox::Ptr* self, int style)'
+    extern 'int ABI_ChatBox_getTextStyle(ChatBox::Ptr* self)'
+    extern 'void ABI_ChatBox_setLinesStartFromTop(ChatBox::Ptr* self, int startFromTop)'
+    extern 'int ABI_ChatBox_getLinesStartFromTop(ChatBox::Ptr* self)'
+    extern 'void ABI_ChatBox_setNewLinesBelowOthers(ChatBox::Ptr* self, int newLinesBelowOthers)'
+    extern 'int ABI_ChatBox_getNewLinesBelowOthers(ChatBox::Ptr* self)'
+    extern 'void ABI_ChatBox_setScrollbarValue(ChatBox::Ptr* self, int value)'
+    extern 'int ABI_ChatBox_getScrollbarValue(ChatBox::Ptr* self)'
     extern 'void ABI_Container_get_widgets(Container::Ptr* self, void(*f)(Widget::Ptr* widget, const char32_t* type))'
     extern 'void ABI_Container_add(Container::Ptr* self, Widget::Ptr* widget, char* name)'
     extern 'void* ABI_Container_get(Container::Ptr* self, char* name)'
@@ -1060,6 +1080,29 @@ module Tgui
     def _abi_set_clockwise_turning(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_setClockwiseTurning(@pointer, *a); end
     def _abi_get_clockwise_turning(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getClockwiseTurning(@pointer, *a); end
     def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_onValueChange(@pointer, *a).parse('SignalFloat'); end
+  end
+
+  class ChatBox
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ChatBox_new(*a)); initialized(); end
+    def _abi_add_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_addLine(@pointer, *a); end
+    def _abi_get_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLine(@pointer, *a).parse('char32_t'); end
+    def _abi_get_line_color(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineColor(@pointer, *a).parse('Color'); end
+    def _abi_get_line_text_style(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineTextStyle(@pointer, *a); end
+    def _abi_remove_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_removeLine(@pointer, *a).odd?; end
+    def _abi_remove_all_lines(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_removeAllLines(@pointer, *a); end
+    def _abi_get_line_amount(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineAmount(@pointer, *a); end
+    def _abi_set_line_limit(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setLineLimit(@pointer, *a); end
+    def _abi_get_line_limit(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineLimit(@pointer, *a); end
+    def _abi_set_text_color(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setTextColor(@pointer, *a); end
+    def _abi_get_text_color(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getTextColor(@pointer, *a).parse('Color'); end
+    def _abi_set_text_style(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setTextStyle(@pointer, *a); end
+    def _abi_get_text_style(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getTextStyle(@pointer, *a); end
+    def _abi_set_lines_start_from_top(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setLinesStartFromTop(@pointer, *a); end
+    def _abi_get_lines_start_from_top(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLinesStartFromTop(@pointer, *a).odd?; end
+    def _abi_set_new_lines_below_others(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setNewLinesBelowOthers(@pointer, *a); end
+    def _abi_get_new_lines_below_others(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getNewLinesBelowOthers(@pointer, *a).odd?; end
+    def _abi_set_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setScrollbarValue(@pointer, *a); end
+    def _abi_get_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getScrollbarValue(@pointer, *a); end
   end
 
   class Container

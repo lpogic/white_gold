@@ -38,7 +38,8 @@ module Tgui
     toggle_button: Tgui::ToggleButton,
     tree_view: Tgui::TreeView,
     scrollbar: Tgui::Scrollbar,
-    panel: Tgui::Panel
+    panel: Tgui::Panel,
+    chat_box: Tgui::ChatBox
   }.freeze
 
   module WidgetOwner

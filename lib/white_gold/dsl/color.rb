@@ -8,7 +8,7 @@ module Tgui
       when Color
         return arg
       when String
-        r, g, b, a = *tones_from_string
+        r, g, b, a = *tones_from_string(arg)
       when Array
         case arg.size
         when 1

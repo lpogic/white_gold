@@ -29,6 +29,14 @@ class Page < Tgui::Group
     @tgui.next_page_id = page
   end
 
+  def job **na, &b
+    @tgui.job **na, &b
+  end
+
+  def timer **na, &b
+    @tgui.timer **na, &b
+  end
+
   def gui
     @tgui.gui
   end

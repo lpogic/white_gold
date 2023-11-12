@@ -98,44 +98,41 @@ class WhiteGold
   class Job
     NO_RESULT = Object.new
 
-    def initialize delay:, repeat:, &b
+    def initialize delay:, repeat:, run: true, &b
+      @delay = delay
       @repeat = repeat
+      @job = b
       @result = NO_RESULT
+      self.run if run
+    end
+
+    def run
       @thread = Thread.new do
-        sleep(delay / 1000.0) if delay
-        iteration = 1
-        case repeat
-        when false
-          result = b.(iteration, self)
-        when true
-          while @repeat
-            result = b.(iteration, self)
-            iteration += 1
-          end
-        when Integer
-          @repeat.times do
-            result = b.(iteration, self)
-            iteration += 1
-          end
-        end
-        @result = result if @result == NO_RESULT
+        sleep(@delay / 1000.0) if @delay
+        @result = @job.(self)
       end
     end
 
-    def later &b
-      if @thread.alive?
-        @later = b
-      else
-        b.(@result)
-      end
+    def on_done &b
+      @on_done = b
+      b.(@result) if @thread && !@thread.alive?
     end
 
     def audit
-      if @thread.alive?
+      if @thread
+        if @thread.alive?
+          return true
+        else
+          @on_done.(@result) if @on_done
+          if @repeat
+            run
+            return true
+          else
+            return false
+          end
+        end
+      else 
         return true
-      else
-        @later.(@result) if @later
-        return false
       end
     end
 
@@ -149,6 +146,11 @@ class WhiteGold
     job = Job.new delay:, repeat:, &b
     @jobs << job
     job
+  end
+
+  def timer delay: nil, repeat: false, &b
+    job delay:, repeat: do
+    end.on_done &b
   end
 
   def respond_to? name
