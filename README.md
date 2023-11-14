@@ -26,8 +26,7 @@ button! text: "Then press the button", position: [200, 250] do
 end
 ```
 ### Output:<br>
-<img src="./.github/img/screen_1.PNG" width="30%">
-<img src="./.github/img/screen_2.PNG" width="30%">
+<img src="./.github/img/screen_1.PNG" width="30%">   <img src="./.github/img/screen_2.PNG" width="30%">
 
 
 
