@@ -33,8 +33,8 @@ class Page < Tgui::Group
     @tgui.job **na, &b
   end
 
-  def timer **na, &b
-    @tgui.timer **na, &b
+  def timer *a, **na, &b
+    @tgui.timer *a, **na, &b
   end
 
   def gui

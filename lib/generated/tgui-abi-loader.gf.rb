@@ -34,6 +34,7 @@ module Tgui
     extern 'void* ABI_Window_new()'
     extern 'void ABI_Window_close(sf::WindowBase* self)'
     extern 'int ABI_Window_isOpen(sf::WindowBase* self)'
+    extern 'void ABI_Window_setTitle(sf::WindowBase* self, char* title)'
     extern 'void ABI_BackendGui_setTextSize(BackendGui* self, int textSize)'
     extern 'int ABI_BackendGui_getTextSize(BackendGui* self)'
     extern 'void ABI_BackendGui_setAbsoluteView(BackendGui* self, int x, int y, int w, int h)'
@@ -64,6 +65,9 @@ module Tgui
     extern 'void ABI_Gui_removeAll(Gui* self)'
     extern 'void ABI_Gui_mainLoop(Gui* self)'
     extern 'void* ABI_Gui_getWidget(Gui* self, const char* name)'
+    extern 'void ABI_Gui_setClearColor(Gui* self, Color* color)'
+    extern 'void ABI_Gui_setClipboard(Gui* self, char* text)'
+    extern 'void* ABI_Gui_getClipboard(Gui* self)'
     extern 'void ABI_STATIC_Theme_setDefault(char* theme)'
     extern 'void* ABI_Texture_new(char* id, int partRectX, int partRectY, int partRectW, int partRectH, int middlePartX, int middlePartY, int middlePartW, int middlePartH, int smooth)'
     extern 'void* ABI_Texture_getId(Texture* self)'
@@ -347,7 +351,7 @@ module Tgui
     extern 'void* ABI_ListBox_getIdByIndex(ListBox::Ptr* self, int index)'
     extern 'void* ABI_ListBox_getSelectedItem(ListBox::Ptr* self)'
     extern 'void* ABI_ListBox_getSelectedItemId(ListBox::Ptr* self)'
-    extern 'const int ABI_ListBox_getSelectedItemIndex(ListBox::Ptr* self)'
+    extern 'int ABI_ListBox_getSelectedItemIndex(ListBox::Ptr* self)'
     extern 'int ABI_ListBox_changeItem(ListBox::Ptr* self, char* originalValue, char* newValue)'
     extern 'int ABI_ListBox_changeItemById(ListBox::Ptr* self, char* id, char* newValue)'
     extern 'int ABI_ListBox_changeItemByIndex(ListBox::Ptr* self, int index, char* newValue)'
@@ -856,6 +860,7 @@ module Tgui
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Window_new(*a)); initialized(); end
     def _abi_close(*a);    Abi.call_arg_map! a; Abi.ABI_Window_close(@pointer, *a); end
     def _abi_is_open(*a);    Abi.call_arg_map! a; Abi.ABI_Window_isOpen(@pointer, *a).odd?; end
+    def _abi_set_title(*a);    Abi.call_arg_map! a; Abi.ABI_Window_setTitle(@pointer, *a); end
   end
 
   class BackendGui
@@ -895,6 +900,9 @@ module Tgui
     def _abi_remove_all(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_removeAll(@pointer, *a); end
     def _abi_main_loop(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_mainLoop(@pointer, *a); end
     def _abi_get_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_getWidget(@pointer, *a).parse('Widget::Ptr'); end
+    def _abi_set_clear_color(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_setClearColor(@pointer, *a); end
+    def _abi_set_clipboard(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_setClipboard(@pointer, *a); end
+    def _abi_get_clipboard(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_getClipboard(@pointer, *a).parse('char32_t'); end
   end
 
   class Theme

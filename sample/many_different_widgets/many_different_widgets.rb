@@ -1,4 +1,4 @@
-require_relative '../../lib/white_gold'
+require_relative 'white_gold'
 
 Theme.default = "Black.txt"
 picture! url: "RedBackground.jpg"
@@ -79,6 +79,13 @@ checkbox! position: [420, 240], text: "Ok, I got it", size: [25, 25]
 checkbox! position: [570, 240], text: "No, I didn't", size: [25, 25]
 
 label! text: "Chatbox", position: [420, 280], text_size: 18
+
+chat_box! size: [300, 100], text_size: 18, position: [420, 310], lines_start_from_top: true do
+  line! "texus: Hey, this is TGUI!", color: :green
+  line! "Me: Looks awesome! ;)", color: :yellow
+  line! "texus: Thanks! :)", color: :green
+  line! "Me: The widgets rock ^^", color: :yellow
+end
 
 btn! "Exit", position: [(gui.view[2] - 115), (gui.view[3] - 50)], size: [100, 40] do
   window.close

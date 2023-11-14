@@ -1,6 +1,6 @@
 require 'optparse'
 require 'fileutils'
-require_relative '../../tgui-update.config'
+require_relative '../../tgui-abi-update.config'
 
 options = {}
 OptionParser.new do |opts|

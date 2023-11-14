@@ -148,9 +148,9 @@ module Tgui
       _abi_move_with_animation x, y, duration
     end
 
-    def resize width, height = nil, duration = 1000
+    def resize width, height = nil, duration: 1000
       w = self_encode_size_layout(width)
-      h = self_encode_size_layout(width || height)
+      h = self_encode_size_layout(height || width)
       _abi_resize_with_animation w, h, duration
     end
 

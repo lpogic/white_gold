@@ -3,12 +3,23 @@ require_relative '../extern_object'
 module Tgui
   class Color < ExternObject
 
+    PREDEFINED_COLORS = {
+      red: [200, 0, 0, 255],
+      green: [0, 200, 0, 255],
+      blue: [0, 0, 200, 255],
+      yellow: [200, 200, 0, 255],
+      white: [200, 200, 200, 255],
+      black: [0, 0, 0, 255]
+    }
+
     def self.produce arg
       case arg
       when Color
         return arg
       when String
         r, g, b, a = *tones_from_string(arg)
+      when Symbol
+        r, g, b, a = *PREDEFINED_COLORS[arg]
       when Array
         case arg.size
         when 1

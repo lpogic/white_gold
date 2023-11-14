@@ -1,5 +1,5 @@
 class Unit
-  @@default = :pc
+  @@default = :px
 
   class << self
     

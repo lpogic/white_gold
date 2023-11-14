@@ -86,15 +86,6 @@ class WhiteGold
     @next_page_id = next_page_id
   end
 
-  # def main_page
-  #   # g.gui.text_size = 7.pc
-  #   g += l = Label.new "Witaj w White Gold!"
-  #   l.position = [50.pc, 50.pc]
-  #   l.vertical_alignment = :center
-  #   l.horizontal_alignment = :center
-  #   l.auto_size = true
-  # end
-
   class Job
     NO_RESULT = Object.new
 
@@ -148,8 +139,8 @@ class WhiteGold
     job
   end
 
-  def timer delay: nil, repeat: false, &b
-    job delay:, repeat: do
+  def timer delay_ = nil, delay: nil, repeat: false, &b
+    job delay: delay || delay_, repeat: do
     end.on_done &b
   end
 

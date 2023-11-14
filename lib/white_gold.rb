@@ -33,9 +33,11 @@ class << self
 end
 
 @wg.init Page
-at_exit do
-  go :main_page
-rescue NameError
-ensure
-  @wg.run init: false
+if $0 != 'irb'
+  at_exit do
+    go :main_page
+  rescue NameError
+  ensure
+    @wg.run init: false
+  end
 end

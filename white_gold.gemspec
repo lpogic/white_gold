@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Łukasz Pomietło"]
   s.email       = "oficjalnyadreslukasza@gmail.com"
   s.files       = Dir.glob('lib/**/*') + 
-    Dir.glob('ext/**/*.{dll}') +
+    Dir.glob('ext/**/*.{dll,so}') +
     Dir.glob('res/**/*')
   s.homepage    = "https://github.com/lpogic/white_gold"
   s.license       = "Zlib"

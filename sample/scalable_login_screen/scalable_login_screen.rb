@@ -1,4 +1,6 @@
-require_relative '../../lib/white_gold'
+require_relative 'white_gold'
+
+Unit.default = :pc
 
 def login username, password
   puts "Username: " + username.text

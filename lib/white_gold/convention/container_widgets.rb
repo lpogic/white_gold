@@ -119,8 +119,8 @@ module Tgui
       common_widget_post_initialize radio, *a, **na, &b
     end
 
-    def msg_box text, **buttons
-      message_box text:, buttons: buttons.map do |k, v| 
+    def msg text, **buttons
+      message_box text:, position: :center, label_alignment: :center, buttons: buttons.map do |k, v| 
         procedure = proc do |w|
           v.call()
           w.close true

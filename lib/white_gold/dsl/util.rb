@@ -6,7 +6,7 @@ module Tgui
     abi_static :free
 
     def self.expand_path path
-      path = File.expand_path(path, File.dirname($0))
+      path = File.expand_path(path, File.dirname(ENV["OCRAN_EXECUTABLE"] || $0))
       raise "File #{path} not found" if !File.exist? path
       path
     end

@@ -10,5 +10,12 @@ module Tgui
     abi_alias :self_poll_events, :poll_events
     abi_alias :self_draw, :draw
     
+    def clear_color=(color)
+      c = Color.produce color
+      _abi_set_clear_color c
+    end
+
+    abi_attr :clipboard
+    
   end
 end

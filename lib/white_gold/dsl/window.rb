@@ -5,6 +5,7 @@ module Tgui
 
     abi_alias :close
     abi_alias :open?, :is_
+    abi_alias :title=, :set_
 
   end
 end

@@ -28,5 +28,15 @@ module Tgui
     end
 
     abi_attr :enabled?
+
+    def suppress
+      enabled_before = enabled?
+      self.enabled = false
+      if block_given?
+        yield
+        self.enabled = true
+      end
+    end
+    
   end
 end

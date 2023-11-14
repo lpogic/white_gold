@@ -6,15 +6,15 @@ module Fiddle
         utf32_to_s
       when 'Vector2f'
         v = Tgui::Abi::Vector2f.new self
-        ObjectSpace.define_finalizer(v, Tgui::ExternObject.finalizer(self))
+        ObjectSpace.define_finalizer(v, Tgui::ExternObject.proc.finalizer(self))
         v
       when 'Vector2u'
         v = Tgui::Abi::Vector2u.new self
-        ObjectSpace.define_finalizer(v, Tgui::ExternObject.finalizer(self))
+        ObjectSpace.define_finalizer(v, Tgui::ExternObject.proc.finalizer(self))
         v
       when 'UIntRect'
         v = Tgui::Abi::UIntRect.new self
-        ObjectSpace.define_finalizer(v, Tgui::ExternObject.finalizer(self))
+        ObjectSpace.define_finalizer(v, Tgui::ExternObject.proc.finalizer(self))
         v
       when 'Color'
         Tgui::Color.new pointer: self

@@ -1,0 +1,2 @@
+This is altered version of the original TGUI software.
+Source code can be found here: https://github.com/lpogic/TGUI-ABI/tree/cabi
