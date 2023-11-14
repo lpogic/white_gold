@@ -1,7 +1,8 @@
 White Gold 
 ===
 
-Ruby gem for building pure ruby graphical user interface. Uses [TGUI](https://tgui.eu/) & [SFML](https://www.sfml-dev.org/) as backend.
+Ruby gem for building pure ruby graphical user interface.<br>
+Uses [TGUI](https://tgui.eu/) & [SFML](https://www.sfml-dev.org/) as backend.
 
 Taste
 ---
