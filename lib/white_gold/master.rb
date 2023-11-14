@@ -27,7 +27,7 @@ class WhiteGold
   end
 
   def run init_page = :main_page, fps: nil, theme: nil, init: true
-    self.init fps: fps, theme: theme if init
+    self.init init_page, fps: fps, theme: theme if init
 
     next_frame_time = Time.now
     while @gui.self_active?
