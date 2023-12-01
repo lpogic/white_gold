@@ -30,10 +30,10 @@ module Tgui
     def tab object, index: nil, **na, &b
       text = object.then(&format)
       if !index
-        index = _abi_add abi_pack_string(text), abi_pack_bool(false)
+        index = _abi_add abi_pack_string(text), abi_pack_boolean(false)
       else
         index = abi_pack_integer(index)
-        _abi_insert index, abi_pack_string(text), abi_pack_bool(false)
+        _abi_insert index, abi_pack_string(text), abi_pack_boolean(false)
       end
       objects.insert index, object
       tab = Tab.new self, index

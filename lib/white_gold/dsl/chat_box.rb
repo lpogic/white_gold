@@ -30,7 +30,7 @@ module Tgui
       text = object.then(&format)
       color ||= text_color
       style ||= text_style
-      _abi_add_line abi_pack_string(text), abi_pack_color(color), abi_pack_text_styles(*style)
+      _abi_add_line abi_pack_string(text), abi_pack(Color, color), abi_pack(TextStyles, *style)
       line = Line.new self, objects.size
       objects << object
       bang_nest line, **na, &b

@@ -21,8 +21,8 @@ module Packer
     end
   end
 
-  def abi_pack host, type, object
-    Interface.parse_packer(type).call host, object
+  def abi_pack host, type, *a
+    Interface.parse_packer(type).call host, *a
   end
 end
     

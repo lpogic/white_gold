@@ -25,8 +25,8 @@ class ExternObject
   @@callback_storage = {}
   @@data_storage = {}
 
-  def abi_pack type, object
-    ExternObject.abi_pack self, type, object
+  def abi_pack type, *a
+    ExternObject.abi_pack self, type, *a
   end
 
   def abi_unpack type, object
@@ -69,7 +69,11 @@ class ExternObject
 
       na = {nil => nil} if na.empty?
       interface = na.map{|k, v| Interface.from k, v }.first
-      self_abi_def name, abi_name, interface
+      # if name.to_s.end_with? "="
+      #   self_abi_def_setter name, abi_name, interface
+      # else
+        self_abi_def name, abi_name, interface
+      # end
     end
 
     def self_abi_def name, abi_name, abi_interface
@@ -77,6 +81,12 @@ class ExternObject
         abi_interface.call self, abi_name, *a
       end
     end
+
+    # def self_abi_def_setter name, abi_name, abi_interface
+    #   define_method name do |a|
+    #     abi_interface.call self, abi_name, *a
+    #   end
+    # end
 
     def abi_attr name, type = nil, original_name = nil
       if original_name
@@ -124,8 +134,8 @@ class ExternObject
         const_set base, enum
         enum.name = base
       end
-      abi_packer enum do |o|
-        enum.pack(o)
+      abi_packer enum do |*o|
+        enum.pack(*o)
       end
       abi_unpacker enum do |o|
         enum.unpack(o)

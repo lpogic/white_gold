@@ -66,11 +66,11 @@ module Tgui
     def tab object, index: nil, **na, &b
       text = object.then(&format)
       if !index
-        panel_pointer = _abi_add_tab abi_pack_string(text), abi_pack_bool(false)
+        panel_pointer = _abi_add_tab abi_pack_string(text), abi_pack_boolean(false)
         index = _abi_get_index panel_pointer
       else
         index = abi_pack_integer index
-        panel_pointer = _abi_insert_tab index, abi_pack_string(text), abi_pack_bool(false)
+        panel_pointer = _abi_insert_tab index, abi_pack_string(text), abi_pack_boolean(false)
       end
       objects.insert index, object
       tab_panel = TabPanel.new self, index, panel_pointer

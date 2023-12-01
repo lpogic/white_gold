@@ -76,7 +76,7 @@ module Tgui
           hide *a[1..]
         end
       else
-        _abi_set_visible abi_pack_bool(a)
+        _abi_set_visible abi_pack_boolean(a)
       end
     end
 
@@ -143,10 +143,10 @@ module Tgui
 
       def key_press key, alt: false, control: false, shift: false, system: false
         host._abi_key_pressed abi_pack(KeyCode, key), 
-          abi_pack_bool(alt), 
-          abi_pack_bool(control), 
-          abi_pack_bool(shift), 
-          abi_pack_bool(system)
+          abi_pack_boolean(alt), 
+          abi_pack_boolean(control), 
+          abi_pack_boolean(shift), 
+          abi_pack_boolean(system)
       end
 
       def text text
@@ -156,7 +156,7 @@ module Tgui
       end
 
       def scroll delta, x, y, touch = false
-        host._abi_scrolled abi_pack_float(delta), abi_pack_float(x), abi_pack_float(y), abi_pack_bool(touch)
+        host._abi_scrolled abi_pack_float(delta), abi_pack_float(x), abi_pack_float(y), abi_pack_boolean(touch)
       end
 
       abi_def :tooltip, :ask_toop_tip, [Float, Float] => nil
@@ -200,7 +200,7 @@ module Tgui
 
     def self_cast_up widget, type = nil, equip: true
       return nil if widget.null?
-      type = Widget.get_type widget if !type
+      type = abi_unpack_string(Widget.get_type widget) if !type
       casted = Tgui.const_get(type).new pointer: widget
       equip_child_widget casted if equip
       casted

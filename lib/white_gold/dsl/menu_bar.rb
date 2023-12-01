@@ -138,13 +138,14 @@ module Tgui
     end
 
     class Menu < MenuItem
+
       alias_method :id, :text
 
       abi_attr :enabled?, "Boolean", :menu_enabled, id: 0
       abi_def :remove, :remove_menu, id: 0
 
       def path
-        [@object]
+        [@id]
       end
     end
 
@@ -215,7 +216,7 @@ module Tgui
 
     def self_path_block path, &b
       path = self_tree.path_object_to_str *path
-      b.(*abi_pack(String.., path), path)
+      b.(*abi_pack(String.., *path), path)
     end
 
     def self_object_path path

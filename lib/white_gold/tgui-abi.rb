@@ -80,22 +80,27 @@ require_relative 'convention/container_widgets'
 
 class ExternObject
   abi_packer Object do |o|
+    o = o.first if o.is_a? Array
     o
   end
 
   abi_packer String do |o|
+    o = o.first if o.is_a? Array
     o.to_s
   end
 
   abi_packer Integer do |o|
+    o = o.first if o.is_a? Array
     o.to_i
   end
 
   abi_packer Float do |o|
+    o = o.first if o.is_a? Array
     o.to_f
   end
 
   abi_packer "Boolean" do |o|
+    o = o.first if o.is_a? Array
     o ? 1 : 0
   end
 
@@ -108,15 +113,16 @@ class ExternObject
     end
   end
 
-  abi_packer "SingleSizeLayout" do |value|
-    case value
-    when String then value
-    when Numeric then Unit.nominate value
+  abi_packer "SingleSizeLayout" do |o|
+    o = o.first if o.is_a? Array
+    case o
+    when String then o
+    when Numeric then Unit.nominate o
     when :full then "100%"
     when :half then "50%"
     when :third then "parent.innersize  / 3"
     when :quarter then "25%"
-    else raise "Invalid value `#{value}` given"
+    else raise "Invalid value `#{o}` given"
     end
   end
 
@@ -129,14 +135,15 @@ class ExternObject
     end
   end
 
-  abi_packer "SinglePositionLayout" do |value|
-    case value
-    when String then value
-    when Numeric then Unit.nominate value
+  abi_packer "SinglePositionLayout" do |o|
+    o = o.first if o.is_a? Array
+    case o
+    when String then o
+    when Numeric then Unit.nominate o
     when :center then "(parent.innersize - size) / 2"
     when :begin then "0"
     when :end then "parent.innersize - size / 2"
-    else raise "Invalid value `#{value}` given"
+    else raise "Invalid value `#{o}` given"
     end
   end
 

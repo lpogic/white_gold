@@ -37,7 +37,7 @@ module Interface
       parse_packer "abi_pack#{abi_const_string_method_suffix packer}".to_sym
     when Range
       subpacker = parse_packer packer.min
-      fiddle_type = packer_fiddle_type subpacker
+      fiddle_type = packer_fiddle_type packer.min
       if packer.exclude_end?
         proc do |host, *a|
           it = a.each
@@ -64,7 +64,7 @@ module Interface
   end
 
   def self.packer_fiddle_type type
-    if type == Integer || type == "Boolean" then Fiddle::TYPE_INTEGER
+    if type == Integer || type == "Boolean" then Fiddle::TYPE_INT
     elsif type == Float then Fiddle::TYPE_FLOAT
     elsif type == String then Fiddle::TYPE_CONST_STRING
     else Fiddle::TYPE_VOIDP

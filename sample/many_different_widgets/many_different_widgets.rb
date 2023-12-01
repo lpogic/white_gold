@@ -1,4 +1,4 @@
-require_relative 'white_gold'
+require_relative '../../lib/white_gold'
 
 Theme.default = "Black.txt"
 picture! url: "RedBackground.jpg"

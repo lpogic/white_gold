@@ -86,7 +86,7 @@ module Tgui
 
       def remove
         self_path_block do
-          host._abi_remove_item _1, _2, abi_pack_bool(false)
+          host._abi_remove_item _1, _2, abi_pack_boolean(false)
           host.self_tree.cut *_3
         end
       end
@@ -169,7 +169,7 @@ module Tgui
     def self_add_item path, object, **na, &b
       new_path = [*path, object]
       self_path_block new_path do
-        _abi_add_item _1, _2, abi_pack_bool(true)
+        _abi_add_item _1, _2, abi_pack_boolean(true)
         self_tree[*_3, grow: true].object = object
       end
       item = Item.new self, new_path
