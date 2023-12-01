@@ -8,25 +8,22 @@ module Tgui
     class SignalItem < Tgui::SignalItem
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP]) do |str1, str2|
-          id = str2.parse('char32_t')
+          id = @widget.abi_unpack_string(str2)
           b.(@widget.self_get_object_by_id(id))
         end
       end
     end
 
-    api_attr :self_objects do
-      {}
-    end
     api_attr :format do
       :to_s
     end
 
-    abi_attr :display_count, :items_to_display
-    abi_attr :default_text
-    abi_attr :scroll_item?, :change_item_on_scroll
+    abi_attr :display_count, Integer, :items_to_display
+    abi_attr :default_text, String
+    abi_attr :scroll_item?, "Boolean", :change_item_on_scroll
     abi_signal :on_item_select, SignalItem
 
-    ExpandDirection = enum :down, :up, :auto
+    abi_enum "ExpandDirection", :down, :up, :auto
 
     @@auto_item_id = "@/"
 
@@ -45,11 +42,11 @@ module Tgui
       end
 
       def text=(text)
-        @combo_box._abi_change_item_by_id @id, text
+        @combo_box._abi_change_item_by_id abi_pack_string(@id), abi_pack_string(text)
       end
 
       def text
-        @combo_box._abi_get_item_by_id @id
+        abi_unpack_string(@combo_box._abi_get_item_by_id abi_pack_string(@id))
       end
 
       def selected=(selected)
@@ -69,28 +66,28 @@ module Tgui
     def item object, **na, &b
       text = object.then(&format)
       @@auto_item_id = id = @@auto_item_id.next
-      _abi_add_item text, id
+      _abi_add_item abi_pack_string(text), abi_pack_string(id)
       item = Item.new self, id
       self_objects[id] = object
       bang_nest item, **na, &b
     end
 
     def selected
-      return self_objects[_abi_get_selected_item_id]
+      return self_objects[abi_unpack_string _abi_get_selected_item_id]
     end
 
     def selected=(object)
       id = self_find_id_by_object object
       raise "`#{object}` is out of the combobox" if !id
-      _abi_set_selected_item_by_id id
+      _abi_set_selected_item_by_id abi_pack_string(id)
     end
 
-    abi_alias :deselect, :deselect_item
+    abi_def :deselect, :deselect_item
 
     def remove object
       id = self_find_id_by_object object
       if id
-        _abi_remove_item_by_id id
+        _abi_remove_item_by_id abi_pack_string(id)
         self_objects.delete id
       end
     end
@@ -111,21 +108,7 @@ module Tgui
       self_objects.values
     end
 
-    def expand_direction=(direction)
-      _abi_set_expand_direction ExpandDirection[direction]
-    end
-
-    def expand_direction
-      ExpandDirection[_abi_get_expand_direction]
-    end
-
-    def displayed_count=(count)
-      self.items_to_display = count
-    end
-
-    def displayed_count
-      self.items_to_display
-    end
+    abi_attr :expand_direction, ExpandDirection
 
     def [](object)
       id = self_find_id_by_object object
@@ -134,6 +117,10 @@ module Tgui
 
     # internal
 
+    api_attr :self_objects do
+      {}
+    end
+
     def self_get_object_by_id id
       return self_objects[id]
     end
@@ -141,5 +128,6 @@ module Tgui
     def self_find_id_by_object object
       self_objects.find{ _2 == object }&.at(0)
     end
+    
   end
 end

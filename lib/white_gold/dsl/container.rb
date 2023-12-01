@@ -6,24 +6,20 @@ module Tgui
     def widgets
       widgets = []
       block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP]) do |pointer, type|
-        widgets << self_cast_up(pointer, type.utf32_to_s)
+        widgets << self_cast_up(pointer, abi_pack_string(type))
       end
       _abi_get_widgets block_caller
       return widgets
     end
-
-    abi_alias :add
-    abi_alias :remove_all
-    abi_alias :inner_size, :get_
-    abi_alias :child_offset, :get_
-
-    def remove widget
-      widget = self[widget] if widget.is_a? Symbol
-      _abi_remove widget
-    end
+    
+    abi_def :add
+    abi_def :remove_all
+    abi_def :inner_size, :get_, nil => Vector2f
+    abi_def :child_offset, :get_, nil => Vector2f
+    abi_def :remove, Widget => nil
 
     def move_front widget, ceil = false
-      widget = self[widget] if widget.is_a? Symbol
+      widget = abi_pack_widget widget
       if ceil
         _abi_move_widget_to_front widget
       else
@@ -32,7 +28,7 @@ module Tgui
     end
 
     def move_back widget, floor = false
-      widget = self[widget] if widget.is_a? Symbol
+      widget = abi_pack_widget widget
       if floor
         _abi_move_widget_to_back widget
       else
@@ -41,29 +37,15 @@ module Tgui
     end
 
     def move_at index, widget
-      widget = self[widget] if widget.is_a? Symbol
-      _abi_set_widget_index widget, index
+      _abi_set_widget_index abi_pack_widget(widget), abi_pack_integer(index)
     end
 
-    def index widget
-      widget = self[widget] if widget.is_a? Symbol
-      _abi_get_widget_index widget
-    end
-
-    def focused_child
-      self_cast_up _abi_get_focused_child
-    end
-
-    def focused_leaf
-      self_cast_up _abi_get_focused_leaf
-    end
-
-    def leaf_at_position x, y
-      self_cast_up _abi_get_widget_at_position(x, y)
-    end
-
-    abi_alias :focus_next, :focus_next_widget
-    abi_alias :focus_previous, :focus_previous_widget
+    abi_def :index, :get_widget_, Widget => Integer
+    abi_def :focused_child, :get_, nil => Widget
+    abi_def :focused_leaf, :get_, nil => Widget
+    abi_def :leaf_at_position, :get_widget_at_position, [Float, Float] => Widget
+    abi_def :focus_next, :focus_next_widget
+    abi_def :focus_previous, :focus_previous_widget
 
     def get(*keys)
       case keys
@@ -83,6 +65,21 @@ module Tgui
     alias_method :[], :get
 
     # internal
+
+    def abi_pack_widget o
+      case o
+      when Symbol
+        self[o]
+      when Widget
+        o
+      else
+        raise "Unable to make Widget from #{o}"
+      end
+    end
+
+    def abi_unpack_widget o
+      self_cast_up o
+    end
 
     def self_get_widget_name a
       case a

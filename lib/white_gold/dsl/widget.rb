@@ -1,4 +1,4 @@
-require_relative '../extern_object'
+require_relative '../abi/extern_object'
 require_relative '../convention/bang_nested_caller'
 require_relative '../convention/unit'
 require_relative '../convention/widget_like'
@@ -14,7 +14,7 @@ module Tgui
 
     attr_accessor :page
 
-    abi_attr :text_size
+    abi_attr :text_size, Integer
     abi_attr :enabled?
     abi_attr :focused?
     abi_attr :focusable?
@@ -26,61 +26,24 @@ module Tgui
     abi_signal :on_mouse_leave, Tgui::Signal
     abi_signal :on_show_effect_finish, Tgui::SignalShowEffect
     abi_signal :on_animation_finish, Tgui::SignalAnimationType
-
-    def position=(position)
-      a = Array(position)
-      x = self_encode_position_layout(a[0])
-      y = self_encode_position_layout(a[1] || a[0])
-      _abi_set_position x, y
-    end
-
-    def position
-      vec = _abi_get_position
-      [vec.x, vec.y]
-    end
-
-    def absolute_position
-      vec = _abi_get_absolute_position
-      [vec.x, vec.y]
-    end
-
-    def size=(size)
-      a = Array(size)
-      w = self_encode_size_layout(a[0])
-      h = self_encode_size_layout(a[1] || a[0])
-      _abi_set_size w, h
-    end
-
-    def size
-      vec = _abi_get_size
-      [vec.x, vec.y]
-    end
-
-    def full_size
-      vec = _abi_get_full_size
-      [vec.x, vec.y]
-    end
-
-    def height=(height)
-      h = self_encode_size_layout(height)
-      _abi_set_height h
-    end
+    abi_attr :position, "PositionLayout"
+    abi_def :absolute_position, :get_, nil => "PositionLayout"
+    abi_attr :size, "SizeLayout"
+    abi_def :full_size, :get_, nil => "SizeLayout"
+    abi_def :height=, :set_, "SingleSizeLayout" => nil
 
     def height
       size[1]
     end
 
-    def width=(width)
-      w = self_encode_size_layout(width)
-      _abi_set_width w
-    end
+    abi_def :width=, :set_, "SingleSizeLayout" => nil
 
     def width
       size[0]
     end
 
-    abi_alias :can_gain_focus?
-    abi_alias :container?, :is_
+    abi_def :can_gain_focus?, :can_gain_focus, nil => "Boolean"
+    abi_def :container?, nil => "Boolean"
 
     def tooltip *a, **na, &b
       if block_given?
@@ -97,18 +60,11 @@ module Tgui
       end
     end
 
-    def mouse_cursor=(cursor)
-      _abi_set_mouse_cursor CursorType[cursor]
-    end
+    abi_attr :mouse_cursor, CursorType
+    abi_def :draggable?, :is_widget_, nil => "Boolean"
+    abi_def :mouse_down?, nil => "Boolean"
 
-    def mouse_cursor
-      CursorType[_abi_get_mouse_cursor]
-    end
-
-    abi_alias :draggable?, :is_widget_draggable
-    abi_alias :mouse_down?, :is_
-
-    ShowEffectType = enum :fade, :scale, :slide_to_right, :slide_to_left, :slide_to_bottom,
+    abi_enum "ShowEffectType", :fade, :scale, :slide_to_right, :slide_to_left, :slide_to_bottom,
     :slide_to_top, slide_from_left: :slide_to_right, slide_from_right: :slide_to_left,
     slide_from_top: :slide_to_bottom, slide_from_bottom: :slide_to_top
 
@@ -120,15 +76,15 @@ module Tgui
           hide *a[1..]
         end
       else
-        _abi_set_visible a
+        _abi_set_visible abi_pack_bool(a)
       end
     end
 
-    abi_alias :visible?, :is_
+    abi_def :visible?, nil => "Boolean"
 
     def show effect = nil, duration = 1000
       if effect
-        _abi_show_with_effect ShowEffectType[effect], duration
+        _abi_show_with_effect abi_pack(ShowEffectType, effect), abi_pack_integer(duration)
       else
         _abi_set_visible 1
       end
@@ -136,31 +92,26 @@ module Tgui
 
     def hide effect = nil, duration = 1000
       if effect
-        _abi_hide_with_effect ShowEffectType[effect], duration
+        _abi_hide_with_effect abi_pack(ShowEffectType, effect), abi_pack_integer(duration)
       else
         _abi_set_visible 0
       end
     end
 
-    def move x, y = nil, duration = 1000
-      x = self_encode_position_layout(x)
-      y = self_encode_position_layout(x || y)
-      _abi_move_with_animation x, y, duration
+    def pack_animation_time o
+      o ? o.to_i : 1000
     end
 
-    def resize width, height = nil, duration: 1000
-      w = self_encode_size_layout(width)
-      h = self_encode_size_layout(height || width)
-      _abi_resize_with_animation w, h, duration
-    end
+    abi_def :move, :move_with_animation, ["SizeLayout", :pack_animation_time] => nil
+    abi_def :resize, :resize_with_animation, ["PositionLayout", :pack_animation_time] => nil
 
-    AnimationType = enum :move, :resize, :opacity
+    abi_enum "AnimationType", :move, :resize, :opacity
 
-    abi_alias :finish_animations, :finish_all_animations
-    abi_alias :front, :move_to_
-    abi_alias :back, :move_to_
+    abi_def :finish_animations, :finish_all_animations
+    abi_def :front, :move_to_
+    abi_def :back, :move_to_
 
-    KeyCode = enum nil, :a, :b, :c, :d, :e, :f, :g, :h, :i, :j, :k, 
+    abi_enum "KeyCode", nil, :a, :b, :c, :d, :e, :f, :g, :h, :i, :j, :k, 
       :l, :m, :n, :o, :p, :q, :r, :s, :t, :u, :v, :w, :x, :y, :z,
       :num0, :num1, :num2, :num3, :num4, :num5, :num6, :num7, :num8, :num9,
       :escape, :left_control, :left_shift, :left_alt, :left_system,
@@ -176,47 +127,39 @@ module Tgui
 
     class Robot < WidgetLike
       def initialize widget
-        @widget = widget
+        super(widget, nil)
       end
 
-      def mouse_move x, y
-        @widget._abi_mouse_moved x, y
-      end
+      abi_def :mouse_move, :mouse_moved, [Float, Float] => nil
 
       def mouse_press x, y, down: false
-        @widget._abi_left_mouse_pressed x, y
+        host._abi_left_mouse_pressed abi_pack_float(x), abi_pack_float(y)
         mouse_release x, y if !down
       end
 
-      def mouse_release x, y
-        @widget._abi_left_mouse_released x, y
-      end
-
-      def right_mouse_press x, y
-        @widget._abi_right_mouse_pressed x, y
-      end
-
-      def right_mouse_release x, y
-        @widget._abi_right_mouse_released x, y
-      end
+      abi_def :mouse_release, :left_mouse_released, [Float, Float] => nil
+      abi_def :right_mouse_press, :right_mouse_pressed, [Float, Float] => nil
+      abi_def :right_mouse_release, :right_mouse_released, [Float, Float] => nil
 
       def key_press key, alt: false, control: false, shift: false, system: false
-        @widget._abi_key_pressed KeyCode[key], alt, control, shift, system
+        host._abi_key_pressed abi_pack(KeyCode, key), 
+          abi_pack_bool(alt), 
+          abi_pack_bool(control), 
+          abi_pack_bool(shift), 
+          abi_pack_bool(system)
       end
 
       def text text
         text.each_codepoint do |cp|
-          @widget._abi_text_entered cp
+          host._abi_text_entered abi_pack_integer(cp)
         end
       end
 
       def scroll delta, x, y, touch = false
-        @widget._abi_scrolled delta, x, y, touch
+        host._abi_scrolled abi_pack_float(delta), abi_pack_float(x), abi_pack_float(y), abi_pack_bool(touch)
       end
 
-      def tooltip x, y
-        @widget._abi_ask_tool_tip x, y
-      end
+      abi_def :tooltip, :ask_toop_tip, [Float, Float] => nil
     end
 
     def robot **na, &b
@@ -276,12 +219,18 @@ module Tgui
       else
         if original_name
           if original_name.end_with? "_"
-            abi_name = "_abi_#{original_name}#{name}".delete_suffix("?").to_sym
+            abi_name = "_abi_#{original_name}#{name}".delete_suffix("=").delete_suffix("?").to_sym
           else
             abi_name = "_abi_#{original_name}".to_sym
           end
         else
-          abi_name = "_abi_#{name}".delete_suffix("?").to_sym
+          if name.end_with? "?"
+            abi_name = "_abi_is_#{name}".delete_suffix("?").to_sym
+          elsif name.end_with? "="
+            abi_name = "_abi_set_#{name}".delete_suffix("=").to_sym
+          else
+            abi_name = "_abi_#{name}".to_sym
+          end
         end
         define_method "api_child_#{name}" do |*a|
           send(abi_name, *a)
@@ -289,29 +238,16 @@ module Tgui
       end
     end
 
-    # internal
+    def self.abi_render_attr name, type, original_name = nil
+      abi_attr name, "#{type}ObjectConverter", original_name
+    end
 
-    def self_encode_position_layout value
-      case value
-      when String then value
-      when Numeric then Unit.nominate value
-      when :center then "(parent.innersize - size) / 2"
-      when :begin then "0"
-      when :end then "parent.innersize - size / 2"
-      else raise "Invalid value `#{value}` given"
-      end
-    end    
+    def abi_pack_color_object_converter o
+      Color.from(o)._abi_to_object_converter
+    end
 
-    def self_encode_size_layout value
-      case value
-      when String then value
-      when Numeric then Unit.nominate value
-      when :full then "100%"
-      when :half then "50%"
-      when :third then "parent.innersize  / 3"
-      when :quarter then "25%"
-      else raise "Invalid value `#{value}` given"
-      end
+    def abi_unpack_color_object_converter o
+      abi_unpack Color, Color._abi_from_object_converter(o)
     end
   end
 end

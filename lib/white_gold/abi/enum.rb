@@ -7,12 +7,18 @@ class Enum
     @int_to_symbol = @symbol_to_int.invert
   end
 
+  attr_accessor :name
+
+  def sym_to_i sym
+    @symbol_to_int[sym] || raise("No value at #{sym}")
+  end
+
+  def i_to_sym i
+    @int_to_symbol[i] || raise("No keyword at #{i}")
+  end
+
   def [](k)
-    if k.is_a? Integer
-      @int_to_symbol[k] || raise("No keyword at #{k}")
-    else
-      @symbol_to_int[k] || raise("No value at #{k}")
-    end
+    k.is_a?(Integer) ? i_to_sym(k) : sym_to_i(k)
   end
 
   def pack *k
@@ -26,14 +32,12 @@ class Enum
   def symbols
     @symbol_to_int
   end
-end
 
-module Kernel
-  def enum *keywords, **indexed_keywords
-    Enum.new *keywords, **indexed_keywords
+  def to_abi o
+    self[o]
   end
 
-  def bit_enum zero, *keywords, **indexed_keywords
-    Enum.new zero, **(keywords.each_with_index.map{[_1, 1 << _2]}.to_h), **indexed_keywords
+  def to_api o
+    self[o]
   end
 end

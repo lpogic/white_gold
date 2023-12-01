@@ -34,7 +34,7 @@ module Tgui
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |vector|
           path = []
           loader = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |str|
-            path << str.parse('char32_t')
+            path << @widget.abi_unpack_string(str)
           end
           SignalItemHierarchy.fetch_path vector, loader
           object_path = @widget.self_object_path path
@@ -97,16 +97,16 @@ module Tgui
     class MenuItem < WidgetLike
       def item object, **na, &b
         item_path = [*path, object]
-        @menu_bar.self_tree[*item_path, grow: true].text = object.then(&@menu_bar.format)
-        @menu_bar.self_path_block item_path do
-          @menu_bar._abi_add_menu_item _1, _2
+        host.self_tree[*item_path, grow: true].text = object.then(&host.format)
+        host.self_path_block item_path do
+          host._abi_add_menu_item _1, _2
         end
-        item = Item.new @menu_bar, item_path
+        item = Item.new host, item_path
         bang_nest item, **na, &b
       end
       
       def on_press(&b)
-        signal = ItemPressSignal.new @menu_bar, path
+        signal = ItemPressSignal.new host, path
         block_given? ? signal.connect(&b) : signal
       end
 
@@ -115,45 +115,33 @@ module Tgui
       end
 
       def remove_subitems
-        @menu_bar.self_path_block path do
-          @menu_bar._abi_remove_sub_menu_item _1, _2
-          @menu_bar.self_tree.cut_branches *_3
+        host.self_path_block path do
+          host._abi_remove_sub_menu_item _1, _2
+          host.self_tree.cut_branches *_3
         end
       end
 
       def text=(text)
-        @menu_bar.self_path_block path do
-          @menu_bar._abi_change_menu_item _1, _2, text
-          @menu_bar.self_tree[*path].text = text
+        host.self_path_block path do
+          host._abi_change_menu_item _1, _2, text
+          host.self_tree[*path].text = text
         end
       end
 
       def text
-        @menu_bar.self_tree[*path].text
+        host.self_tree[*path].text
       end
 
       def [](*path)
-        Item.new(@menu_bar, self.path + path)
+        Item.new(host, self.path + path)
       end
     end
 
     class Menu < MenuItem
-      def initialize menu_bar, object
-        @menu_bar = menu_bar
-        @object = object
-      end
+      alias_method :id, :text
 
-      def enabled=(enabled)
-        @menu_bar._abi_set_menu_enabled text, enabled
-      end
-
-      def enabled?
-        @menu_bar._abi_get_menu_enabled text
-      end
-
-      def remove
-        @menu_bar._abi_remove_menu @menu_bar.self_tree[@object].text
-      end
+      abi_attr :enabled?, "Boolean", :menu_enabled, id: 0
+      abi_def :remove, :remove_menu, id: 0
 
       def path
         [@object]
@@ -162,26 +150,26 @@ module Tgui
 
     class Item < MenuItem
       def initialize menu_bar, path
-        @menu_bar = menu_bar
-        @path = path.freeze
+        super(menu_bar, path.freeze)
       end
 
+
       def enabled=(enabled)
-        @menu_bar.self_path_block path do
-          @menu_bar._abi_set_menu_item_enabled _1, _2, enabled
+        host.self_path_block path do
+          host._abi_set_menu_item_enabled _1, _2, enabled
         end   
       end
 
       def enabled?
-        @menu_bar.self_path_block path do
-          @menu_bar._abi_get_menu_item_enabled _1, _2
+        host.self_path_block path do
+          host._abi_get_menu_item_enabled _1, _2
         end
       end
 
       def remove
-        @menu_bar.self_path_block path do
-          @menu_bar._abi_remove_menu_item _1, _2
-          @menu_bar.self_tree.cut *_3
+        host.self_path_block path do
+          host._abi_remove_menu_item _1, _2
+          host.self_tree.cut *_3
         end
       end
 
@@ -193,7 +181,7 @@ module Tgui
     def item object, **na, &b
       text = object.then(&format)
       self_tree[object, grow: true].text = text
-      _abi_add_menu text
+      _abi_add_menu abi_pack_string(text)
       item = Menu.new self, object
       bang_nest item, **na, &b
     end
@@ -214,11 +202,10 @@ module Tgui
       end
     end
 
-    abi_attr :min_item_width, :minimum_sub_menu_width
-    abi_alias :direction_inverted=, :set_inverted_menu_direction
-    abi_alias :direction_inverted?, :get_inverted_menu_direction
-    abi_alias :close, :close_menu
-    abi_alias :remove_all
+    abi_attr :min_item_width, Integer, :minimum_sub_menu_width
+    abi_attr :direction_inverted?, "Boolean", :inverted_menu_direction
+    abi_def :close, :close_menu
+    abi_def :remove_all
 
     def remove *path
       self[*path].remove
@@ -228,11 +215,7 @@ module Tgui
 
     def self_path_block path, &b
       path = self_tree.path_object_to_str *path
-      it = path.each
-      block_caller = Fiddle::Closure::BlockCaller.new(Fiddle::TYPE_CONST_STRING, [0]) do
-        it.next
-      end
-      b.(path.size, block_caller, path)
+      b.(*abi_pack(String.., path), path)
     end
 
     def self_object_path path

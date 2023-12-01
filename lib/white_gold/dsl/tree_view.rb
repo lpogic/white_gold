@@ -9,7 +9,7 @@ module Tgui
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |vector|
           path = []
           loader = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |str|
-            path << str.parse('char32_t')
+            path << @widget.abi_unpack_string(str)
           end
           SignalItemHierarchy.fetch_path vector, loader
           object_path = @widget.self_tree.path_str_to_object path
@@ -54,20 +54,16 @@ module Tgui
     end
 
     class Item < WidgetLike
-      def initialize tree_view, path
-        @tree_view = tree_view
-        @path = path
-      end
 
-      attr :path
+      alias_method :path, :id
 
       def self_path_block &b
-        @tree_view.self_path_block @path, &b
+        host.self_path_block path, &b
       end
 
       def expanded=(expanded)
         self_path_block do
-          expanded ? @tree_view._abi_expand(_1, _2) : @tree_view._abi_collapse(_1, _2)
+          expanded ? host._abi_expand(_1, _2) : host._abi_collapse(_1, _2)
         end
       end
 
@@ -78,33 +74,33 @@ module Tgui
       def selected=(selected)
         if selected
           self_path_block do
-            @tree_view.select_item(_1, _2)
+            host.select_item(_1, _2)
           end
         else
-          selected_item = @tree_view.selected_item
-          if selected_item.path == @path
-            @tree_view.deselect_item
+          selected_item = host.selected_item
+          if selected_item.path == path
+            host.deselect_item
           end
         end
       end
 
       def remove
         self_path_block do
-          @tree_view._abi_remove_item _1, _2, false
-          @tree_view.self_tree.cut *_3
+          host._abi_remove_item _1, _2, abi_pack_bool(false)
+          host.self_tree.cut *_3
         end
       end
 
       def item object, **na, &b
-        @tree_view.self_add_item @path, object, **na, &b
+        host.self_add_item path, object, **na, &b
       end
 
       def [](*path_end)
-        Item.new @tree_view, [*@path, *path_end]
+        Item.new host, [*path, *path_end]
       end
 
       def object
-        @path.last
+        path.last
       end
     end
 
@@ -133,11 +129,7 @@ module Tgui
     end
 
     def selected_item
-      path = []
-      loader = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |str|
-        path << str.parse('char32_t')
-      end
-      _abi_get_selected_item loader
+      path = self_selected_item_path
       path.empty? ? nil : Item.new(self, self_tree.path_str_to_object(path))
     end
 
@@ -145,14 +137,22 @@ module Tgui
       selected_item&.object
     end
 
-    abi_alias :expand_all
-    abi_alias :collapse_all
-    abi_alias :deselect
-    abi_alias :remove_all
-    abi_attr :item_height
-    abi_attr :vertical_scrollbar_value
-    abi_attr :horizontal_scrollbar_value
+    abi_def :expand_all
+    abi_def :collapse_all
+    abi_def :deselect
+    abi_def :remove_all
+    abi_attr :item_height, Integer
+    abi_attr :vertical_scrollbar_value, Integer
+    abi_attr :horizontal_scrollbar_value, Integer
+    abi_signal :on_item_select, SignalItemHierarchy
+    abi_signal :on_double_click, SignalItemHierarchy
+    abi_signal :on_expand, SignalItemHierarchy
+    abi_signal :on_collapse, SignalItemHierarchy
+    abi_signal :on_right_click, SignalItemHierarchy
 
+    # internal
+
+    abi_def :self_selected_item_path, :get_selected_item, nil => (String..)
 
     def self_items items, path = []
       items.each do |k, v|
@@ -169,7 +169,7 @@ module Tgui
     def self_add_item path, object, **na, &b
       new_path = [*path, object]
       self_path_block new_path do
-        _abi_add_item _1, _2, true
+        _abi_add_item _1, _2, abi_pack_bool(true)
         self_tree[*_3, grow: true].object = object
       end
       item = Item.new self, new_path
@@ -178,17 +178,7 @@ module Tgui
 
     def self_path_block path, &b
       path = path.map(&format)
-      it = path.each
-      block_caller = Fiddle::Closure::BlockCaller.new(Fiddle::TYPE_CONST_STRING, [0]) do
-        it.next
-      end
-      b.(path.size, block_caller, path)
+      b.(*abi_pack(String.., path), path)
     end
-
-    abi_signal :on_item_select, SignalItemHierarchy
-    abi_signal :on_double_click, SignalItemHierarchy
-    abi_signal :on_expand, SignalItemHierarchy
-    abi_signal :on_collapse, SignalItemHierarchy
-    abi_signal :on_right_click, SignalItemHierarchy
   end
 end

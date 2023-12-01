@@ -8,19 +8,16 @@ module Tgui
     class SignalPanelListBoxItem < Tgui::SignalPanelListBoxItem
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |id|
-          b.(@widget.self_objects.key(id.parse('char32_t')), @widget)
+          b.(@widget.self_objects.key(@widget.abi_unpack_string(id)), @widget)
         end
       end
     end
 
     @@auto_item_id = "@/"
-    api_attr :self_objects do
-      {}
-    end
 
     def item object, index: -1, **na, &b
       @@auto_item_id = id = @@auto_item_id.next
-      panel = Panel.new pointer: _abi_add_item(id, index)
+      panel = Panel.new pointer: _abi_add_item(id, abi_pack_integer(index))
       panel.page = page
       self_objects[object] = id
       bang_nest panel, **na, &b
@@ -32,24 +29,28 @@ module Tgui
       end
     end
 
-    abi_alias :item_width, :get_items_width
-    
-    def item_height=(height)
-      h = self_nominate_height height
-      _abi_set_items_height h
+    abi_def :item_width, :get_items_width, nil => Float
+    abi_packer "NominatedFloat" do |value|
+      case value
+      when Numeric then Unit.nominate value
+      else value
+      end
     end
-    abi_alias :item_height, :get_items_height
+    abi_unpacker "NominatedFloat" do |o|
+      abi_unpack_float o
+    end
+    abi_attr :item_height, "NominatedFloat", :items_height
 
     def selected=(object)
-      _abi_set_selected_item_by_id(self_objects[object])
+      _abi_set_selected_item_by_id self_objects[object]
     end
 
     def selected
-      id = _abi_get_selected_item_id
+      id = abi_unpack_string(_abi_get_selected_item_id)
       id == "" ? nil : self_objects.key(id)
     end
 
-    abi_alias :deselect, :deselect_item
+    abi_def :deselect, :deselect_item
 
     def remove object
       _abi_remove_item_by_id self_objects[object]
@@ -61,7 +62,7 @@ module Tgui
       self_objects.clear
     end
 
-    abi_attr :max_items, :maximum_items
+    abi_attr :max_items, Integer, :maximum_items
 
     abi_signal :on_item_select, SignalPanelListBoxItem
 
@@ -71,12 +72,10 @@ module Tgui
       bang_nest panel, **na, &b
     end
 
-    def self_nominate_height height
-      case height
-      when Numeric then Unit.nominate height
-      else height
-      end
-    end
+    # internal
 
+    api_attr :self_objects do
+      {}
+    end
   end
 end

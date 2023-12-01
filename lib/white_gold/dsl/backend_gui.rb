@@ -1,79 +1,27 @@
-require_relative '../extern_object'
+require_relative '../abi/extern_object'
 require_relative 'signal/signal'
+require_relative 'font'
 
 module Tgui
   class BackendGui < ExternObject
 
-    def view=(view)
-      _abi_set_absolute_view *view
-    end
-
-    def relative_view=(view)
-      _abi_set_relative_view *view
-    end
-
-    def view
-      view = nil
-      block_caller = Fiddle::Closure::BlockCaller.new(0,  Array.new(4, Fiddle::TYPE_FLOAT)) do |*a|
-        view = a
-      end
-      _abi_get_view block_caller
-      view
-    end
-
-    def viewport=(view)
-      _abi_set_absolute_viewport *view
-    end
-
-    def relative_viewport=(view)
-      _abi_set_relative_viewport *view
-    end
-
-    def viewport
-      viewport = nil
-      block_caller = Fiddle::Closure::BlockCaller.new(0,  Array.new(4, Fiddle::TYPE_FLOAT)) do |*a|
-        viewport = a
-      end
-      _abi_get_viewport block_caller
-      viewport
-    end
-
-    abi_alias :tab_focus_pass, :is_tab_key_usage_enabled
-    abi_alias :tab_focus_pass=, :tab_key_usage_enabled
-
-    def font=(font)
-      _abi_set_font Font.produce(font)
-    end
-
-    abi_alias :font, :get_
-    abi_alias :unfocus, :unfocus_all_widgets
-    abi_attr :opacity
-    abi_attr :text_size
+    abi_def :view=, :set_absolute_, [Integer] * 4 => nil
+    abi_def :relative_view=, [Float] * 4 => nil
+    abi_def :view, nil => [Float] * 4
+    abi_def :viewport=, :set_absolute_, [Integer] * 4 => nil
+    abi_def :viewport, nil => [Float] * 4
+    abi_def :relative_viewport=, [Float] * 4 => nil
+    abi_def :tab_focus_pass?, :is_tab_key_usage_enabled, nil => "Boolean"
+    abi_def :tab_focus_pass=, :tab_key_usage_enabled, "Boolean" => nil
+    abi_attr :font, Font
+    abi_def :unfocus, :unfocus_all_widgets
+    abi_attr :opacity, Float
+    abi_attr :text_size, Integer
+    abi_def :push_mouse_cursor, :set_override_mouse_cursor, CursorType => nil
+    abi_def :pop_mouse_cursor, :restore_override_mouse_cursor
+    abi_def :px_to_crd, :map_pixel_to_coords, [Integer, Integer] => [Float, Float]
+    abi_def :crd_to_px, :map_coords_to_pixel, [Float, Float] => [Float, Float]
+    abi_signal :on_view_change, Signal
     
-    def push_mouse_cursor cursor
-      _abi_set_override_mouse_cursor CursorType[cursor]
-    end
-
-    abi_alias :pop_mouse_cursor, :restore_override_mouse_cursor
-
-    def px_to_crd px
-      crd = nil
-      block_caller = Fiddle::Closure::BlockCaller.new(0,  [Fiddle::TYPE_FLOAT, Fiddle::TYPE_FLOAT] ) do |*a|
-        crd = a
-      end
-      _abi_map_pixel_to_coords px, block_caller
-      crd
-    end
-
-    def crd_to_px crd
-      px = nil
-      block_caller = Fiddle::Closure::BlockCaller.new(0,  [Fiddle::TYPE_FLOAT, Fiddle::TYPE_FLOAT] ) do |*a|
-        px = a
-      end
-      _abi_map_coords_to_pixel crd, block_caller
-      px
-    end
-
-    abi_signal :on_view_change, Tgui::Signal
   end
 end

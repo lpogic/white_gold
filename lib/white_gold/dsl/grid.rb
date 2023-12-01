@@ -4,12 +4,12 @@ module Tgui
   class Grid < Container
 
     api_child :padding= do |w, padding|
-      _abi_set_widget_padding w, *self_value_to_padding(padding)
+      _abi_set_widget_padding w, *abi_pack_padding(padding)
     end
 
     api_child :padding, :get_widget_
 
-    Alignment = enum :center, :upper_left, :up, :upper_right, :right, :bottom_right, :bottom, :bottom_left, :left,
+    abi_enum "Alignment", :center, :upper_left, :up, :upper_right, :right, :bottom_right, :bottom, :bottom_left, :left,
       top_left: :upper_left, left_top: :upper_left,
       top_right: :upper_right, right_top: :upper_right,
       right_bottom: :bottom_right, left_bottom: :bottom_left
@@ -24,7 +24,7 @@ module Tgui
 
     api_child :cell=, :set_widget_cell
 
-    def self_value_to_padding v
+    def abi_pack_padding v
       padding = if !v
         Array.new(4, 0)
       elsif Array === v
@@ -38,10 +38,10 @@ module Tgui
       else
         Array.new(4, v)
       end
-      padding.map{ self_encode_padding _1 }
+      padding.map{ abi_pack_pad _1 }
     end
 
-    def self_encode_padding value
+    def abi_pack_pad value
       case value
       when String then value
       when Numeric then "#{value}"
@@ -66,7 +66,7 @@ module Tgui
       widgets = {}
       block_caller = Fiddle::Closure::BlockCaller.new(0, 
         [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_INT, Fiddle::TYPE_INT]) do |pointer, type, row, column|
-        widgets[[row, column]] = self_cast_up(pointer, type.utf32_to_s)
+        widgets[[row, column]] = self_cast_up(pointer, abi_unpack_string(type))
       end
       _abi_get_widget_locations block_caller
       return widgets
@@ -74,7 +74,7 @@ module Tgui
 
     def add widget, id
       super
-      _abi_set_widget_cell widget, @current_row, @current_column
+      _abi_set_widget_cell abi_pack_widget(widget), @current_row, @current_column
       @current_column += 1
     end
 
@@ -82,13 +82,13 @@ module Tgui
       case keys
       in [Symbol]
         id = page.clubs[keys.first]&.members&.first
-        id && self_cast_up(_abi_get(id.to_s))
+        id && self_cast_up(_abi_get(abi_pack_string id))
       in [Integer, Integer]
         self_cast_up(_abi_get_widget *keys)
       else
         Enumerator.new do |e|
           Array(self_get_widget_name keys).flatten.compact.uniq.each do |id|
-            w = _abi_get(id.to_s)
+            w = _abi_get(abi_pack_string id)
             e << self_cast_up(w) if w && !w.null?
           end
         end

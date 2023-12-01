@@ -1,11 +1,10 @@
 require 'fiddle/import'
 require_relative 'path/fiddle-pointer.path'
 require_relative 'tgui-config'
-require_relative 'extern_object'
-require_relative 'extern_enum'
+require_relative 'abi/extern_object'
+require_relative 'abi/enum'
 
 module Tgui
-
   module Abi
     extend Fiddle::Importer
     
@@ -44,12 +43,20 @@ module Tgui
     ]
   end
 
-  TextStyles = bit_enum :regular, :bold, :italic, :underlined, :strike_through
+  Vector2f = Abi::Vector2f
+  Vector2u = Abi::Vector2u
+  UIntRect = Abi::UIntRect
+end
 
-  CursorType = enum :arrow, :text, :hand, :size_left, :size_right,
+class ExternObject
+   
+  abi_bit_enum "TextStyles", :regular, :bold, :italic, :underlined, :strike_through
+
+  abi_enum "CursorType", :arrow, :text, :hand, :size_left, :size_right,
     :size_top, :size_bottom, :size_top_left, :size_bottom_right,
     :size_bottom_left, :size_top_right, :size_horizontal, :size_vertical,
     :crosshair, :help, :not_allowed
+
 end
 
 def each_file_ancestor base, dir, &b
@@ -68,5 +75,143 @@ each_file_ancestor File.dirname(__FILE__), "dsl" do |dsl_file|
 end
 
 # ABI loader should be required after dsl directory files because of class hierarchy
-require_relative '../generated/tgui-abi-loader.gf'
+require_relative 'generated/tgui-abi-loader.gf'
 require_relative 'convention/container_widgets'
+
+class ExternObject
+  abi_packer Object do |o|
+    o
+  end
+
+  abi_packer String do |o|
+    o.to_s
+  end
+
+  abi_packer Integer do |o|
+    o.to_i
+  end
+
+  abi_packer Float do |o|
+    o.to_f
+  end
+
+  abi_packer "Boolean" do |o|
+    o ? 1 : 0
+  end
+
+  abi_packer "SizeLayout" do |o|
+    case o
+    in [x, y]
+      [abi_pack_single_size_layout(x), abi_pack_single_size_layout(y)]
+    else
+      raise "Unable to make Size from #{o}"
+    end
+  end
+
+  abi_packer "SingleSizeLayout" do |value|
+    case value
+    when String then value
+    when Numeric then Unit.nominate value
+    when :full then "100%"
+    when :half then "50%"
+    when :third then "parent.innersize  / 3"
+    when :quarter then "25%"
+    else raise "Invalid value `#{value}` given"
+    end
+  end
+
+  abi_packer "PositionLayout" do |o|
+    case o
+    in [x, y]
+      [abi_pack_single_position_layout(x), abi_pack_single_position_layout(y)]
+    else
+      raise "Unable to make Position from #{o}"
+    end
+  end
+
+  abi_packer "SinglePositionLayout" do |value|
+    case value
+    when String then value
+    when Numeric then Unit.nominate value
+    when :center then "(parent.innersize - size) / 2"
+    when :begin then "0"
+    when :end then "parent.innersize - size / 2"
+    else raise "Invalid value `#{value}` given"
+    end
+  end
+
+  abi_packer Tgui::Abi::Vector2f do |o|
+    case o
+    when Array
+      raise "Invalid array size excepted: #{2}, given: #{o.size}" if o.size != 2
+      return o.map{ abi_pack_float _1 }
+    else
+      raise "Unable to make Vector2f from #{o}"
+    end
+  end
+
+  abi_packer Tgui::Abi::UIntRect do |o|
+    case o
+    when Array
+      raise "Invalid array size excepted: #{4}, given: #{o.size}" if o.size != 4
+      return o.map{ abi_pack_integer _1 }
+    else
+      raise "Unable to make UIntRect from #{o}"
+    end
+  end
+
+  abi_packer Tgui::Color
+  abi_packer Tgui::Font
+  abi_packer Tgui::Texture
+
+  abi_unpacker String do |o|
+    a = []
+    (0..).each do |i|
+      i *= 4
+      ch = (o[i]) | (o[i + 1] << 8) | (o[i + 2] << 16) | (o[i + 3] << 24)
+      break if ch == 0
+      a << ch
+    end
+    raise "deleted string!" if a[0] == 572653601
+    a.pack("N*").encode("UTF-8", "UTF-32BE")
+  end
+
+  abi_unpacker Integer do |o|
+    o
+  end
+
+  abi_unpacker Float do |o|
+    o
+  end
+
+  abi_unpacker "Boolean" do |o|
+    o.odd?
+  end
+
+  abi_unpacker "SizeLayout" do |o|
+    [o.x, o.y]
+  end
+
+  abi_unpacker "PositionLayout" do |o|
+    [o.x, o.y]
+  end
+
+  abi_unpacker Tgui::Vector2f do |o|
+    v = Tgui::Vector2f.new o
+    r = [v.x, v.y]
+    Util.free(o)
+    r
+  end
+
+  abi_unpacker Tgui::UIntRect do |o|
+    v = Tgui::UIntRect.new o
+    r = [v.left, v.top, v.width, v.height]
+    Util.free(o)
+    r
+  end
+
+  abi_unpacker Tgui::Color
+  abi_unpacker Tgui::Font
+  abi_unpacker Tgui::Texture
+
+end

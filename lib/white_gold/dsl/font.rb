@@ -1,8 +1,9 @@
-require_relative '../extern_object'
+require_relative '../abi/extern_object'
 
 module Tgui
   class Font < ExternObject
-    def self.produce arg
+
+    def self.from arg
       case arg
       when Font
         return arg
@@ -13,5 +14,6 @@ module Tgui
       end
       Font.new id
     end
+    
   end
 end

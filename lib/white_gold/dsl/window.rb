@@ -1,11 +1,11 @@
-require_relative '../extern_object'
+require_relative '../abi/extern_object'
 
 module Tgui
   class Window < ExternObject
 
-    abi_alias :close
-    abi_alias :open?, :is_
-    abi_alias :title=, :set_
+    abi_def :close
+    abi_def :open?
+    abi_def :title=, String => nil
 
   end
 end

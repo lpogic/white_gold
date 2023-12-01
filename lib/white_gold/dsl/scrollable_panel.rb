@@ -5,48 +5,39 @@ require_relative 'scrollbar'
 module Tgui
   class ScrollablePanel < Panel
 
-    abi_alias :content_size=, :set_
-
-    def content_size
-      v = _abi_get_content_size
-      [v.x, v.y]
-    end
-
-    abi_alias :content_offset, :get_
-    abi_alias :scrollbar_width, :get_
+    abi_attr :content_size, Vector2f
+    abi_def :content_offset, :get_, nil => Vector2f
+    abi_def :scrollbar_width, :get_, nil => Float
+    abi_enum Tgui::Scrollbar::Policy
 
     class Scrollbar < WidgetLike
-      def initialize scrollable_panel, direction
-        @scrollable_panel = scrollable_panel
-        @direction = direction
-      end
-
+      
       def policy=(policy)
-        @scrollable_panel.send("_abi_set_#{@direction}_scrollbar_policy", Tgui::Scrollbar::Policy[policy])
+        host.send("_abi_set_#{id}_scrollbar_policy", host.abi_pack(Tgui::Scrollbar::Policy, policy))
       end
 
       def policy
-        Tgui::Scrollbar::Policy[@scrollable_panel.send("_abi_get_#{@direction}_scrollbar_policy")]
+        host.abi_unpack(Tgui::Scrollbar::Policy, host.send("_abi_get_#{id}_scrollbar_policy"))
       end
 
       def amount=(amount)
-        @scrollable_panel.send("_abi_set_#{@direction}_scroll_amount", amount)
+        host.send("_abi_set_#{id}_scroll_amount", host.abi_pack_integer(amount))
       end
 
       def amount
-        @scrollable_panel.send("_abi_get_#{@direction}_scroll_amount")
+        host.abi_unpack_integer(host.send("_abi_get_#{id}_scroll_amount"))
       end
 
       def value=(value)
-        @scrollable_panel.send("_abi_set_#{@direction}_scrollbar_value", value)
+        host.send("_abi_set_#{id}_scrollbar_value", host.abi_pack_integer(value))
       end
 
       def value
-        @scrollable_panel.send("_abi_get_#{@direction}_scrollbar_value")
+        host.abi_unpack_integer(host.send("_abi_get_#{id}_scrollbar_value"))
       end
 
       def shown?
-        @scrollable_panel.send("_abi_is_#{@direction}_scrollbar_shown")
+        host.abi_unpack_bool(host.send("_abi_is_#{id}_scrollbar_shown"))
       end
     end
 

@@ -1,8 +1,9 @@
-require_relative '../extern_object'
+require_relative '../abi/extern_object'
+require_relative 'color'
 
 module Tgui
   class Texture < ExternObject
-    def self.produce arg
+    def self.from arg
       case arg
       when Texture
         return arg
@@ -27,26 +28,11 @@ module Tgui
       Texture.new id, prx, pry, prw, prh, mpx, mpy, mpw, mph, smooth
     end
 
-    abi_alias :id, :get_
-
-    def image_size
-      size = _abi_get_image_size
-      [size.x, size.y]
-    end
-
-    def part_rect
-      rect = _abi_get_part_rect
-      [rect.left, rect.top, rect.width, rect.height]
-    end
-
-    abi_alias :smooth?
-
-    def color=(color)
-      c = Color.produce color
-      _abi_set_color c
-    end
-
-    abi_alias :color, :get_
+    abi_def :id, :get_, nil => String
+    abi_def :image_size, :get_, nil => Vector2f
+    abi_def :part_rect, :get_, nil => UIntRect
+    abi_def :smooth?, nil => "Boolean"
+    abi_attr :color, Color
 
     def self.default_smooth=(smooth)
       _abi_set_default_smooth smooth
@@ -55,6 +41,5 @@ module Tgui
     def self.default_smooth
       _abi_get_default_smooth
     end
-
   end
 end

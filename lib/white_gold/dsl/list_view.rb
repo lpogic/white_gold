@@ -8,7 +8,6 @@ module Tgui
     class ListViewItemSignal < Tgui::SignalInt
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |index|
-          p index
           b.(@widget.self_objects[index], @widget)
         end
       end
@@ -22,7 +21,7 @@ module Tgui
       end
     end
 
-    ColumnAlignment = enum :left, :center, :right
+    abi_enum "ColumnAlignment", :left, :center, :right
 
     api_attr :columns do
       []
@@ -33,84 +32,37 @@ module Tgui
 
     class Column < WidgetLike
       def initialize list_view, index
-        @list_view = list_view
-        @index = index
+        super
         @format = :to_s
       end
 
       attr_accessor :format
 
-      def text=(text)
-        @list_view._abi_set_column_text @index, text
-      end
-
-      def text
-        @list_view._abi_get_column_text @index
-      end
-
-      def width=(width)
-        @list_view._abi_set_column_width @index, width
-      end
-
-      def width
-        @list_view._abi_get_column_width @index
-      end
-
-      def design_width
-        @list_view._abi_get_column_design_width @index
-      end
-
-      def auto_resize=(auto_resize)
-        @list_view._abi_set_column_auto_resize @index, auto_resize
-      end
-
-      def auto_resize?
-        @list_view._abi_get_column_auto_resize @index
-      end
-
-      def expanded=(expanded)
-        @list_view._abi_set_column_expanded @index, expanded
-      end
-
-      def expanded?
-        @list_view._abi_get_column_expanded @index
-      end
-
-      def alignment=(alignment)
-        @list_view._abi_set_column_alignment(@index, ColumnAlignment[alignment])
-      end
-
-      def alignment
-        ColumnAlignment[@list_view._abi_get_column_alignment @index]
-      end
+      abi_attr :text, String, :column_text, id: 0
+      abi_attr :width, Integer, :column_width, id: 0
+      abi_def :design_width, :get_column_, id: 0, nil => Integer
+      abi_attr :auto_resize?, "Boolean", :column_auto_resize, id: 0
+      abi_attr :expanded?, "Boolean", :column_expanded, id: 0
+      abi_attr :alignment, ColumnAlignment, :column_alignment, id: 0
     end
 
     class Item < WidgetLike
       def initialize list_view, object
-        @list_view = list_view
-        @object = object
+        super
       end
 
-      def index
-        @list_view.self_object_index @object
+      def id
+        host.self_object_index @id
       end
 
       def object=(object)
-        @list_view.self_change_object @object, object
-        @object = object
+        @list_view.self_change_object @id, object
+        self.id = object
       end
 
-      def object
-        @object
-      end
+      alias_method :object, :id
 
-      def icon=(icon)
-        @list_view._abi_set_item_icon index, Texture.produce(icon)
-      end
-
-      def icon
-        @list_view._abi_get_item_icon index
-      end
+      abi_attr :icon, Texture, :item_icon, id: 0
     end
 
     def column **na, &b
@@ -178,38 +130,18 @@ module Tgui
       end
     end
 
-    abi_attr :separator_width
-    abi_attr :row_height, :item_height
-    abi_alias :deselect, :deselect_items
+    abi_attr :separator_width, Integer
+    abi_attr :row_height, Integer, :item_height
+    abi_def :deselect, :deselect_items
     abi_attr :multi_select?
     abi_attr :auto_scroll?
     abi_attr :resizable_columns?
-
-    def vertical_scrollbar_policy=(policy)
-      _abi_set_vertical_scrollbar_policy Scrollbar::Policy[policy]
-    end
-
-    def vertical_scrollbar_policy
-      Scrollbar::Policy[_abi_get_vertical_scrollbar_policy]
-    end
-
-    def horizontal_scrollbar_policy=(policy)
-      _abi_set_horizontal_scrollbar_policy Scrollbar::Policy[policy]
-    end
-
-    def horizontal_scrollbar_policy
-      Scrollbar::Policy[_abi_get_horizontal_scrollbar_policy]
-    end
-
-    abi_attr :vertical_scrollbar_value
-    abi_attr :horizontal_scrollbar_value
-    abi_alias :fixed_icon_size=, :set_
-
-    def fixed_icon_size
-      size = _abi_get_fixed_icon_size
-      [size.x, size.y]
-    end
-
+    abi_enum Scrollbar::Policy
+    abi_attr :vertical_scrollbar_policy, Scrollbar::Policy
+    abi_attr :horizontal_scrollbar_policy, Scrollbar::Policy
+    abi_attr :vertical_scrollbar_value, Integer
+    abi_attr :horizontal_scrollbar_value, Integer
+    abi_attr :fixed_icon_size, Vector2f
     abi_signal :on_item_select, ListViewItemSignal
     abi_signal :on_double_click, ListViewItemSignal
     abi_signal :on_right_click, ListViewItemSignal
@@ -233,32 +165,12 @@ module Tgui
 
     class GridLines < WidgetLike
       def initialize list_view
-        @list_view = list_view
+        super(list_view, nil)
       end
 
-      def width=(width)
-        @list_view._abi_set_grid_lines_width width
-      end
-
-      def width
-        @list_view._abi_get_grid_lines_width
-      end
-
-      def horizontal=(show)
-        @list_view._abi_set_show_horizontal_grid_lines show
-      end
-
-      def horizontal?
-        @list_view._abi_get_show_horizontal_grid_lines
-      end
-
-      def vertical=(show)
-        @list_view._abi_set_show_vertical_grid_lines show
-      end
-
-      def vertical?
-        @list_view._abi_get_show_vertical_grid_lines
-      end
+      abi_attr :width, Integer, :grid_lines_width
+      abi_attr :horizontal?, "Boolean", :show_horizontal_grid_lines
+      abi_attr :vertical?, "Boolean", :show_vertical_grid_lines
     end
 
     def header **na, &b
@@ -279,44 +191,14 @@ module Tgui
 
     class Header < WidgetLike
       def initialize list_view
-        @list_view = list_view
+        super(list_view, nil)
       end
 
-      def height=(height)
-        @list_view._abi_set_header_height height
-      end
-
-      def height
-        @list_view._abi_get_header_height
-      end
-
-      def text_size=(size)
-        @list_view._abi_set_header_text_size size
-      end
-
-      def text_size
-        @list_view._abi_get_header_text_size
-      end
-
-      def separator_height=(height)
-        @list_view._abi_set_header_separator_height height
-      end
-
-      def separator_height
-        @list_view._abi_get_header_separator_height
-      end
-
-      def actual_height
-        @list_view._abi_get_current_header_height
-      end
-
-      def visible=(show)
-        @list_view._abi_set_header_visible show
-      end
-
-      def visible?
-        @list_view._abi_get_header_visible
-      end
+      abi_attr :height, Integer, :header_height
+      abi_attr :text_size, Integer, :header_text_size
+      abi_attr :separator_height, Integer, :header_separator_height
+      abi_def :actual_height, :get_current_header_height, nil => Integer
+      abi_attr :visible, "Boolean", :header_visible
     end
 
     def self_add_object object, index = nil
@@ -336,47 +218,15 @@ module Tgui
     end
 
     def self_add_item item, index: nil
-      it = item.each
-      block_caller = Fiddle::Closure::BlockCaller.new(Fiddle::TYPE_CONST_STRING, [0]) do
-        it.next
-      rescue StopIteration
-        ""
-      end
       if index
-        _abi_insert_item index, block_caller
+        _abi_insert_item index, abi_pack(String..., item)
         index
       else
-        _abi_add_item block_caller
+        _abi_add_item abi_pack(String..., item)
       end
     end
 
-    def self_change_item index, item
-      it = item.each
-      block_caller = Fiddle::Closure::BlockCaller.new(Fiddle::TYPE_CONST_STRING, [0]) do
-        it.next
-      rescue StopIteration
-        ""
-      end
-      _abi_change_item index, block_caller
-    end
-
-    def self_selected_item_indices
-      indices = []
-      block_caller = Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |index|
-        indices << index
-      end
-      _abi_get_selected_item_indices block_caller
-      return indices      
-    end
-
-    def self_set_selected_item_indices indices
-      it = indices.each
-      block_caller = Fiddle::Closure::BlockCaller.new(Fiddle::TYPE_INT, [0]) do
-        it.next
-      rescue StopIteration
-        -1
-      end
-      _abi_set_selected_items block_caller
-    end
+    abi_def :self_change_item, :change_item, [Integer, String...] => nil
+    abi_attr :self_selected_item_indices, Integer.., :selected_item_indices
   end
 end

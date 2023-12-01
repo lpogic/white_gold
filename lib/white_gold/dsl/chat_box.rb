@@ -18,11 +18,11 @@ module Tgui
       end
 
       def color
-        @chat_box._abi_get_line_color @index
+        @chat_box._abi_get_line_color abi_pack_integer(@index)
       end
 
       def style
-        TextStyles.unpack(@chat_box._abi_get_line_style @index)
+        abi_unpack_text_styles(@chat_box._abi_get_line_style abi_pack_integer(@index))
       end
     end
 
@@ -30,7 +30,7 @@ module Tgui
       text = object.then(&format)
       color ||= text_color
       style ||= text_style
-      _abi_add_line text, Color.produce(color), TextStyles.pack(*style)
+      _abi_add_line abi_pack_string(text), abi_pack_color(color), abi_pack_text_styles(*style)
       line = Line.new self, objects.size
       objects << object
       bang_nest line, **na, &b
@@ -44,7 +44,7 @@ module Tgui
     def remove object
       index = objects.index object
       if index
-        _abi_remove_line index
+        _abi_remove_line abi_pack_integer(index)
         objects.delete_at index
       end
     end
@@ -54,27 +54,11 @@ module Tgui
       objects.clear
     end
 
-    abi_attr :line_limit
-
-    def text_color=(color)
-      c = Color.produce(color)
-      _abi_set_text_color c
-    end
-
-    abi_alias :text_color, :get_
-
-    def text_style=(style)
-      _abi_set_text_style TextStyles.pack(*style)
-    end
-
-    def text_style
-      TextStyles.unpack(_abi_get_text_style)
-    end
-
+    abi_attr :line_limit, Integer
+    abi_attr :text_color, Color
+    abi_attr :text_style, TextStyles
     abi_attr :lines_start_from_top?
     abi_attr :new_lines_below_others?
-    abi_attr :scrollbar_value
-
-    
+    abi_attr :scrollbar_value, Integer
   end
 end

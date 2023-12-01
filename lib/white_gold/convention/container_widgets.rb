@@ -97,7 +97,7 @@ module Tgui
     end
 
     def picture *a, **na, &b
-      texture = na[:texture] || Tgui::Texture.produce([
+      texture = na[:texture] || Tgui::Texture.from([
         na[:url],
         na.dig(:part_rect, 0),
         na.dig(:part_rect, 1),

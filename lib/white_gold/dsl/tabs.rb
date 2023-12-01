@@ -6,34 +6,11 @@ module Tgui
   class Tabs < Widget
 
     class Tab < WidgetLike
-      def initialize tabs, index
-        @tabs = tabs
-        @index = index
-      end
 
-      def text=(text)
-        @tabs.change_text @index, text
-      end
-
-      def text
-        @tabs.text @index
-      end
-      
-      def visible=(visible)
-        @tabs._abi_set_tab_visible @index, visible
-      end
-
-      def visible?
-        @tabs._abi_get_tab_visible @index
-      end
-
-      def enabled=(enabled)
-        @tabs._abi_set_tab_enabled @index, enabled
-      end
-
-      def enabled?
-        @tabs._abi_get_tab_enabled @index
-      end
+      abi_def :text=, :change_text, id: 0, String => nil
+      abi_def :text, :get_, id: 0, nil => String
+      abi_attr :visible?, "Boolean", :get_, id: 0
+      abi_attr :enabled?, "Boolean", :get_, id: 0
 
     end
 
@@ -45,17 +22,18 @@ module Tgui
     end
 
     abi_attr :auto_size?
-    abi_alias :deselect
-    abi_alias :tab_height=, :set_
-    abi_attr :max_tab_width, :maximum_tab_width
-    abi_attr :min_tab_width, :minimum_tab_width
+    abi_def :deselect
+    abi_def :tab_height=, :set_, Float => nil
+    abi_attr :max_tab_width, Float, :maximum_tab_width
+    abi_attr :min_tab_width, Float, :minimum_tab_width
 
     def tab object, index: nil, **na, &b
       text = object.then(&format)
       if !index
-        index = _abi_add text, false
+        index = _abi_add abi_pack_string(text), abi_pack_bool(false)
       else
-        _abi_insert index, text, false
+        index = abi_pack_integer(index)
+        _abi_insert index, abi_pack_string(text), abi_pack_bool(false)
       end
       objects.insert index, object
       tab = Tab.new self, index
@@ -64,7 +42,7 @@ module Tgui
 
     def remove object
       index = objects.index object
-      if index && _abi_remove(index)
+      if index && abi_unpack_bool(_abi_remove(index))
         objects.delete_at index
       end
     end
@@ -82,7 +60,7 @@ module Tgui
     end
 
     def selected
-      index = _abi_get_selected_index
+      index = abi_unpack_integer _abi_get_selected_index
       index >= 0 ? objects[index] : nil
     end
 

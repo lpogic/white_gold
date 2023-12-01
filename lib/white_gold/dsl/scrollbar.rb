@@ -4,14 +4,14 @@ require_relative 'signal/signal_u_int'
 module Tgui
   class Scrollbar < Widget
 
-    Policy = enum :auto, :always, :never
+    abi_enum "Policy", :auto, :always, :never
 
-    abi_attr :max, :maximum
-    abi_attr :value
-    abi_attr :viewport_size
-    abi_attr :speed, :scroll_amount
+    abi_attr :max, Integer, :maximum
+    abi_attr :value, Integer
+    abi_attr :viewport_size, Integer
+    abi_attr :speed, Integer, :scroll_amount
     abi_attr :auto_hide?
-    abi_attr :vertical?, :vertical_scroll
+    abi_attr :vertical?, "Boolean", :vertical_scroll
 
     def horizontal=(horizontal)
       self.vertical = !horizontal
@@ -21,8 +21,8 @@ module Tgui
       !vertical?
     end
 
-    abi_alias :default_width
-
+    abi_def :default_width, :get_, nil => Float
     abi_signal :on_value_change, SignalUInt
+    
   end
 end

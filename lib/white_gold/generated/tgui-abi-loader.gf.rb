@@ -10,6 +10,8 @@ module Tgui
     extern 'int ABI_Color_get_blue(Color* self)'
     extern 'int ABI_Color_get_alpha(Color* self)'
     extern 'void* ABI_Color_applyOpacity(Color* self, float fade)'
+    extern 'void* ABI_STATIC_Color_fromObjectConverter(ObjectConverter* objectConverter)'
+    extern 'void* ABI_Color_toObjectConverter(Color* self)'
     extern 'int ABI_Signal_connect(Signal* self, void(*f)())'
     extern 'int ABI_Signal_disconnect(Signal* self, int f)'
     extern 'void ABI_Signal_setEnabled(Signal* self, int enabled)'
@@ -69,6 +71,9 @@ module Tgui
     extern 'void ABI_Gui_setClipboard(Gui* self, char* text)'
     extern 'void* ABI_Gui_getClipboard(Gui* self)'
     extern 'void ABI_STATIC_Theme_setDefault(char* theme)'
+    extern 'void* ABI_STATIC_Theme_getDefault()'
+    extern 'void ABI_STATIC_Theme_finalizer(std::shared_ptr<Theme>* pointer)'
+    extern 'void ABI_Theme_load(std::shared_ptr<Theme>* self, char* primary)'
     extern 'void* ABI_Texture_new(char* id, int partRectX, int partRectY, int partRectW, int partRectH, int middlePartX, int middlePartY, int middlePartW, int middlePartH, int smooth)'
     extern 'void* ABI_Texture_getId(Texture* self)'
     extern 'void* ABI_Texture_getImageSize(Texture* self)'
@@ -128,6 +133,8 @@ module Tgui
     extern 'void* ABI_Widget_getWidgetName(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onPositionChange(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onSizeChange(Widget::Ptr* self)'
+    extern 'void ABI_Widget_rendererSetProperty(Widget::Ptr* self, char* property, ObjectConverter* objectConverter)'
+    extern 'void* ABI_Widget_rendererGetProperty(Widget::Ptr* self, char* property)'
     extern 'void* ABI_Widget_onFocus(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onUnfocus(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onMouseEnter(Widget::Ptr* self)'
@@ -401,7 +408,7 @@ module Tgui
     extern 'int ABI_ListView_removeItem(ListView::Ptr* self, int index)'
     extern 'void ABI_ListView_removeAllItems(ListView::Ptr* self)'
     extern 'void ABI_ListView_setSelectedItem(ListView::Ptr* self, int index)'
-    extern 'void ABI_ListView_setSelectedItems(ListView::Ptr* self, int(*f)(void))'
+    extern 'void ABI_ListView_setSelectedItems(ListView::Ptr* self, int size, int(*f)(void))'
     extern 'void ABI_ListView_deselectItems(ListView::Ptr* self)'
     extern 'int ABI_ListView_getSelectedItemIndex(ListView::Ptr* self)'
     extern 'void ABI_ListView_getSelectedItemIndices(ListView::Ptr* self, void(*f)(int))'
@@ -781,14 +788,16 @@ module Tgui
     def _abi_get_green(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_green(@pointer, *a); end
     def _abi_get_blue(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_blue(@pointer, *a); end
     def _abi_get_alpha(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_alpha(@pointer, *a); end
-    def _abi_apply_opacity(*a);    Abi.call_arg_map! a; Abi.ABI_Color_applyOpacity(@pointer, *a).parse('Color'); end
+    def _abi_apply_opacity(*a);    Abi.call_arg_map! a; Abi.ABI_Color_applyOpacity(@pointer, *a); end
+    def self._abi_from_object_converter(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Color_fromObjectConverter(*a); end
+    def _abi_to_object_converter(*a);    Abi.call_arg_map! a; Abi.ABI_Color_toObjectConverter(@pointer, *a); end
   end
 
   class Signal
     def _abi_connect(*a);    Abi.call_arg_map! a; Abi.ABI_Signal_connect(@pointer, *a); end
-    def _abi_disconnect(*a);    Abi.call_arg_map! a; Abi.ABI_Signal_disconnect(@pointer, *a).odd?; end
+    def _abi_disconnect(*a);    Abi.call_arg_map! a; Abi.ABI_Signal_disconnect(@pointer, *a); end
     def _abi_set_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_Signal_setEnabled(@pointer, *a); end
-    def _abi_is_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_Signal_isEnabled(@pointer, *a).odd?; end
+    def _abi_is_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_Signal_isEnabled(@pointer, *a); end
   end
 
   class SignalString
@@ -859,7 +868,7 @@ module Tgui
   class Window
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Window_new(*a)); initialized(); end
     def _abi_close(*a);    Abi.call_arg_map! a; Abi.ABI_Window_close(@pointer, *a); end
-    def _abi_is_open(*a);    Abi.call_arg_map! a; Abi.ABI_Window_isOpen(@pointer, *a).odd?; end
+    def _abi_is_open(*a);    Abi.call_arg_map! a; Abi.ABI_Window_isOpen(@pointer, *a); end
     def _abi_set_title(*a);    Abi.call_arg_map! a; Abi.ABI_Window_setTitle(@pointer, *a); end
   end
 
@@ -873,9 +882,9 @@ module Tgui
     def _abi_set_relative_viewport(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_setRelativeViewport(@pointer, *a); end
     def _abi_get_viewport(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_getViewport(@pointer, *a); end
     def _abi_set_tab_key_usage_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_setTabKeyUsageEnabled(@pointer, *a); end
-    def _abi_is_tab_key_usage_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_isTabKeyUsageEnabled(@pointer, *a).odd?; end
+    def _abi_is_tab_key_usage_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_isTabKeyUsageEnabled(@pointer, *a); end
     def _abi_set_font(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_setFont(@pointer, *a); end
-    def _abi_get_font(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_getFont(@pointer, *a).parse('Font'); end
+    def _abi_get_font(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_getFont(@pointer, *a); end
     def _abi_unfocus_all_widgets(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_unfocusAllWidgets(@pointer, *a); end
     def _abi_set_opacity(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_setOpacity(@pointer, *a); end
     def _abi_get_opacity(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_getOpacity(@pointer, *a); end
@@ -883,7 +892,7 @@ module Tgui
     def _abi_restore_override_mouse_cursor(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_restoreOverrideMouseCursor(@pointer, *a); end
     def _abi_map_pixel_to_coords(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_mapPixelToCoords(@pointer, *a); end
     def _abi_map_coords_to_pixel(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_mapCoordsToPixel(@pointer, *a); end
-    def _abi_on_view_change(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_onViewChange(@pointer, *a).parse('Signal'); end
+    def _abi_on_view_change(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_onViewChange(@pointer, *a); end
   end
 
   class Font
@@ -892,70 +901,73 @@ module Tgui
 
   class Gui
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Gui_new(*a)); initialized(); end
-    def _abi_is_active(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_isActive(@pointer, *a).odd?; end
+    def _abi_is_active(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_isActive(@pointer, *a); end
     def _abi_poll_events(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_pollEvents(@pointer, *a); end
     def _abi_draw(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_draw(@pointer, *a); end
     def _abi_add(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_add(@pointer, *a); end
     def _abi_remove(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_remove(@pointer, *a); end
     def _abi_remove_all(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_removeAll(@pointer, *a); end
     def _abi_main_loop(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_mainLoop(@pointer, *a); end
-    def _abi_get_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_getWidget(@pointer, *a).parse('Widget::Ptr'); end
+    def _abi_get_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_getWidget(@pointer, *a); end
     def _abi_set_clear_color(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_setClearColor(@pointer, *a); end
     def _abi_set_clipboard(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_setClipboard(@pointer, *a); end
-    def _abi_get_clipboard(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_getClipboard(@pointer, *a).parse('char32_t'); end
+    def _abi_get_clipboard(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_getClipboard(@pointer, *a); end
   end
 
   class Theme
     def self._abi_set_default(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Theme_setDefault(*a); end
+    def self._abi_get_default(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Theme_getDefault(*a); end
+    def self._abi_finalizer(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Theme_finalizer(*a); end
+    def _abi_load(*a);    Abi.call_arg_map! a; Abi.ABI_Theme_load(@pointer, *a); end
   end
 
   class Texture
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Texture_new(*a)); initialized(); end
-    def _abi_get_id(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getId(@pointer, *a).parse('char32_t'); end
-    def _abi_get_image_size(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getImageSize(@pointer, *a).parse('Vector2u'); end
-    def _abi_get_part_rect(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getPartRect(@pointer, *a).parse('UIntRect'); end
+    def _abi_get_id(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getId(@pointer, *a); end
+    def _abi_get_image_size(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getImageSize(@pointer, *a); end
+    def _abi_get_part_rect(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getPartRect(@pointer, *a); end
     def _abi_set_color(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_setColor(@pointer, *a); end
-    def _abi_get_color(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getColor(@pointer, *a).parse('Color'); end
-    def _abi_is_smooth(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_isSmooth(@pointer, *a).odd?; end
+    def _abi_get_color(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getColor(@pointer, *a); end
+    def _abi_is_smooth(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_isSmooth(@pointer, *a); end
     def self._abi_set_default_smooth(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Texture_setDefaultSmooth(*a); end
-    def self._abi_get_default_smooth(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Texture_getDefaultSmooth(*a).odd?; end
+    def self._abi_get_default_smooth(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Texture_getDefaultSmooth(*a); end
   end
 
   class Widget
     def self._abi_finalizer(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Widget_finalizer(*a); end
-    def self._abi_get_unshared(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Widget_getUnshared(*a).parse('Widget'); end
-    def self._abi_get_type(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Widget_getType(*a).parse('char32_t'); end
-    def _abi_get_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getName(@pointer, *a).parse('char32_t'); end
+    def self._abi_get_unshared(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Widget_getUnshared(*a); end
+    def self._abi_get_type(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Widget_getType(*a); end
+    def _abi_get_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getName(@pointer, *a); end
     def _abi_set_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setSize(@pointer, *a); end
-    def _abi_get_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getSize(@pointer, *a).parse('Vector2f'); end
-    def _abi_get_full_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getFullSize(@pointer, *a).parse('Vector2f'); end
+    def _abi_get_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getSize(@pointer, *a); end
+    def _abi_get_full_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getFullSize(@pointer, *a); end
     def _abi_set_position(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setPosition(@pointer, *a); end
-    def _abi_get_position(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getPosition(@pointer, *a).parse('Vector2f'); end
-    def _abi_get_absolute_position(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getAbsolutePosition(@pointer, *a).parse('Vector2f'); end
+    def _abi_get_position(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getPosition(@pointer, *a); end
+    def _abi_get_absolute_position(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getAbsolutePosition(@pointer, *a); end
     def _abi_set_text_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setTextSize(@pointer, *a); end
     def _abi_get_text_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getTextSize(@pointer, *a); end
     def _abi_set_width(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setWidth(@pointer, *a); end
     def _abi_set_height(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setHeight(@pointer, *a); end
     def _abi_set_visible(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setVisible(@pointer, *a); end
-    def _abi_is_visible(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isVisible(@pointer, *a).odd?; end
+    def _abi_is_visible(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isVisible(@pointer, *a); end
     def _abi_set_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setEnabled(@pointer, *a); end
-    def _abi_is_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isEnabled(@pointer, *a).odd?; end
+    def _abi_is_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isEnabled(@pointer, *a); end
     def _abi_set_focused(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setFocused(@pointer, *a); end
-    def _abi_is_focused(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isFocused(@pointer, *a).odd?; end
+    def _abi_is_focused(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isFocused(@pointer, *a); end
     def _abi_set_focusable(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setFocusable(@pointer, *a); end
-    def _abi_is_focusable(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isFocusable(@pointer, *a).odd?; end
-    def _abi_can_gain_focus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_canGainFocus(@pointer, *a).odd?; end
-    def _abi_is_container(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isContainer(@pointer, *a).odd?; end
+    def _abi_is_focusable(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isFocusable(@pointer, *a); end
+    def _abi_can_gain_focus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_canGainFocus(@pointer, *a); end
+    def _abi_is_container(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isContainer(@pointer, *a); end
     def _abi_set_tool_tip(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setToolTip(@pointer, *a); end
-    def _abi_get_tool_tip(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getToolTip(@pointer, *a).parse('Widget::Ptr'); end
+    def _abi_get_tool_tip(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getToolTip(@pointer, *a); end
     def _abi_set_mouse_cursor(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setMouseCursor(@pointer, *a); end
     def _abi_get_mouse_cursor(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getMouseCursor(@pointer, *a); end
-    def _abi_is_mouse_down(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isMouseDown(@pointer, *a).odd?; end
+    def _abi_is_mouse_down(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isMouseDown(@pointer, *a); end
     def _abi_show_with_effect(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_showWithEffect(@pointer, *a); end
     def _abi_hide_with_effect(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_hideWithEffect(@pointer, *a); end
     def _abi_move_with_animation(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_moveWithAnimation(@pointer, *a); end
     def _abi_resize_with_animation(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_resizeWithAnimation(@pointer, *a); end
-    def _abi_is_animation_playing(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isAnimationPlaying(@pointer, *a).odd?; end
+    def _abi_is_animation_playing(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isAnimationPlaying(@pointer, *a); end
     def _abi_move_to_front(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_moveToFront(@pointer, *a); end
     def _abi_move_to_back(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_moveToBack(@pointer, *a); end
     def _abi_finish_all_animations(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_finishAllAnimations(@pointer, *a); end
@@ -969,41 +981,43 @@ module Tgui
     def _abi_scrolled(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_scrolled(@pointer, *a); end
     def _abi_ask_tool_tip(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_askToolTip(@pointer, *a); end
     def _abi_set_widget_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setWidgetName(@pointer, *a); end
-    def _abi_get_widget_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getWidgetName(@pointer, *a).parse('char32_t'); end
-    def _abi_on_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onPositionChange(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_size_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onSizeChange(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_focus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onFocus(@pointer, *a).parse('Signal'); end
-    def _abi_on_unfocus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onUnfocus(@pointer, *a).parse('Signal'); end
-    def _abi_on_mouse_enter(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onMouseEnter(@pointer, *a).parse('Signal'); end
-    def _abi_on_mouse_leave(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onMouseLeave(@pointer, *a).parse('Signal'); end
-    def _abi_on_show_effect_finish(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onShowEffectFinish(@pointer, *a).parse('SignalShowEffect'); end
-    def _abi_on_animation_finish(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onAnimationFinish(@pointer, *a).parse('SignalAnimationType'); end
+    def _abi_get_widget_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getWidgetName(@pointer, *a); end
+    def _abi_on_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onPositionChange(@pointer, *a); end
+    def _abi_on_size_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onSizeChange(@pointer, *a); end
+    def _abi_renderer_set_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_rendererSetProperty(@pointer, *a); end
+    def _abi_renderer_get_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_rendererGetProperty(@pointer, *a); end
+    def _abi_on_focus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onFocus(@pointer, *a); end
+    def _abi_on_unfocus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onUnfocus(@pointer, *a); end
+    def _abi_on_mouse_enter(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onMouseEnter(@pointer, *a); end
+    def _abi_on_mouse_leave(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onMouseLeave(@pointer, *a); end
+    def _abi_on_show_effect_finish(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onShowEffectFinish(@pointer, *a); end
+    def _abi_on_animation_finish(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onAnimationFinish(@pointer, *a); end
   end
 
   class ClickableWidget
-    def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onMousePress(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onMouseRelease(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_click(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onClick(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_right_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onRightMousePress(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_right_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onRightMouseRelease(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_right_click(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onRightClick(@pointer, *a).parse('SignalVector2f'); end
+    def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onMousePress(@pointer, *a); end
+    def _abi_on_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onMouseRelease(@pointer, *a); end
+    def _abi_on_click(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onClick(@pointer, *a); end
+    def _abi_on_right_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onRightMousePress(@pointer, *a); end
+    def _abi_on_right_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onRightMouseRelease(@pointer, *a); end
+    def _abi_on_right_click(*a);    Abi.call_arg_map! a; Abi.ABI_ClickableWidget_onRightClick(@pointer, *a); end
   end
 
   class ButtonBase
     def _abi_set_text_position(*a);    Abi.call_arg_map! a; Abi.ABI_ButtonBase_setTextPosition(@pointer, *a); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_ButtonBase_setText(@pointer, *a); end
-    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_ButtonBase_getText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_ButtonBase_getText(@pointer, *a); end
   end
 
   class Button
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Button_new(*a)); initialized(); end
-    def _abi_on_press(*a);    Abi.call_arg_map! a; Abi.ABI_Button_onPress(@pointer, *a).parse('Signal'); end
+    def _abi_on_press(*a);    Abi.call_arg_map! a; Abi.ABI_Button_onPress(@pointer, *a); end
   end
 
   class BitmapButton
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_BitmapButton_new(*a)); initialized(); end
     def _abi_set_image(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_setImage(@pointer, *a); end
-    def _abi_get_image(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_getImage(@pointer, *a).parse('Texture'); end
+    def _abi_get_image(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_getImage(@pointer, *a); end
     def _abi_set_image_scaling(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_setImageScaling(@pointer, *a); end
     def _abi_get_image_scaling(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_getImageScaling(@pointer, *a); end
   end
@@ -1011,35 +1025,35 @@ module Tgui
   class EditBox
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_EditBox_new(*a)); initialized(); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setText(@pointer, *a); end
-    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getText(@pointer, *a); end
     def _abi_set_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setDefaultText(@pointer, *a); end
-    def _abi_get_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getDefaultText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getDefaultText(@pointer, *a); end
     def _abi_select_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_selectText(@pointer, *a); end
-    def _abi_get_selected_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getSelectedText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_selected_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getSelectedText(@pointer, *a); end
     def _abi_set_password_character(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setPasswordCharacter(@pointer, *a); end
-    def _abi_get_password_character(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getPasswordCharacter(@pointer, *a).chr; end
+    def _abi_get_password_character(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getPasswordCharacter(@pointer, *a); end
     def _abi_set_maximum_characters(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setMaximumCharacters(@pointer, *a); end
     def _abi_get_maximum_characters(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getMaximumCharacters(@pointer, *a); end
     def _abi_set_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setAlignment(@pointer, *a); end
     def _abi_get_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getAlignment(@pointer, *a); end
     def _abi_limit_text_width(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_limitTextWidth(@pointer, *a); end
-    def _abi_is_text_width_limited(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isTextWidthLimited(@pointer, *a).odd?; end
+    def _abi_is_text_width_limited(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isTextWidthLimited(@pointer, *a); end
     def _abi_set_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setReadOnly(@pointer, *a); end
-    def _abi_is_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isReadOnly(@pointer, *a).odd?; end
+    def _abi_is_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isReadOnly(@pointer, *a); end
     def _abi_set_caret_position(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setCaretPosition(@pointer, *a); end
     def _abi_get_caret_position(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getCaretPosition(@pointer, *a); end
     def _abi_set_suffix(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setSuffix(@pointer, *a); end
-    def _abi_get_suffix(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getSuffix(@pointer, *a).parse('char32_t'); end
-    def _abi_on_text_change(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onTextChange(@pointer, *a).parse('SignalString'); end
-    def _abi_on_return_key_press(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onReturnKeyPress(@pointer, *a).parse('SignalString'); end
-    def _abi_on_return_or_unfocus(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onReturnOrUnfocus(@pointer, *a).parse('SignalString'); end
-    def _abi_on_caret_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onCaretPositionChange(@pointer, *a).parse('SignalTypedSizeT'); end
+    def _abi_get_suffix(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getSuffix(@pointer, *a); end
+    def _abi_on_text_change(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onTextChange(@pointer, *a); end
+    def _abi_on_return_key_press(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onReturnKeyPress(@pointer, *a); end
+    def _abi_on_return_or_unfocus(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onReturnOrUnfocus(@pointer, *a); end
+    def _abi_on_caret_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_onCaretPositionChange(@pointer, *a); end
   end
 
   class Label
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Label_new(*a)); initialized(); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_Label_setText(@pointer, *a); end
-    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getText(@pointer, *a); end
     def _abi_set_horizontal_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_Label_setHorizontalAlignment(@pointer, *a); end
     def _abi_get_horizontal_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getHorizontalAlignment(@pointer, *a); end
     def _abi_set_vertical_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_Label_setVerticalAlignment(@pointer, *a); end
@@ -1049,24 +1063,24 @@ module Tgui
     def _abi_set_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_Label_setScrollbarValue(@pointer, *a); end
     def _abi_get_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getScrollbarValue(@pointer, *a); end
     def _abi_set_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Label_setAutoSize(@pointer, *a); end
-    def _abi_get_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getAutoSize(@pointer, *a).odd?; end
+    def _abi_get_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getAutoSize(@pointer, *a); end
     def _abi_set_maximum_text_width(*a);    Abi.call_arg_map! a; Abi.ABI_Label_setMaximumTextWidth(@pointer, *a); end
     def _abi_get_maximum_text_width(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getMaximumTextWidth(@pointer, *a); end
     def _abi_ignore_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Label_ignoreMouseEvents(@pointer, *a); end
-    def _abi_ignoring_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Label_ignoringMouseEvents(@pointer, *a).odd?; end
+    def _abi_ignoring_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Label_ignoringMouseEvents(@pointer, *a); end
   end
 
   class RadioButton
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RadioButton_new(*a)); initialized(); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_setText(@pointer, *a); end
-    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_getText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_getText(@pointer, *a); end
     def _abi_set_checked(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_setChecked(@pointer, *a); end
-    def _abi_is_checked(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_isChecked(@pointer, *a).odd?; end
+    def _abi_is_checked(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_isChecked(@pointer, *a); end
     def _abi_set_text_clickable(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_setTextClickable(@pointer, *a); end
-    def _abi_is_text_clickable(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_isTextClickable(@pointer, *a).odd?; end
-    def _abi_on_check(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_onCheck(@pointer, *a).parse('SignalBool'); end
-    def _abi_on_uncheck(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_onUncheck(@pointer, *a).parse('SignalBool'); end
-    def _abi_on_change(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_onChange(@pointer, *a).parse('SignalBool'); end
+    def _abi_is_text_clickable(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_isTextClickable(@pointer, *a); end
+    def _abi_on_check(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_onCheck(@pointer, *a); end
+    def _abi_on_uncheck(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_onUncheck(@pointer, *a); end
+    def _abi_on_change(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_onChange(@pointer, *a); end
   end
 
   class CheckBox
@@ -1087,28 +1101,28 @@ module Tgui
     def _abi_get_value(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getValue(@pointer, *a); end
     def _abi_set_clockwise_turning(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_setClockwiseTurning(@pointer, *a); end
     def _abi_get_clockwise_turning(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getClockwiseTurning(@pointer, *a); end
-    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_onValueChange(@pointer, *a).parse('SignalFloat'); end
+    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_onValueChange(@pointer, *a); end
   end
 
   class ChatBox
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ChatBox_new(*a)); initialized(); end
     def _abi_add_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_addLine(@pointer, *a); end
-    def _abi_get_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLine(@pointer, *a).parse('char32_t'); end
-    def _abi_get_line_color(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineColor(@pointer, *a).parse('Color'); end
+    def _abi_get_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLine(@pointer, *a); end
+    def _abi_get_line_color(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineColor(@pointer, *a); end
     def _abi_get_line_text_style(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineTextStyle(@pointer, *a); end
-    def _abi_remove_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_removeLine(@pointer, *a).odd?; end
+    def _abi_remove_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_removeLine(@pointer, *a); end
     def _abi_remove_all_lines(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_removeAllLines(@pointer, *a); end
     def _abi_get_line_amount(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineAmount(@pointer, *a); end
     def _abi_set_line_limit(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setLineLimit(@pointer, *a); end
     def _abi_get_line_limit(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineLimit(@pointer, *a); end
     def _abi_set_text_color(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setTextColor(@pointer, *a); end
-    def _abi_get_text_color(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getTextColor(@pointer, *a).parse('Color'); end
+    def _abi_get_text_color(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getTextColor(@pointer, *a); end
     def _abi_set_text_style(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setTextStyle(@pointer, *a); end
     def _abi_get_text_style(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getTextStyle(@pointer, *a); end
     def _abi_set_lines_start_from_top(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setLinesStartFromTop(@pointer, *a); end
-    def _abi_get_lines_start_from_top(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLinesStartFromTop(@pointer, *a).odd?; end
+    def _abi_get_lines_start_from_top(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLinesStartFromTop(@pointer, *a); end
     def _abi_set_new_lines_below_others(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setNewLinesBelowOthers(@pointer, *a); end
-    def _abi_get_new_lines_below_others(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getNewLinesBelowOthers(@pointer, *a).odd?; end
+    def _abi_get_new_lines_below_others(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getNewLinesBelowOthers(@pointer, *a); end
     def _abi_set_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_setScrollbarValue(@pointer, *a); end
     def _abi_get_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getScrollbarValue(@pointer, *a); end
   end
@@ -1116,34 +1130,34 @@ module Tgui
   class Container
     def _abi_get_widgets(*a);    Abi.call_arg_map! a; Abi.ABI_Container_get_widgets(@pointer, *a); end
     def _abi_add(*a);    Abi.call_arg_map! a; Abi.ABI_Container_add(@pointer, *a); end
-    def _abi_get(*a);    Abi.call_arg_map! a; Abi.ABI_Container_get(@pointer, *a).parse('Widget::Ptr'); end
-    def _abi_remove(*a);    Abi.call_arg_map! a; Abi.ABI_Container_remove(@pointer, *a).odd?; end
+    def _abi_get(*a);    Abi.call_arg_map! a; Abi.ABI_Container_get(@pointer, *a); end
+    def _abi_remove(*a);    Abi.call_arg_map! a; Abi.ABI_Container_remove(@pointer, *a); end
     def _abi_remove_all_widgets(*a);    Abi.call_arg_map! a; Abi.ABI_Container_removeAllWidgets(@pointer, *a); end
-    def _abi_get_inner_size(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getInnerSize(@pointer, *a).parse('Vector2f'); end
-    def _abi_get_child_widgets_offset(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getChildWidgetsOffset(@pointer, *a).parse('Vector2f'); end
+    def _abi_get_inner_size(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getInnerSize(@pointer, *a); end
+    def _abi_get_child_widgets_offset(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getChildWidgetsOffset(@pointer, *a); end
     def _abi_move_widget_to_front(*a);    Abi.call_arg_map! a; Abi.ABI_Container_moveWidgetToFront(@pointer, *a); end
     def _abi_move_widget_to_back(*a);    Abi.call_arg_map! a; Abi.ABI_Container_moveWidgetToBack(@pointer, *a); end
     def _abi_move_widget_forward(*a);    Abi.call_arg_map! a; Abi.ABI_Container_moveWidgetForward(@pointer, *a); end
     def _abi_move_widget_backward(*a);    Abi.call_arg_map! a; Abi.ABI_Container_moveWidgetBackward(@pointer, *a); end
-    def _abi_set_widget_index(*a);    Abi.call_arg_map! a; Abi.ABI_Container_setWidgetIndex(@pointer, *a).odd?; end
+    def _abi_set_widget_index(*a);    Abi.call_arg_map! a; Abi.ABI_Container_setWidgetIndex(@pointer, *a); end
     def _abi_get_widget_index(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getWidgetIndex(@pointer, *a); end
-    def _abi_get_focused_child(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getFocusedChild(@pointer, *a).parse('Widget::Ptr'); end
-    def _abi_get_focused_leaf(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getFocusedLeaf(@pointer, *a).parse('Widget::Ptr'); end
-    def _abi_get_widget_at_position(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getWidgetAtPosition(@pointer, *a).parse('Widget::Ptr'); end
-    def _abi_focus_next_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Container_focusNextWidget(@pointer, *a).odd?; end
-    def _abi_focus_previous_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Container_focusPreviousWidget(@pointer, *a).odd?; end
+    def _abi_get_focused_child(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getFocusedChild(@pointer, *a); end
+    def _abi_get_focused_leaf(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getFocusedLeaf(@pointer, *a); end
+    def _abi_get_widget_at_position(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getWidgetAtPosition(@pointer, *a); end
+    def _abi_focus_next_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Container_focusNextWidget(@pointer, *a); end
+    def _abi_focus_previous_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Container_focusPreviousWidget(@pointer, *a); end
   end
 
   class ChildWindow
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ChildWindow_new(*a)); initialized(); end
     def _abi_set_client_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setClientSize(@pointer, *a); end
-    def _abi_get_client_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getClientSize(@pointer, *a).parse('Vector2f'); end
+    def _abi_get_client_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getClientSize(@pointer, *a); end
     def _abi_set_maximum_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setMaximumSize(@pointer, *a); end
-    def _abi_get_maximum_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getMaximumSize(@pointer, *a).parse('Vector2f'); end
+    def _abi_get_maximum_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getMaximumSize(@pointer, *a); end
     def _abi_set_minimum_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setMinimumSize(@pointer, *a); end
-    def _abi_get_minimum_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getMinimumSize(@pointer, *a).parse('Vector2f'); end
+    def _abi_get_minimum_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getMinimumSize(@pointer, *a); end
     def _abi_set_title(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setTitle(@pointer, *a); end
-    def _abi_get_title(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getTitle(@pointer, *a).parse('char32_t'); end
+    def _abi_get_title(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getTitle(@pointer, *a); end
     def _abi_set_title_text_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setTitleTextSize(@pointer, *a); end
     def _abi_get_title_text_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getTitleTextSize(@pointer, *a); end
     def _abi_set_title_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setTitleAlignment(@pointer, *a); end
@@ -1153,17 +1167,17 @@ module Tgui
     def _abi_close(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_close(@pointer, *a); end
     def _abi_destroy(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_destroy(@pointer, *a); end
     def _abi_set_resizable(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setResizable(@pointer, *a); end
-    def _abi_is_resizable(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isResizable(@pointer, *a).odd?; end
+    def _abi_is_resizable(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isResizable(@pointer, *a); end
     def _abi_set_position_locked(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setPositionLocked(@pointer, *a); end
-    def _abi_is_position_locked(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isPositionLocked(@pointer, *a).odd?; end
+    def _abi_is_position_locked(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isPositionLocked(@pointer, *a); end
     def _abi_set_keep_in_parent(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setKeepInParent(@pointer, *a); end
-    def _abi_is_kept_in_parent(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isKeptInParent(@pointer, *a).odd?; end
-    def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMousePress(@pointer, *a).parse('Signal'); end
-    def _abi_on_close(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onClose(@pointer, *a).parse('Signal'); end
-    def _abi_on_minimize(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMinimize(@pointer, *a).parse('Signal'); end
-    def _abi_on_maximize(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMaximize(@pointer, *a).parse('Signal'); end
-    def _abi_on_escape_key_press(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onEscapeKeyPress(@pointer, *a).parse('Signal'); end
-    def _abi_on_closing(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onClosing(@pointer, *a).parse('SignalTyped<bool*>'); end
+    def _abi_is_kept_in_parent(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isKeptInParent(@pointer, *a); end
+    def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMousePress(@pointer, *a); end
+    def _abi_on_close(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onClose(@pointer, *a); end
+    def _abi_on_minimize(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMinimize(@pointer, *a); end
+    def _abi_on_maximize(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMaximize(@pointer, *a); end
+    def _abi_on_escape_key_press(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onEscapeKeyPress(@pointer, *a); end
+    def _abi_on_closing(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onClosing(@pointer, *a); end
   end
 
   class Group
@@ -1171,9 +1185,9 @@ module Tgui
   end
 
   class BoxLayout
-    def _abi_get_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_BoxLayout_getByIndex(@pointer, *a).parse('Widget::Ptr'); end
+    def _abi_get_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_BoxLayout_getByIndex(@pointer, *a); end
     def _abi_insert(*a);    Abi.call_arg_map! a; Abi.ABI_BoxLayout_insert(@pointer, *a); end
-    def _abi_remove_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_BoxLayout_removeByIndex(@pointer, *a).odd?; end
+    def _abi_remove_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_BoxLayout_removeByIndex(@pointer, *a); end
   end
 
   class BoxLayoutRatios
@@ -1200,25 +1214,25 @@ module Tgui
   class RadioButtonGroup
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RadioButtonGroup_new(*a)); initialized(); end
     def _abi_uncheck_radio_buttons(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButtonGroup_uncheckRadioButtons(@pointer, *a); end
-    def _abi_get_checked_radio_button(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButtonGroup_getCheckedRadioButton(@pointer, *a).parse('RadioButton::Ptr'); end
+    def _abi_get_checked_radio_button(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButtonGroup_getCheckedRadioButton(@pointer, *a); end
   end
 
   class Panel
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Panel_new(*a)); initialized(); end
-    def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onMousePress(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onMouseRelease(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_click(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onClick(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onDoubleClick(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_right_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onRightMousePress(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_right_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onRightMouseRelease(@pointer, *a).parse('SignalVector2f'); end
-    def _abi_on_right_click(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onRightClick(@pointer, *a).parse('SignalVector2f'); end
+    def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onMousePress(@pointer, *a); end
+    def _abi_on_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onMouseRelease(@pointer, *a); end
+    def _abi_on_click(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onClick(@pointer, *a); end
+    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onDoubleClick(@pointer, *a); end
+    def _abi_on_right_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onRightMousePress(@pointer, *a); end
+    def _abi_on_right_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onRightMouseRelease(@pointer, *a); end
+    def _abi_on_right_click(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onRightClick(@pointer, *a); end
   end
 
   class ScrollablePanel
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ScrollablePanel_new(*a)); initialized(); end
     def _abi_set_content_size(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_setContentSize(@pointer, *a); end
-    def _abi_get_content_size(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_getContentSize(@pointer, *a).parse('Vector2f'); end
-    def _abi_get_content_offset(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_getContentOffset(@pointer, *a).parse('Vector2f'); end
+    def _abi_get_content_size(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_getContentSize(@pointer, *a); end
+    def _abi_get_content_offset(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_getContentOffset(@pointer, *a); end
     def _abi_get_scrollbar_width(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_getScrollbarWidth(@pointer, *a); end
     def _abi_set_vertical_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_setVerticalScrollbarPolicy(@pointer, *a); end
     def _abi_get_vertical_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_getVerticalScrollbarPolicy(@pointer, *a); end
@@ -1237,11 +1251,11 @@ module Tgui
   class Grid
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Grid_new(*a)); initialized(); end
     def _abi_set_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_setAutoSize(@pointer, *a); end
-    def _abi_is_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_isAutoSize(@pointer, *a).odd?; end
-    def _abi_set_widget_cell(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_setWidgetCell(@pointer, *a).odd?; end
-    def _abi_get_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_getWidget(@pointer, *a).parse('Widget::Ptr'); end
+    def _abi_is_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_isAutoSize(@pointer, *a); end
+    def _abi_set_widget_cell(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_setWidgetCell(@pointer, *a); end
+    def _abi_get_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_getWidget(@pointer, *a); end
     def _abi_set_widget_padding(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_setWidgetPadding(@pointer, *a); end
-    def _abi_get_widget_padding(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_getWidgetPadding(@pointer, *a).parse('Outline'); end
+    def _abi_get_widget_padding(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_getWidgetPadding(@pointer, *a); end
     def _abi_set_widget_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_setWidgetAlignment(@pointer, *a); end
     def _abi_get_widget_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_getWidgetAlignment(@pointer, *a); end
     def _abi_get_widget_locations(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_getWidgetLocations(@pointer, *a); end
@@ -1250,24 +1264,24 @@ module Tgui
   class ListBox
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ListBox_new(*a)); initialized(); end
     def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_addItem(@pointer, *a); end
-    def _abi_set_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setSelectedItem(@pointer, *a).odd?; end
-    def _abi_set_selected_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setSelectedItemById(@pointer, *a).odd?; end
-    def _abi_set_selected_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setSelectedItemByIndex(@pointer, *a).odd?; end
+    def _abi_set_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setSelectedItem(@pointer, *a); end
+    def _abi_set_selected_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setSelectedItemById(@pointer, *a); end
+    def _abi_set_selected_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setSelectedItemByIndex(@pointer, *a); end
     def _abi_deselect_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_deselectItem(@pointer, *a); end
-    def _abi_remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_removeItem(@pointer, *a).odd?; end
-    def _abi_remove_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_removeItemById(@pointer, *a).odd?; end
-    def _abi_remove_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_removeItemByIndex(@pointer, *a).odd?; end
+    def _abi_remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_removeItem(@pointer, *a); end
+    def _abi_remove_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_removeItemById(@pointer, *a); end
+    def _abi_remove_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_removeItemByIndex(@pointer, *a); end
     def _abi_remove_all_items(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_removeAllItems(@pointer, *a); end
-    def _abi_get_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getItemById(@pointer, *a).parse('char32_t'); end
-    def _abi_get_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getItemByIndex(@pointer, *a).parse('char32_t'); end
+    def _abi_get_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getItemById(@pointer, *a); end
+    def _abi_get_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getItemByIndex(@pointer, *a); end
     def _abi_get_index_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getIndexById(@pointer, *a); end
-    def _abi_get_id_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getIdByIndex(@pointer, *a).parse('char32_t'); end
-    def _abi_get_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getSelectedItem(@pointer, *a).parse('char32_t'); end
-    def _abi_get_selected_item_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getSelectedItemId(@pointer, *a).parse('char32_t'); end
+    def _abi_get_id_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getIdByIndex(@pointer, *a); end
+    def _abi_get_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getSelectedItem(@pointer, *a); end
+    def _abi_get_selected_item_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getSelectedItemId(@pointer, *a); end
     def _abi_get_selected_item_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getSelectedItemIndex(@pointer, *a); end
-    def _abi_change_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_changeItem(@pointer, *a).odd?; end
-    def _abi_change_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_changeItemById(@pointer, *a).odd?; end
-    def _abi_change_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_changeItemByIndex(@pointer, *a).odd?; end
+    def _abi_change_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_changeItem(@pointer, *a); end
+    def _abi_change_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_changeItemById(@pointer, *a); end
+    def _abi_change_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_changeItemByIndex(@pointer, *a); end
     def _abi_get_item_count(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getItemCount(@pointer, *a); end
     def _abi_get_items(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getItems(@pointer, *a); end
     def _abi_get_item_ids(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getItemIds(@pointer, *a); end
@@ -1276,45 +1290,45 @@ module Tgui
     def _abi_set_maximum_items(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setMaximumItems(@pointer, *a); end
     def _abi_get_maximum_items(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getMaximumItems(@pointer, *a); end
     def _abi_set_auto_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setAutoScroll(@pointer, *a); end
-    def _abi_get_auto_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getAutoScroll(@pointer, *a).odd?; end
+    def _abi_get_auto_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getAutoScroll(@pointer, *a); end
     def _abi_set_text_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setTextAlignment(@pointer, *a); end
     def _abi_get_text_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getTextAlignment(@pointer, *a); end
-    def _abi_contains(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_contains(@pointer, *a).odd?; end
-    def _abi_contains_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_containsId(@pointer, *a).odd?; end
+    def _abi_contains(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_contains(@pointer, *a); end
+    def _abi_contains_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_containsId(@pointer, *a); end
     def _abi_set_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setScrollbarValue(@pointer, *a); end
     def _abi_get_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_getScrollbarValue(@pointer, *a); end
-    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onItemSelect(@pointer, *a).parse('SignalItem'); end
-    def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onMousePress(@pointer, *a).parse('SignalItem'); end
-    def _abi_on_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onMouseRelease(@pointer, *a).parse('SignalItem'); end
-    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onDoubleClick(@pointer, *a).parse('SignalItem'); end
-    def _abi_on_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onScroll(@pointer, *a).parse('Signal'); end
+    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onItemSelect(@pointer, *a); end
+    def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onMousePress(@pointer, *a); end
+    def _abi_on_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onMouseRelease(@pointer, *a); end
+    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onDoubleClick(@pointer, *a); end
+    def _abi_on_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_onScroll(@pointer, *a); end
   end
 
   class ListView
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ListView_new(*a)); initialized(); end
     def _abi_add_column(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_addColumn(@pointer, *a); end
     def _abi_set_column_text(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setColumnText(@pointer, *a); end
-    def _abi_get_column_text(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_column_text(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnText(@pointer, *a); end
     def _abi_set_column_width(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setColumnWidth(@pointer, *a); end
     def _abi_get_column_width(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnWidth(@pointer, *a); end
     def _abi_set_column_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setColumnAlignment(@pointer, *a); end
     def _abi_get_column_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnAlignment(@pointer, *a); end
     def _abi_set_column_auto_resize(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setColumnAutoResize(@pointer, *a); end
-    def _abi_get_column_auto_resize(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnAutoResize(@pointer, *a).odd?; end
+    def _abi_get_column_auto_resize(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnAutoResize(@pointer, *a); end
     def _abi_set_column_expanded(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setColumnExpanded(@pointer, *a); end
-    def _abi_get_column_expanded(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnExpanded(@pointer, *a).odd?; end
+    def _abi_get_column_expanded(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnExpanded(@pointer, *a); end
     def _abi_remove_all_columns(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_removeAllColumns(@pointer, *a); end
     def _abi_get_column_count(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnCount(@pointer, *a); end
     def _abi_set_header_height(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setHeaderHeight(@pointer, *a); end
     def _abi_get_header_height(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getHeaderHeight(@pointer, *a); end
     def _abi_get_current_header_height(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getCurrentHeaderHeight(@pointer, *a); end
     def _abi_set_header_visible(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setHeaderVisible(@pointer, *a); end
-    def _abi_header_visible(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_headerVisible(@pointer, *a).odd?; end
+    def _abi_header_visible(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_headerVisible(@pointer, *a); end
     def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_addItem(@pointer, *a); end
     def _abi_insert_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_insertItem(@pointer, *a); end
-    def _abi_change_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_changeItem(@pointer, *a).odd?; end
-    def _abi_change_subitem(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_changeSubitem(@pointer, *a).odd?; end
-    def _abi_remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_removeItem(@pointer, *a).odd?; end
+    def _abi_change_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_changeItem(@pointer, *a); end
+    def _abi_change_subitem(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_changeSubitem(@pointer, *a); end
+    def _abi_remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_removeItem(@pointer, *a); end
     def _abi_remove_all_items(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_removeAllItems(@pointer, *a); end
     def _abi_set_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setSelectedItem(@pointer, *a); end
     def _abi_set_selected_items(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setSelectedItems(@pointer, *a); end
@@ -1322,12 +1336,12 @@ module Tgui
     def _abi_get_selected_item_index(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getSelectedItemIndex(@pointer, *a); end
     def _abi_get_selected_item_indices(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getSelectedItemIndices(@pointer, *a); end
     def _abi_set_multi_select(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setMultiSelect(@pointer, *a); end
-    def _abi_multi_select(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_multiSelect(@pointer, *a).odd?; end
+    def _abi_multi_select(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_multiSelect(@pointer, *a); end
     def _abi_set_item_icon(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setItemIcon(@pointer, *a); end
-    def _abi_get_item_icon(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemIcon(@pointer, *a).parse('Texture'); end
+    def _abi_get_item_icon(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemIcon(@pointer, *a); end
     def _abi_get_item_count(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemCount(@pointer, *a); end
     def _abi_get_item_row(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemRow(@pointer, *a); end
-    def _abi_get_item_cell(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemCell(@pointer, *a).parse('char32_t'); end
+    def _abi_get_item_cell(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemCell(@pointer, *a); end
     def _abi_get_item_rows(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemRows(@pointer, *a); end
     def _abi_set_item_height(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setItemHeight(@pointer, *a); end
     def _abi_get_item_height(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getItemHeight(@pointer, *a); end
@@ -1340,11 +1354,11 @@ module Tgui
     def _abi_set_grid_lines_width(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setGridLinesWidth(@pointer, *a); end
     def _abi_get_grid_lines_width(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getGridLinesWidth(@pointer, *a); end
     def _abi_set_auto_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setAutoScroll(@pointer, *a); end
-    def _abi_auto_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_autoScroll(@pointer, *a).odd?; end
+    def _abi_auto_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_autoScroll(@pointer, *a); end
     def _abi_set_show_vertical_grid_lines(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setShowVerticalGridLines(@pointer, *a); end
-    def _abi_show_vertical_grid_lines(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_showVerticalGridLines(@pointer, *a).odd?; end
+    def _abi_show_vertical_grid_lines(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_showVerticalGridLines(@pointer, *a); end
     def _abi_set_show_horizontal_grid_lines(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setShowHorizontalGridLines(@pointer, *a); end
-    def _abi_show_horizontal_grid_lines(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_showHorizontalGridLines(@pointer, *a).odd?; end
+    def _abi_show_horizontal_grid_lines(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_showHorizontalGridLines(@pointer, *a); end
     def _abi_set_vertical_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setVerticalScrollbarPolicy(@pointer, *a); end
     def _abi_get_vertical_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getVerticalScrollbarPolicy(@pointer, *a); end
     def _abi_set_horizontal_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setHorizontalScrollbarPolicy(@pointer, *a); end
@@ -1354,13 +1368,13 @@ module Tgui
     def _abi_set_horizontal_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setHorizontalScrollbarValue(@pointer, *a); end
     def _abi_get_horizontal_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getHorizontalScrollbarValue(@pointer, *a); end
     def _abi_set_fixed_icon_size(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setFixedIconSize(@pointer, *a); end
-    def _abi_get_fixed_icon_size(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getFixedIconSize(@pointer, *a).parse('Vector2f'); end
+    def _abi_get_fixed_icon_size(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getFixedIconSize(@pointer, *a); end
     def _abi_set_resizable_columns(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setResizableColumns(@pointer, *a); end
-    def _abi_resizable_columns(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_resizableColumns(@pointer, *a).odd?; end
-    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_onItemSelect(@pointer, *a).parse('SignalInt'); end
-    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_onDoubleClick(@pointer, *a).parse('SignalInt'); end
-    def _abi_on_right_click(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_onRightClick(@pointer, *a).parse('SignalInt'); end
-    def _abi_on_header_click(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_onHeaderClick(@pointer, *a).parse('SignalInt'); end
+    def _abi_resizable_columns(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_resizableColumns(@pointer, *a); end
+    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_onItemSelect(@pointer, *a); end
+    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_onDoubleClick(@pointer, *a); end
+    def _abi_on_right_click(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_onRightClick(@pointer, *a); end
+    def _abi_on_header_click(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_onHeaderClick(@pointer, *a); end
   end
 
   class ComboBox
@@ -1368,74 +1382,74 @@ module Tgui
     def _abi_set_items_to_display(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setItemsToDisplay(@pointer, *a); end
     def _abi_get_items_to_display(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getItemsToDisplay(@pointer, *a); end
     def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_addItem(@pointer, *a); end
-    def _abi_set_selected_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setSelectedItemById(@pointer, *a).odd?; end
-    def _abi_set_selected_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setSelectedItemByIndex(@pointer, *a).odd?; end
+    def _abi_set_selected_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setSelectedItemById(@pointer, *a); end
+    def _abi_set_selected_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setSelectedItemByIndex(@pointer, *a); end
     def _abi_deselect_item(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_deselectItem(@pointer, *a); end
-    def _abi_remove_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_removeItemById(@pointer, *a).odd?; end
-    def _abi_remove_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_removeItemByIndex(@pointer, *a).odd?; end
+    def _abi_remove_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_removeItemById(@pointer, *a); end
+    def _abi_remove_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_removeItemByIndex(@pointer, *a); end
     def _abi_remove_all_items(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_removeAllItems(@pointer, *a); end
-    def _abi_get_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getItemById(@pointer, *a).parse('char32_t'); end
-    def _abi_get_selected_item_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getSelectedItemId(@pointer, *a).parse('char32_t'); end
-    def _abi_change_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_changeItemById(@pointer, *a).odd?; end
-    def _abi_change_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_changeItemByIndex(@pointer, *a).odd?; end
+    def _abi_get_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getItemById(@pointer, *a); end
+    def _abi_get_selected_item_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getSelectedItemId(@pointer, *a); end
+    def _abi_change_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_changeItemById(@pointer, *a); end
+    def _abi_change_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_changeItemByIndex(@pointer, *a); end
     def _abi_get_item_count(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getItemCount(@pointer, *a); end
     def _abi_get_item_ids(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getItemIds(@pointer, *a); end
     def _abi_set_maximum_items(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setMaximumItems(@pointer, *a); end
     def _abi_get_maximum_items(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getMaximumItems(@pointer, *a); end
     def _abi_set_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setDefaultText(@pointer, *a); end
-    def _abi_get_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getDefaultText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getDefaultText(@pointer, *a); end
     def _abi_set_expand_direction(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setExpandDirection(@pointer, *a); end
     def _abi_get_expand_direction(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getExpandDirection(@pointer, *a); end
-    def _abi_contains_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_containsId(@pointer, *a).odd?; end
+    def _abi_contains_id(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_containsId(@pointer, *a); end
     def _abi_set_change_item_on_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setChangeItemOnScroll(@pointer, *a); end
-    def _abi_get_change_item_on_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getChangeItemOnScroll(@pointer, *a).odd?; end
-    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_onItemSelect(@pointer, *a).parse('SignalItem'); end
+    def _abi_get_change_item_on_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getChangeItemOnScroll(@pointer, *a); end
+    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_onItemSelect(@pointer, *a); end
   end
 
   class ColorPicker
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ColorPicker_new(*a)); initialized(); end
     def _abi_set_color(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_setColor(@pointer, *a); end
-    def _abi_get_color(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_getColor(@pointer, *a).parse('Color'); end
-    def _abi_on_color_change(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_onColorChange(@pointer, *a).parse('SignalColor'); end
-    def _abi_on_ok_press(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_onOkPress(@pointer, *a).parse('SignalColor'); end
+    def _abi_get_color(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_getColor(@pointer, *a); end
+    def _abi_on_color_change(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_onColorChange(@pointer, *a); end
+    def _abi_on_ok_press(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_onOkPress(@pointer, *a); end
   end
 
   class FileDialog
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_FileDialog_new(*a)); initialized(); end
     def _abi_get_selected_paths(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getSelectedPaths(@pointer, *a); end
     def _abi_set_path(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setPath(@pointer, *a); end
-    def _abi_get_path(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getPath(@pointer, *a).parse('char32_t'); end
+    def _abi_get_path(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getPath(@pointer, *a); end
     def _abi_set_filename(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setFilename(@pointer, *a); end
-    def _abi_get_filename(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getFilename(@pointer, *a).parse('char32_t'); end
+    def _abi_get_filename(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getFilename(@pointer, *a); end
     def _abi_set_file_type_filters(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setFileTypeFilters(@pointer, *a); end
     def _abi_get_file_type_filters(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getFileTypeFilters(@pointer, *a); end
     def _abi_get_file_type_filters_index(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getFileTypeFiltersIndex(@pointer, *a); end
     def _abi_set_confirm_button_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setConfirmButtonText(@pointer, *a); end
-    def _abi_get_confirm_button_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getConfirmButtonText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_confirm_button_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getConfirmButtonText(@pointer, *a); end
     def _abi_set_cancel_button_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setCancelButtonText(@pointer, *a); end
-    def _abi_get_cancel_button_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getCancelButtonText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_cancel_button_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getCancelButtonText(@pointer, *a); end
     def _abi_set_create_folder_button_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setCreateFolderButtonText(@pointer, *a); end
-    def _abi_get_create_folder_button_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getCreateFolderButtonText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_create_folder_button_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getCreateFolderButtonText(@pointer, *a); end
     def _abi_set_allow_create_folder(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setAllowCreateFolder(@pointer, *a); end
-    def _abi_get_allow_create_folder(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getAllowCreateFolder(@pointer, *a).odd?; end
+    def _abi_get_allow_create_folder(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getAllowCreateFolder(@pointer, *a); end
     def _abi_set_filename_label_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setFilenameLabelText(@pointer, *a); end
-    def _abi_get_filename_label_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getFilenameLabelText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_filename_label_text(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getFilenameLabelText(@pointer, *a); end
     def _abi_set_list_view_column_captions(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setListViewColumnCaptions(@pointer, *a); end
     def _abi_get_list_view_column_captions(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getListViewColumnCaptions(@pointer, *a); end
     def _abi_set_file_must_exist(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setFileMustExist(@pointer, *a); end
-    def _abi_get_file_must_exist(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getFileMustExist(@pointer, *a).odd?; end
+    def _abi_get_file_must_exist(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getFileMustExist(@pointer, *a); end
     def _abi_set_selecting_directory(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setSelectingDirectory(@pointer, *a); end
-    def _abi_get_selecting_directory(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getSelectingDirectory(@pointer, *a).odd?; end
+    def _abi_get_selecting_directory(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getSelectingDirectory(@pointer, *a); end
     def _abi_set_multi_select(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setMultiSelect(@pointer, *a); end
-    def _abi_get_multi_select(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getMultiSelect(@pointer, *a).odd?; end
-    def _abi_on_file_select(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_onFileSelect(@pointer, *a).parse('Signal'); end
-    def _abi_on_cancel(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_onCancel(@pointer, *a).parse('Signal'); end
+    def _abi_get_multi_select(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getMultiSelect(@pointer, *a); end
+    def _abi_on_file_select(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_onFileSelect(@pointer, *a); end
+    def _abi_on_cancel(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_onCancel(@pointer, *a); end
   end
 
   class MessageBox
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_MessageBox_new(*a)); initialized(); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_setText(@pointer, *a); end
-    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getText(@pointer, *a); end
     def _abi_add_button(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_addButton(@pointer, *a); end
     def _abi_change_buttons(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_changeButtons(@pointer, *a); end
     def _abi_get_buttons(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getButtons(@pointer, *a); end
@@ -1443,69 +1457,69 @@ module Tgui
     def _abi_get_label_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getLabelAlignment(@pointer, *a); end
     def _abi_set_button_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_setButtonAlignment(@pointer, *a); end
     def _abi_get_button_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getButtonAlignment(@pointer, *a); end
-    def _abi_on_button_press(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_onButtonPress(@pointer, *a).parse('SignalString'); end
+    def _abi_on_button_press(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_onButtonPress(@pointer, *a); end
   end
 
   class Picture
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Picture_new(*a)); initialized(); end
     def _abi_ignore_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_ignoreMouseEvents(@pointer, *a); end
-    def _abi_is_ignoring_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_isIgnoringMouseEvents(@pointer, *a).odd?; end
-    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_onDoubleClick(@pointer, *a).parse('SignalVector2f'); end
+    def _abi_is_ignoring_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_isIgnoringMouseEvents(@pointer, *a); end
+    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_onDoubleClick(@pointer, *a); end
   end
 
   class MenuBar
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_MenuBar_new(*a)); initialized(); end
     def _abi_add_menu(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_addMenu(@pointer, *a); end
     def _abi_connect_menu_item(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_connectMenuItem(@pointer, *a); end
-    def _abi_add_menu_item(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_addMenuItem(@pointer, *a).odd?; end
-    def _abi_change_menu_item(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_changeMenuItem(@pointer, *a).odd?; end
+    def _abi_add_menu_item(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_addMenuItem(@pointer, *a); end
+    def _abi_change_menu_item(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_changeMenuItem(@pointer, *a); end
     def _abi_remove_all_menus(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_removeAllMenus(@pointer, *a); end
-    def _abi_remove_menu(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_removeMenu(@pointer, *a).odd?; end
-    def _abi_remove_menu_item(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_removeMenuItem(@pointer, *a).odd?; end
-    def _abi_remove_sub_menu_items(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_removeSubMenuItems(@pointer, *a).odd?; end
-    def _abi_set_menu_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_setMenuEnabled(@pointer, *a).odd?; end
-    def _abi_get_menu_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_getMenuEnabled(@pointer, *a).odd?; end
-    def _abi_set_menu_item_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_setMenuItemEnabled(@pointer, *a).odd?; end
-    def _abi_get_menu_item_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_getMenuItemEnabled(@pointer, *a).odd?; end
+    def _abi_remove_menu(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_removeMenu(@pointer, *a); end
+    def _abi_remove_menu_item(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_removeMenuItem(@pointer, *a); end
+    def _abi_remove_sub_menu_items(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_removeSubMenuItems(@pointer, *a); end
+    def _abi_set_menu_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_setMenuEnabled(@pointer, *a); end
+    def _abi_get_menu_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_getMenuEnabled(@pointer, *a); end
+    def _abi_set_menu_item_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_setMenuItemEnabled(@pointer, *a); end
+    def _abi_get_menu_item_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_getMenuItemEnabled(@pointer, *a); end
     def _abi_set_minimum_sub_menu_width(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_setMinimumSubMenuWidth(@pointer, *a); end
     def _abi_get_minimum_sub_menu_width(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_getMinimumSubMenuWidth(@pointer, *a); end
     def _abi_set_inverted_menu_direction(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_setInvertedMenuDirection(@pointer, *a); end
-    def _abi_get_inverted_menu_direction(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_getInvertedMenuDirection(@pointer, *a).odd?; end
+    def _abi_get_inverted_menu_direction(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_getInvertedMenuDirection(@pointer, *a); end
     def _abi_get_menus(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_getMenus(@pointer, *a); end
     def _abi_close_menu(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_closeMenu(@pointer, *a); end
-    def _abi_on_menu_item_click(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_onMenuItemClick(@pointer, *a).parse('SignalItemHierarchy'); end
+    def _abi_on_menu_item_click(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_onMenuItemClick(@pointer, *a); end
   end
 
   class PanelListBox
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_PanelListBox_new(*a)); initialized(); end
-    def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_addItem(@pointer, *a).parse('Panel::Ptr'); end
-    def _abi_get_panel_template(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getPanelTemplate(@pointer, *a).parse('Panel::Ptr'); end
+    def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_addItem(@pointer, *a); end
+    def _abi_get_panel_template(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getPanelTemplate(@pointer, *a); end
     def _abi_get_items_width(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItemsWidth(@pointer, *a); end
     def _abi_set_items_height(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_setItemsHeight(@pointer, *a); end
     def _abi_get_items_height(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItemsHeight(@pointer, *a); end
-    def _abi_set_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_setSelectedItem(@pointer, *a).odd?; end
-    def _abi_set_selected_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_setSelectedItemById(@pointer, *a).odd?; end
-    def _abi_set_selected_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_setSelectedItemByIndex(@pointer, *a).odd?; end
+    def _abi_set_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_setSelectedItem(@pointer, *a); end
+    def _abi_set_selected_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_setSelectedItemById(@pointer, *a); end
+    def _abi_set_selected_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_setSelectedItemByIndex(@pointer, *a); end
     def _abi_deselect_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_deselectItem(@pointer, *a); end
-    def _abi_remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_removeItem(@pointer, *a).odd?; end
-    def _abi_remove_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_removeItemById(@pointer, *a).odd?; end
-    def _abi_remove_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_removeItemByIndex(@pointer, *a).odd?; end
-    def _abi_get_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItemById(@pointer, *a).parse('Panel::Ptr'); end
-    def _abi_get_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItemByIndex(@pointer, *a).parse('Panel::Ptr'); end
+    def _abi_remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_removeItem(@pointer, *a); end
+    def _abi_remove_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_removeItemById(@pointer, *a); end
+    def _abi_remove_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_removeItemByIndex(@pointer, *a); end
+    def _abi_get_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItemById(@pointer, *a); end
+    def _abi_get_item_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItemByIndex(@pointer, *a); end
     def _abi_get_index_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getIndexById(@pointer, *a); end
     def _abi_get_index_by_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getIndexByItem(@pointer, *a); end
-    def _abi_get_id_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getIdByIndex(@pointer, *a).parse('char32_t'); end
-    def _abi_get_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getSelectedItem(@pointer, *a).parse('Panel::Ptr'); end
-    def _abi_get_selected_item_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getSelectedItemId(@pointer, *a).parse('char32_t'); end
+    def _abi_get_id_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getIdByIndex(@pointer, *a); end
+    def _abi_get_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getSelectedItem(@pointer, *a); end
+    def _abi_get_selected_item_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getSelectedItemId(@pointer, *a); end
     def _abi_get_selected_item_index(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getSelectedItemIndex(@pointer, *a); end
     def _abi_get_item_count(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItemCount(@pointer, *a); end
     def _abi_get_items(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItems(@pointer, *a); end
     def _abi_get_item_ids(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItemIds(@pointer, *a); end
     def _abi_set_maximum_items(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_setMaximumItems(@pointer, *a); end
     def _abi_get_maximum_items(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getMaximumItems(@pointer, *a); end
-    def _abi_contains(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_contains(@pointer, *a).odd?; end
-    def _abi_contains_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_containsId(@pointer, *a).odd?; end
-    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_onItemSelect(@pointer, *a).parse('SignalPanelListBoxItem'); end
+    def _abi_contains(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_contains(@pointer, *a); end
+    def _abi_contains_id(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_containsId(@pointer, *a); end
+    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_onItemSelect(@pointer, *a); end
   end
 
   class PanelLIstBox
@@ -1522,11 +1536,11 @@ module Tgui
     def _abi_get_value(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_getValue(@pointer, *a); end
     def _abi_increment_value(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_incrementValue(@pointer, *a); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_setText(@pointer, *a); end
-    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_getText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_getText(@pointer, *a); end
     def _abi_set_fill_direction(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_setFillDirection(@pointer, *a); end
     def _abi_get_fill_direction(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_getFillDirection(@pointer, *a); end
-    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_onValueChange(@pointer, *a).parse('SignalUInt'); end
-    def _abi_on_full(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_onFull(@pointer, *a).parse('Signal'); end
+    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_onValueChange(@pointer, *a); end
+    def _abi_on_full(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_onFull(@pointer, *a); end
   end
 
   class RangeSlider
@@ -1541,7 +1555,7 @@ module Tgui
     def _abi_get_selection_end(*a);    Abi.call_arg_map! a; Abi.ABI_RangeSlider_getSelectionEnd(@pointer, *a); end
     def _abi_set_step(*a);    Abi.call_arg_map! a; Abi.ABI_RangeSlider_setStep(@pointer, *a); end
     def _abi_get_step(*a);    Abi.call_arg_map! a; Abi.ABI_RangeSlider_getStep(@pointer, *a); end
-    def _abi_on_range_change(*a);    Abi.call_arg_map! a; Abi.ABI_RangeSlider_onRangeChange(@pointer, *a).parse('SignalRange'); end
+    def _abi_on_range_change(*a);    Abi.call_arg_map! a; Abi.ABI_RangeSlider_onRangeChange(@pointer, *a); end
   end
 
   class RichTextLabel
@@ -1563,12 +1577,12 @@ module Tgui
     def _abi_set_step(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_setStep(@pointer, *a); end
     def _abi_get_step(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_getStep(@pointer, *a); end
     def _abi_set_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_setVerticalScroll(@pointer, *a); end
-    def _abi_get_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_getVerticalScroll(@pointer, *a).odd?; end
+    def _abi_get_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_getVerticalScroll(@pointer, *a); end
     def _abi_set_inverted_direction(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_setInvertedDirection(@pointer, *a); end
-    def _abi_get_inverted_direction(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_getInvertedDirection(@pointer, *a).odd?; end
+    def _abi_get_inverted_direction(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_getInvertedDirection(@pointer, *a); end
     def _abi_set_change_value_on_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_setChangeValueOnScroll(@pointer, *a); end
-    def _abi_get_change_value_on_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_getChangeValueOnScroll(@pointer, *a).odd?; end
-    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_onValueChange(@pointer, *a).parse('SignalFloat'); end
+    def _abi_get_change_value_on_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_getChangeValueOnScroll(@pointer, *a); end
+    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_onValueChange(@pointer, *a); end
   end
 
   class SpinButton
@@ -1582,12 +1596,12 @@ module Tgui
     def _abi_set_step(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_setStep(@pointer, *a); end
     def _abi_get_step(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_getStep(@pointer, *a); end
     def _abi_set_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_setVerticalScroll(@pointer, *a); end
-    def _abi_get_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_getVerticalScroll(@pointer, *a).odd?; end
-    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_onValueChange(@pointer, *a).parse('SignalFloat'); end
+    def _abi_get_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_getVerticalScroll(@pointer, *a); end
+    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_onValueChange(@pointer, *a); end
   end
 
   class SubwidgetContainer
-    def _abi_get_container(*a);    Abi.call_arg_map! a; Abi.ABI_SubwidgetContainer_getContainer(@pointer, *a).parse('Container::Ptr'); end
+    def _abi_get_container(*a);    Abi.call_arg_map! a; Abi.ABI_SubwidgetContainer_getContainer(@pointer, *a); end
   end
 
   class SpinControl
@@ -1603,84 +1617,84 @@ module Tgui
     def _abi_set_decimal_places(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_setDecimalPlaces(@pointer, *a); end
     def _abi_get_decimal_places(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_getDecimalPlaces(@pointer, *a); end
     def _abi_set_use_wide_arrows(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_setUseWideArrows(@pointer, *a); end
-    def _abi_get_use_wide_arrows(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_getUseWideArrows(@pointer, *a).odd?; end
-    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_onValueChange(@pointer, *a).parse('SignalFloat'); end
+    def _abi_get_use_wide_arrows(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_getUseWideArrows(@pointer, *a); end
+    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_onValueChange(@pointer, *a); end
   end
 
   class Tabs
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Tabs_new(*a)); initialized(); end
     def _abi_set_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_setAutoSize(@pointer, *a); end
-    def _abi_get_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getAutoSize(@pointer, *a).odd?; end
+    def _abi_get_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getAutoSize(@pointer, *a); end
     def _abi_add(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_add(@pointer, *a); end
     def _abi_insert(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_insert(@pointer, *a); end
-    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getText(@pointer, *a).parse('char32_t'); end
-    def _abi_change_text(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_changeText(@pointer, *a).odd?; end
-    def _abi_select(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_select(@pointer, *a).odd?; end
-    def _abi_select_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_selectByIndex(@pointer, *a).odd?; end
+    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getText(@pointer, *a); end
+    def _abi_change_text(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_changeText(@pointer, *a); end
+    def _abi_select(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_select(@pointer, *a); end
+    def _abi_select_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_selectByIndex(@pointer, *a); end
     def _abi_deselect(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_deselect(@pointer, *a); end
-    def _abi_remove(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_remove(@pointer, *a).odd?; end
-    def _abi_remove_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_removeByIndex(@pointer, *a).odd?; end
+    def _abi_remove(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_remove(@pointer, *a); end
+    def _abi_remove_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_removeByIndex(@pointer, *a); end
     def _abi_remove_all(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_removeAll(@pointer, *a); end
-    def _abi_get_selected(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getSelected(@pointer, *a).parse('char32_t'); end
+    def _abi_get_selected(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getSelected(@pointer, *a); end
     def _abi_get_selected_index(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getSelectedIndex(@pointer, *a); end
     def _abi_set_tab_visible(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_setTabVisible(@pointer, *a); end
-    def _abi_get_tab_visible(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getTabVisible(@pointer, *a).odd?; end
+    def _abi_get_tab_visible(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getTabVisible(@pointer, *a); end
     def _abi_set_tab_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_setTabEnabled(@pointer, *a); end
-    def _abi_get_tab_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getTabEnabled(@pointer, *a).odd?; end
+    def _abi_get_tab_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getTabEnabled(@pointer, *a); end
     def _abi_set_tab_height(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_setTabHeight(@pointer, *a); end
     def _abi_set_maximum_tab_width(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_setMaximumTabWidth(@pointer, *a); end
     def _abi_get_maximum_tab_width(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getMaximumTabWidth(@pointer, *a); end
     def _abi_set_minimum_tab_width(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_setMinimumTabWidth(@pointer, *a); end
     def _abi_get_minimum_tab_width(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getMinimumTabWidth(@pointer, *a); end
     def _abi_get_tabs_count(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getTabsCount(@pointer, *a); end
-    def _abi_on_tab_select(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_onTabSelect(@pointer, *a).parse('SignalString'); end
+    def _abi_on_tab_select(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_onTabSelect(@pointer, *a); end
   end
 
   class TabContainer
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TabContainer_new(*a)); initialized(); end
     def _abi_set_tabs_height(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_setTabsHeight(@pointer, *a); end
-    def _abi_add_tab(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_addTab(@pointer, *a).parse('Panel::Ptr'); end
-    def _abi_insert_tab(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_insertTab(@pointer, *a).parse('Panel::Ptr'); end
-    def _abi_remove_tab(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_removeTab(@pointer, *a).odd?; end
-    def _abi_remove_tab_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_removeTabByIndex(@pointer, *a).odd?; end
+    def _abi_add_tab(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_addTab(@pointer, *a); end
+    def _abi_insert_tab(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_insertTab(@pointer, *a); end
+    def _abi_remove_tab(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_removeTab(@pointer, *a); end
+    def _abi_remove_tab_by_index(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_removeTabByIndex(@pointer, *a); end
     def _abi_select(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_select(@pointer, *a); end
     def _abi_get_panel_count(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getPanelCount(@pointer, *a); end
     def _abi_get_index(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getIndex(@pointer, *a); end
-    def _abi_get_selected(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getSelected(@pointer, *a).parse('Panel::Ptr'); end
+    def _abi_get_selected(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getSelected(@pointer, *a); end
     def _abi_get_selected_index(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getSelectedIndex(@pointer, *a); end
-    def _abi_get_panel(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getPanel(@pointer, *a).parse('Panel::Ptr'); end
-    def _abi_get_tabs(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabs(@pointer, *a).parse('Tabs::Ptr'); end
-    def _abi_get_tab_text(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabText(@pointer, *a).parse('char32_t'); end
-    def _abi_change_tab_text(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_changeTabText(@pointer, *a).odd?; end
+    def _abi_get_panel(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getPanel(@pointer, *a); end
+    def _abi_get_tabs(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabs(@pointer, *a); end
+    def _abi_get_tab_text(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabText(@pointer, *a); end
+    def _abi_change_tab_text(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_changeTabText(@pointer, *a); end
     def _abi_set_tab_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_setTabAlignment(@pointer, *a); end
     def _abi_get_tab_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabAlignment(@pointer, *a); end
     def _abi_set_tab_fixed_size(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_setTabFixedSize(@pointer, *a); end
     def _abi_get_tab_fixed_size(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_getTabFixedSize(@pointer, *a); end
-    def _abi_on_selection_change(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_onSelectionChange(@pointer, *a).parse('SignalInt'); end
-    def _abi_on_selection_changing(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_onSelectionChanging(@pointer, *a).parse('SignalTypedIntBoolPtr'); end
+    def _abi_on_selection_change(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_onSelectionChange(@pointer, *a); end
+    def _abi_on_selection_changing(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_onSelectionChanging(@pointer, *a); end
   end
 
   class TextArea
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TextArea_new(*a)); initialized(); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setText(@pointer, *a); end
     def _abi_add_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_addText(@pointer, *a); end
-    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getText(@pointer, *a); end
     def _abi_set_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setDefaultText(@pointer, *a); end
-    def _abi_get_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getDefaultText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getDefaultText(@pointer, *a); end
     def _abi_set_selected_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setSelectedText(@pointer, *a); end
-    def _abi_get_selected_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getSelectedText(@pointer, *a).parse('char32_t'); end
+    def _abi_get_selected_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getSelectedText(@pointer, *a); end
     def _abi_get_selection_start(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getSelectionStart(@pointer, *a); end
     def _abi_get_selection_end(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getSelectionEnd(@pointer, *a); end
     def _abi_set_maximum_characters(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setMaximumCharacters(@pointer, *a); end
     def _abi_get_maximum_characters(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getMaximumCharacters(@pointer, *a); end
     def _abi_set_tab_string(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setTabString(@pointer, *a); end
-    def _abi_get_tab_string(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getTabString(@pointer, *a).parse('char32_t'); end
+    def _abi_get_tab_string(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getTabString(@pointer, *a); end
     def _abi_set_caret_position(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setCaretPosition(@pointer, *a); end
     def _abi_get_caret_position(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getCaretPosition(@pointer, *a); end
     def _abi_get_caret_line(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getCaretLine(@pointer, *a); end
     def _abi_get_caret_column(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getCaretColumn(@pointer, *a); end
     def _abi_set_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setReadOnly(@pointer, *a); end
-    def _abi_is_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_isReadOnly(@pointer, *a).odd?; end
+    def _abi_is_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_isReadOnly(@pointer, *a); end
     def _abi_get_lines_count(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getLinesCount(@pointer, *a); end
     def _abi_enable_monospaced_font_optimization(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_enableMonospacedFontOptimization(@pointer, *a); end
     def _abi_set_vertical_scrollbar_policy(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setVerticalScrollbarPolicy(@pointer, *a); end
@@ -1691,37 +1705,37 @@ module Tgui
     def _abi_get_vertical_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getVerticalScrollbarValue(@pointer, *a); end
     def _abi_set_horizontal_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setHorizontalScrollbarValue(@pointer, *a); end
     def _abi_get_horizontal_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getHorizontalScrollbarValue(@pointer, *a); end
-    def _abi_on_text_change(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_onTextChange(@pointer, *a).parse('SignalString'); end
-    def _abi_on_selection_change(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_onSelectionChange(@pointer, *a).parse('Signal'); end
-    def _abi_on_caret_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_onCaretPositionChange(@pointer, *a).parse('Signal'); end
+    def _abi_on_text_change(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_onTextChange(@pointer, *a); end
+    def _abi_on_selection_change(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_onSelectionChange(@pointer, *a); end
+    def _abi_on_caret_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_onCaretPositionChange(@pointer, *a); end
   end
 
   class ToggleButton
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ToggleButton_new(*a)); initialized(); end
     def _abi_set_down(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_setDown(@pointer, *a); end
-    def _abi_is_down(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_isDown(@pointer, *a).odd?; end
-    def _abi_on_toggle(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_onToggle(@pointer, *a).parse('SignalBool'); end
+    def _abi_is_down(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_isDown(@pointer, *a); end
+    def _abi_on_toggle(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_onToggle(@pointer, *a); end
   end
 
   class ToolTip
     def self._abi_set_initial_delay(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_ToolTip_setInitialDelay(*a); end
     def self._abi_get_initial_delay(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_ToolTip_getInitialDelay(*a); end
     def self._abi_set_distance_to_mouse(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_ToolTip_setDistanceToMouse(*a); end
-    def self._abi_get_distance_to_mouse(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_ToolTip_getDistanceToMouse(*a).parse('Vector2f'); end
+    def self._abi_get_distance_to_mouse(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_ToolTip_getDistanceToMouse(*a); end
     def self._abi_set_show_on_disabled_widget(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_ToolTip_setShowOnDisabledWidget(*a); end
-    def self._abi_get_show_on_disabled_widget(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_ToolTip_getShowOnDisabledWidget(*a).odd?; end
+    def self._abi_get_show_on_disabled_widget(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_ToolTip_getShowOnDisabledWidget(*a); end
   end
 
   class TreeView
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TreeView_new(*a)); initialized(); end
-    def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_addItem(@pointer, *a).odd?; end
+    def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_addItem(@pointer, *a); end
     def _abi_expand(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_expand(@pointer, *a); end
     def _abi_expand_all(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_expandAll(@pointer, *a); end
     def _abi_collapse(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_collapse(@pointer, *a); end
     def _abi_collapse_all(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_collapseAll(@pointer, *a); end
-    def _abi_select_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_selectItem(@pointer, *a).odd?; end
+    def _abi_select_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_selectItem(@pointer, *a); end
     def _abi_deselect_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_deselectItem(@pointer, *a); end
-    def _abi_remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_removeItem(@pointer, *a).odd?; end
+    def _abi_remove_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_removeItem(@pointer, *a); end
     def _abi_remove_all_items(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_removeAllItems(@pointer, *a); end
     def _abi_get_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_getSelectedItem(@pointer, *a); end
     def _abi_get_nodes(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_getNodes(@pointer, *a); end
@@ -1731,11 +1745,11 @@ module Tgui
     def _abi_get_vertical_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_getVerticalScrollbarValue(@pointer, *a); end
     def _abi_set_horizontal_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_setHorizontalScrollbarValue(@pointer, *a); end
     def _abi_get_horizontal_scrollbar_value(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_getHorizontalScrollbarValue(@pointer, *a); end
-    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onItemSelect(@pointer, *a).parse('SignalItemHierarchy'); end
-    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onDoubleClick(@pointer, *a).parse('SignalItemHierarchy'); end
-    def _abi_on_expand(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onExpand(@pointer, *a).parse('SignalItemHierarchy'); end
-    def _abi_on_collapse(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onCollapse(@pointer, *a).parse('SignalItemHierarchy'); end
-    def _abi_on_right_click(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onRightClick(@pointer, *a).parse('SignalItemHierarchy'); end
+    def _abi_on_item_select(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onItemSelect(@pointer, *a); end
+    def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onDoubleClick(@pointer, *a); end
+    def _abi_on_expand(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onExpand(@pointer, *a); end
+    def _abi_on_collapse(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onCollapse(@pointer, *a); end
+    def _abi_on_right_click(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_onRightClick(@pointer, *a); end
   end
 
   class Scrollbar
@@ -1749,10 +1763,10 @@ module Tgui
     def _abi_set_scroll_amount(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setScrollAmount(@pointer, *a); end
     def _abi_get_scroll_amount(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getScrollAmount(@pointer, *a); end
     def _abi_set_auto_hide(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setAutoHide(@pointer, *a); end
-    def _abi_get_auto_hide(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getAutoHide(@pointer, *a).odd?; end
+    def _abi_get_auto_hide(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getAutoHide(@pointer, *a); end
     def _abi_set_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setVerticalScroll(@pointer, *a); end
-    def _abi_get_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getVerticalScroll(@pointer, *a).odd?; end
+    def _abi_get_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getVerticalScroll(@pointer, *a); end
     def _abi_get_default_width(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getDefaultWidth(@pointer, *a); end
-    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_onValueChange(@pointer, *a).parse('SignalUInt'); end
+    def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_onValueChange(@pointer, *a); end
   end
 end

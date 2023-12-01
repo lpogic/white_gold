@@ -1,7 +1,8 @@
-require_relative '../extern_object'
+require_relative '../abi/extern_object'
 
 module Tgui
   class ToolTip < ExternObject
+    extend Packer
 
     attr_accessor :page
 
@@ -10,8 +11,7 @@ module Tgui
     abi_static :distance_to_mouse=, :set_
     
     def self.distance_to_mouse
-      v = _abi_get_distance_to_mouse
-      [v.x, v.y]
+      abi_unpack_vector2f _abi_get_distance_to_mouse
     end
 
     abi_static :show_on_disabled=, :set_show_on_disabled_widgets

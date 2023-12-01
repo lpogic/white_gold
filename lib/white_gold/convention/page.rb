@@ -2,8 +2,6 @@ require_relative "club"
 
 class Page < Tgui::Group
 
-  
-
   def initialize tgui
     super()
     @tgui = tgui
@@ -13,7 +11,6 @@ class Page < Tgui::Group
     end
     @clubs = {}
     self.size = [100.pc, 100.pc]
-
   end
 
   def inspect
@@ -68,5 +65,12 @@ class Page < Tgui::Group
       end
     end
     club
+  end
+
+  def theme path = nil, **na, &b
+    theme = Theme.default
+    theme.load path if path
+    bang_nest theme, **na, &b
+    theme.self_commit
   end
 end

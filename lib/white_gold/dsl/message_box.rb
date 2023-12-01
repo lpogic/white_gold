@@ -4,25 +4,15 @@ require_relative '../convention/widget_like'
 
 module Tgui
   class MessageBox < ChildWindow
-    Alignment = enum :left, :center, :right
 
-    def button_alignment=(ali)
-      _abi_set_button_alignment Alignment[ali]
-    end
-    
-    def button_alignment
-      Alignment[_abi_get_button_alignment]
+    api_attr :format do
+      :to_s
     end
 
-    def label_alignment=(ali)
-      _abi_set_label_alignment Alignment[ali]
-    end
-    
-    def label_alignment
-      Alignment[_abi_get_label_alignment]
-    end
-
-    abi_attr :text
+    abi_enum "Alignment", :left, :center, :right
+    abi_attr :button_alignment, Alignment
+    abi_attr :label_alignment, Alignment
+    abi_attr :text, String
 
     def initialized
       on_button_press do |button, widget|
@@ -30,31 +20,25 @@ module Tgui
       end
     end
 
-    api_attr :self_buttons do
-      {}
-    end
-
     class Button < WidgetLike
-      def initialize message_box, text
-        @message_box = message_box
-        @text = text
-      end
 
       def on_press=(on_press)
-        @message_box.self_buttons[@text] << on_press.to_proc
+        host.self_buttons[id] << on_press.to_proc
       end
     end
 
 
-    def button text:, **na, &b
-      _abi_add_button text
-      self_buttons[text] = []
-      button = Button.new self, text
+    def button object, text: nil, **na, &b
+      text ||= object.then(&format)
+      raise "Button with given text exists (#{text})" if self_buttons[text]
+      _abi_add_button abi_pack_string(text)
+      button = Button.new self, object
+      self_buttons[text] = button
       bang_nest button, **na, &b
     end
 
-    def [](text)
-      Button.new self, text
+    def [](object)
+      self_buttons.values.find{ _1.id == object }
     end
 
     def remove_buttons
@@ -63,22 +47,29 @@ module Tgui
 
     def buttons=(buttons)
       self.self_buttons = {}
-      it = buttons.each
-      block_caller = Fiddle::Closure::BlockCaller.new(Fiddle::TYPE_CONST_STRING, [0]) do
-        key, action = it.next
-        name = key.to_s
-        (self_buttons[name] ||= []) << action
-        name
-      rescue StopIteration
-        ""
+      names = buttons.map do |object, on_press|
+        text = object.then(&format)
+        raise "Button with given text exists (#{text})" if self_buttons[text]
+        button = Button.new self, object
+        button.on_press = on_press
+        self_buttons[text] = button
+        text
       end
-      _abi_change_buttons buttons.size, block_caller
+      self_change_buttons names
     end
 
     def buttons
-      self_buttons.keys
+      self_buttons.values.map{ _1.id }
     end
 
     abi_signal :on_button_press, SignalString
+
+    #internal
+
+    abi_def :self_change_buttons, :change_buttons, String.. => nil
+
+    api_attr :self_buttons do
+      {}
+    end
   end
 end

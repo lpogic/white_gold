@@ -4,33 +4,33 @@ require_relative 'tabs'
 module Tgui
   class TabContainer < Container
 
-    TabAlign = enum :top, :bottom
-
     class Tabs < Tgui::Tabs
       def initialize tabs_container, pointer
         super(pointer:)
         @tabs_container = tabs_container
       end
 
+      abi_enum "TabAlign", :top, :bottom
+
+
       def alignment=(alignment)
-        @tabs_container._abi_set_tab_alignment TabAlign[alignment]
+        @tabs_container._abi_set_tab_alignment @tabs_container.abi_pack(TabAlign, alignment)
       end
       
       def alignment
-        TabAlign[@tabs_container._abi_get_tab_alignment]
+        @tabs_container.abi_unpack(TabAlign, @tabs_container._abi_get_tab_alignment)
       end
 
       def fixed_size=(size)
-        @tabs_container._abi_set_fixed_size size
+        @tabs_container._abi_set_fixed_size @tabs_container.abi_pack_float(size)
       end
 
       def fixed_size
-        @tabs_container._abi_get_fixed_size
+        @tabs_container.abi_unpack_float(@tabs_container._abi_get_fixed_size)
       end
 
       def height=(height)
-        h = self_encode_size_layout(height)
-        @tabs_container._abi_set_tabs_height h
+        @tabs_container._abi_set_tabs_height @tabs_container.abi_pack("Layout", h)
       end
     end
 
@@ -43,11 +43,11 @@ module Tgui
       end
 
       def text=(text)
-        @tab_container.change_tab_text @index, text
+        @tab_container.change_tab_text @index, @tab_container.abi_pack_string(text)
       end
 
       def text
-        @tab_container.tab_text @index
+        @tab_container.abi_unpack_string(@tab_container.tab_text @index)
       end
     end
 
@@ -66,10 +66,11 @@ module Tgui
     def tab object, index: nil, **na, &b
       text = object.then(&format)
       if !index
-        panel_pointer = _abi_add_tab text, false
+        panel_pointer = _abi_add_tab abi_pack_string(text), abi_pack_bool(false)
         index = _abi_get_index panel_pointer
       else
-        panel_pointer = _abi_insert_tab index, text, false
+        index = abi_pack_integer index
+        panel_pointer = _abi_insert_tab index, abi_pack_string(text), abi_pack_bool(false)
       end
       objects.insert index, object
       tab_panel = TabPanel.new self, index, panel_pointer
@@ -115,5 +116,6 @@ module Tgui
     end
 
     abi_signal :on_selection_change, Signal
+    
   end
 end
