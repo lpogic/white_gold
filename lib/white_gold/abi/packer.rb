@@ -5,8 +5,8 @@ module Packer
     if block_given?
       define_method abi_packer_method_name(base), &body
     elsif base.is_a? Module
-      define_method abi_packer_method_name(base) do |o|
-        base.from o
+      define_method abi_packer_method_name(base) do |*o|
+        base.from *o
       end
     else
       raise "..."

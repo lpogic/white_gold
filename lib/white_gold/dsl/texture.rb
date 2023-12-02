@@ -3,15 +3,20 @@ require_relative 'color'
 
 module Tgui
   class Texture < ExternObject
-    def self.from arg
-      case arg
-      when Texture
-        return arg
-      when String
-        id = Util.expand_path arg
-        prx = pry = prw = prh = mpx = mpy = mpw = mph = 0
-        smooth = Texture.default_smooth
-      when Array
+    def self.from *arg
+      case arg.size
+      when 1
+        a = arg.first
+        case a
+        when Texture
+          return a
+        when String
+          id = Util.expand_path a
+          prx = pry = prw = prh = mpx = mpy = mpw = mph = 0
+          smooth = Texture.default_smooth
+        else raise "Unsupported argument #{arg}"
+        end
+      when 2..10
         id = Util.expand_path arg[0]
         prx = arg[1] || 0
         pry = arg[2] || 0
@@ -22,8 +27,7 @@ module Tgui
         mpw = arg[7] || 0
         mph = arg[8] || 0
         smooth = arg[9] || Texture.default_smooth
-      else
-        raise "Unsupported argument #{arg}"
+      else raise "Unsupported argument #{arg}"
       end
       Texture.new id, prx, pry, prw, prh, mpx, mpy, mpw, mph, smooth
     end

@@ -76,9 +76,9 @@ class ExternObject
       # end
     end
 
-    def self_abi_def name, abi_name, abi_interface
+    def self_abi_def name, abi_name, abi_interface, *def_attr
       define_method name do |*a|
-        abi_interface.call self, abi_name, *a
+        abi_interface.call self, abi_name, *def_attr, *a
       end
     end
 

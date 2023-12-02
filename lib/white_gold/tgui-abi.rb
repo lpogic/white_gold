@@ -139,6 +139,7 @@ class ExternObject
     o = o.first if o.is_a? Array
     case o
     when String then o
+    when Rational then p o; "(parent.innersize - size) * #{o.numerator} / #{o.denominator}"
     when Numeric then Unit.nominate o
     when :center then "(parent.innersize - size) / 2"
     when :begin then "0"
@@ -168,6 +169,7 @@ class ExternObject
   end
 
   abi_packer Tgui::Color
+  abi_packer Tgui::Outline
   abi_packer Tgui::Font
   abi_packer Tgui::Texture
 
@@ -218,6 +220,7 @@ class ExternObject
   end
 
   abi_unpacker Tgui::Color
+  abi_unpacker Tgui::Outline
   abi_unpacker Tgui::Font
   abi_unpacker Tgui::Texture
 

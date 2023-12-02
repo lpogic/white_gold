@@ -12,30 +12,31 @@ module Tgui
       black: [0, 0, 0, 255]
     }
 
-    def self.from arg
-      case arg
-      when Color
-        return arg
-      when String
-        r, g, b, a = *tones_from_string(arg)
-      when Symbol
-        r, g, b, a = *PREDEFINED_COLORS[arg]
-      when Array
-        case arg.size
-        when 1
-          r = g = b = arg[0]
+    def self.from *arg
+      case arg.size
+      when 1
+        arg = arg.first
+        case arg
+        when Color
+          return arg
+        when String
+          r, g, b, a = *tones_from_string(arg)
+        when Symbol
+          r, g, b, a = *PREDEFINED_COLORS[arg]
+        when Numeric
+          r = g = b = arg
           a = 255
-        when 2
-          r = g = b = arg[0]
-          a = arg[1]
-        when 3
-          r, g, b = *arg
-          a = 255
-        else
-          r, g, b, a = *arg
+        else raise "Unsupported argument #{arg}"
         end
-      else
-        raise "Unsupported argument #{arg}"
+      when 2
+        r = g = b = arg[0]
+        a = arg[1]
+      when 3
+        r, g, b = *arg
+        a = 255
+      when 4
+        r, g, b, a = *arg
+      else raise "Unsupported argument #{arg}"
       end
       Color.new r, g, b, a
     end

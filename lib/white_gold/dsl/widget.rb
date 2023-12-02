@@ -2,6 +2,9 @@ require_relative '../abi/extern_object'
 require_relative '../convention/bang_nested_caller'
 require_relative '../convention/unit'
 require_relative '../convention/widget_like'
+require_relative 'color'
+require_relative 'outline'
+require_relative 'texture'
 require_relative 'signal/signal'
 require_relative 'signal/signal_vector2f'
 require_relative 'signal/signal_show_effect'
@@ -238,16 +241,32 @@ module Tgui
       end
     end
 
+    @@renderer_property_types = {
+      Color => [:_abi_set_color_renderer_property, :_abi_get_color_renderer_property],
+      String => [:_abi_set_string_renderer_property, :_abi_get_string_renderer_property],
+      Font => [:_abi_set_font_renderer_property, :_abi_get_font_renderer_property],
+      "Boolean" => [:_abi_set_boolean_renderer_property, :_abi_get_boolean_renderer_property],
+      Float => [:_abi_set_float_renderer_property, :_abi_get_float_renderer_property],
+      Outline => [:_abi_set_outline_renderer_property, :_abi_get_outline_renderer_property],
+      Texture => [:_abi_set_texture_renderer_property, :_abi_get_texture_renderer_property],
+      TextStyles => [:_abi_set_text_styles_renderer_property, :_abi_get_text_styles_renderer_property],
+    }
+
+    def self.renderer_property_types
+      @@renderer_property_types
+    end
+
     def self.abi_render_attr name, type, original_name = nil
-      abi_attr name, "#{type}ObjectConverter", original_name
-    end
+      property_name = original_name || name
+      property_name = property_name.to_s.pascalcase if !property_name.is_a? String
+      property_methods = renderer_property_types[type]
+      raise "Unknown property type #{type}" if !property_methods
 
-    def abi_pack_color_object_converter o
-      Color.from(o)._abi_to_object_converter
-    end
-
-    def abi_unpack_color_object_converter o
-      abi_unpack Color, Color._abi_from_object_converter(o)
+      interface = Interface.from [Object, type], nil
+      self_abi_def "#{name}=".to_sym, property_methods[0], interface, property_name
+      
+      interface = Interface.from nil, type
+      self_abi_def name.to_sym, property_methods[1], interface, property_name
     end
   end
 end

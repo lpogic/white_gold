@@ -10,8 +10,11 @@ module Tgui
     extern 'int ABI_Color_get_blue(Color* self)'
     extern 'int ABI_Color_get_alpha(Color* self)'
     extern 'void* ABI_Color_applyOpacity(Color* self, float fade)'
-    extern 'void* ABI_STATIC_Color_fromObjectConverter(ObjectConverter* objectConverter)'
-    extern 'void* ABI_Color_toObjectConverter(Color* self)'
+    extern 'void* ABI_Outline_new(char* left, char* right, char* top, char* bottom)'
+    extern 'float ABI_Outline_getLeft(Outline* self)'
+    extern 'float ABI_Outline_getRight(Outline* self)'
+    extern 'float ABI_Outline_getTop(Outline* self)'
+    extern 'float ABI_Outline_getBottom(Outline* self)'
     extern 'int ABI_Signal_connect(Signal* self, void(*f)())'
     extern 'int ABI_Signal_disconnect(Signal* self, int f)'
     extern 'void ABI_Signal_setEnabled(Signal* self, int enabled)'
@@ -133,8 +136,22 @@ module Tgui
     extern 'void* ABI_Widget_getWidgetName(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onPositionChange(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onSizeChange(Widget::Ptr* self)'
-    extern 'void ABI_Widget_rendererSetProperty(Widget::Ptr* self, char* property, ObjectConverter* objectConverter)'
-    extern 'void* ABI_Widget_rendererGetProperty(Widget::Ptr* self, char* property)'
+    extern 'void ABI_Widget_setColorRendererProperty(Widget::Ptr* self, char* property, Color* value)'
+    extern 'void* ABI_Widget_getColorRendererProperty(Widget::Ptr* self, char* property)'
+    extern 'void ABI_Widget_setStringRendererProperty(Widget::Ptr* self, char* property, char* value)'
+    extern 'void* ABI_Widget_getStringRendererProperty(Widget::Ptr* self, char* property)'
+    extern 'void ABI_Widget_setFontRendererProperty(Widget::Ptr* self, char* property, Font* value)'
+    extern 'void* ABI_Widget_getFontRendererProperty(Widget::Ptr* self, char* property)'
+    extern 'void ABI_Widget_setBooleanRendererProperty(Widget::Ptr* self, char* property, int value)'
+    extern 'int ABI_Widget_getBooleanRendererProperty(Widget::Ptr* self, char* property)'
+    extern 'void ABI_Widget_setFloatRendererProperty(Widget::Ptr* self, char* property, float value)'
+    extern 'float ABI_Widget_getFloatRendererProperty(Widget::Ptr* self, char* property)'
+    extern 'void ABI_Widget_setOutlineRendererProperty(Widget::Ptr* self, char* property, Outline* value)'
+    extern 'void* ABI_Widget_getOutlineRendererProperty(Widget::Ptr* self, char* property)'
+    extern 'void ABI_Widget_setTextureRendererProperty(Widget::Ptr* self, char* property, Texture* value)'
+    extern 'void* ABI_Widget_getTextureRendererProperty(Widget::Ptr* self, char* property)'
+    extern 'void ABI_Widget_setTextStylesRendererProperty(Widget::Ptr* self, char* property, int value)'
+    extern 'int ABI_Widget_getTextStylesRendererProperty(Widget::Ptr* self, char* property)'
     extern 'void* ABI_Widget_onFocus(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onUnfocus(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onMouseEnter(Widget::Ptr* self)'
@@ -789,8 +806,14 @@ module Tgui
     def _abi_get_blue(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_blue(@pointer, *a); end
     def _abi_get_alpha(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_alpha(@pointer, *a); end
     def _abi_apply_opacity(*a);    Abi.call_arg_map! a; Abi.ABI_Color_applyOpacity(@pointer, *a); end
-    def self._abi_from_object_converter(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Color_fromObjectConverter(*a); end
-    def _abi_to_object_converter(*a);    Abi.call_arg_map! a; Abi.ABI_Color_toObjectConverter(@pointer, *a); end
+  end
+
+  class Outline
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Outline_new(*a)); initialized(); end
+    def _abi_get_left(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getLeft(@pointer, *a); end
+    def _abi_get_right(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getRight(@pointer, *a); end
+    def _abi_get_top(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getTop(@pointer, *a); end
+    def _abi_get_bottom(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getBottom(@pointer, *a); end
   end
 
   class Signal
@@ -984,8 +1007,22 @@ module Tgui
     def _abi_get_widget_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getWidgetName(@pointer, *a); end
     def _abi_on_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onPositionChange(@pointer, *a); end
     def _abi_on_size_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onSizeChange(@pointer, *a); end
-    def _abi_renderer_set_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_rendererSetProperty(@pointer, *a); end
-    def _abi_renderer_get_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_rendererGetProperty(@pointer, *a); end
+    def _abi_set_color_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setColorRendererProperty(@pointer, *a); end
+    def _abi_get_color_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getColorRendererProperty(@pointer, *a); end
+    def _abi_set_string_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setStringRendererProperty(@pointer, *a); end
+    def _abi_get_string_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getStringRendererProperty(@pointer, *a); end
+    def _abi_set_font_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setFontRendererProperty(@pointer, *a); end
+    def _abi_get_font_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getFontRendererProperty(@pointer, *a); end
+    def _abi_set_boolean_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setBooleanRendererProperty(@pointer, *a); end
+    def _abi_get_boolean_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getBooleanRendererProperty(@pointer, *a); end
+    def _abi_set_float_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setFloatRendererProperty(@pointer, *a); end
+    def _abi_get_float_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getFloatRendererProperty(@pointer, *a); end
+    def _abi_set_outline_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setOutlineRendererProperty(@pointer, *a); end
+    def _abi_get_outline_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getOutlineRendererProperty(@pointer, *a); end
+    def _abi_set_texture_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setTextureRendererProperty(@pointer, *a); end
+    def _abi_get_texture_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getTextureRendererProperty(@pointer, *a); end
+    def _abi_set_text_styles_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setTextStylesRendererProperty(@pointer, *a); end
+    def _abi_get_text_styles_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getTextStylesRendererProperty(@pointer, *a); end
     def _abi_on_focus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onFocus(@pointer, *a); end
     def _abi_on_unfocus(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onUnfocus(@pointer, *a); end
     def _abi_on_mouse_enter(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onMouseEnter(@pointer, *a); end

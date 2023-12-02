@@ -1,6 +1,7 @@
-require_relative 'tgui-abi'
 require_relative 'path/numeric.path'
 require_relative 'path/object.path'
+require_relative 'path/string.path'
+require_relative 'tgui-abi'
 require_relative 'convention/page'
 
 class WhiteGold
