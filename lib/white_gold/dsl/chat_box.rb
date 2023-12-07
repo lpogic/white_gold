@@ -26,14 +26,14 @@ module Tgui
       end
     end
 
-    def line object, color: nil, style: nil, **na, &b
+    api_def :line do |object, color: nil, style: nil, **na, &b|
       text = object.then(&format)
       color ||= text_color
       style ||= text_style
       _abi_add_line abi_pack_string(text), abi_pack(Color, color), abi_pack(TextStyles, *style)
       line = Line.new self, objects.size
       objects << object
-      bang_nest line, **na, &b
+      upon! line, **na, &b
     end
 
     def [](index)

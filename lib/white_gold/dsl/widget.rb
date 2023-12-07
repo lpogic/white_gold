@@ -14,11 +14,17 @@ require_relative 'tool_tip'
 module Tgui
   class Widget < ExternObject
     include BangNestedCaller
+    extend ApiDef
 
     attr_accessor :page
 
     abi_attr :text_size, Integer
     abi_attr :enabled?
+
+    api_def :disabled do |disabled = true|
+      self.enabled = !disabled
+    end
+
     abi_attr :focused?
     abi_attr :focusable?
     abi_signal :on_position_change, Tgui::SignalVector2f
@@ -48,11 +54,11 @@ module Tgui
     abi_def :can_gain_focus?, :can_gain_focus, nil => "Boolean"
     abi_def :container?, nil => "Boolean"
 
-    def tooltip *a, **na, &b
+    api_def :tooltip do |*a, **na, &b|
       if block_given?
         tooltip = ToolTip.new
         tooltip.page = page
-        bang_nest tooltip, **na, &b
+        upon! tooltip, **na, &b
         _abi_set_tool_tip tooltip.widget if tooltip.widget
       else
         widget = _abi_get_tool_tip
@@ -165,9 +171,9 @@ module Tgui
       abi_def :tooltip, :ask_toop_tip, [Float, Float] => nil
     end
 
-    def robot **na, &b
+    api_def :robot do |**na, &b|
       robot = Robot.new self
-      bang_nest robot, **na, &b if block_given?
+      upon! robot, **na, &b if block_given?
       robot
     end
     
@@ -263,7 +269,7 @@ module Tgui
       raise "Unknown property type #{type}" if !property_methods
 
       interface = Interface.from [Object, type], nil
-      self_abi_def "#{name}=".to_sym, property_methods[0], interface, property_name
+      self_abi_def_setter "#{name}=".to_sym, property_methods[0], interface, property_name
       
       interface = Interface.from nil, type
       self_abi_def name.to_sym, property_methods[1], interface, property_name

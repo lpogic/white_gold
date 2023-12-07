@@ -26,9 +26,6 @@ module Tgui
     api_attr :columns do
       []
     end
-    api_attr :self_objects do
-      []
-    end
 
     class Column < WidgetLike
       def initialize list_view, index
@@ -65,20 +62,20 @@ module Tgui
       abi_attr :icon, Texture, :item_icon, id: 0
     end
 
-    def column **na, &b
+    api_def :column do |**na, &b|
       index = _abi_add_column
       column = Column.new self, index
       columns << column
-      bang_nest column, **na, &b
+      upon! column, **na, &b
     end
 
-    def item object, **na, &b
+    api_def :item do |object, **na, &b|
       self_add_object object, na[:index]
       item = Item.new self, object
       na.delete :index
-      bang_nest item, **na, &b
+      upon! item, **na, &b
     end
-
+    
     def items=(items)
       remove_all_rows
       items.each do |item|
@@ -147,19 +144,19 @@ module Tgui
     abi_signal :on_right_click, ListViewItemSignal
     abi_signal :on_header_click, ListViewColumnSignal
     
-    def grid_lines **na, &b
+    api_def :grid_lines do | **na, &b|
       lines = GridLines.new self
-      bang_nest lines, **na, &b
+      upon! lines, **na, &b
     end
 
     def grid_lines=(grid_lines)
       case grid_lines
       when Numeric
-        self.grid_lines width: grid_lines
+        api_grid_lines width: grid_lines
       when false
-        self.grid_lines horizontal: false, vertical: false
+        api_grid_lines horizontal: false, vertical: false
       when Hash
-        self.grid_lines **grid_lines
+        api_grid_lines **grid_lines
       end
     end
 
@@ -173,19 +170,19 @@ module Tgui
       abi_attr :vertical?, "Boolean", :show_vertical_grid_lines
     end
 
-    def header **na, &b
+    api_def :header do |**na, &b|
       header = Header.new self
-      bang_nest header, **na, &b
+      upon! header, **na, &b
     end
 
     def header=(header)
       case header
       when true, false
-        self.header visible: header
+        api_header visible: header
       when Hash
-        self.header **header
+        api_header **header
       when Proc
-        self.header &header
+        api_header &header
       end
     end
 
@@ -199,6 +196,12 @@ module Tgui
       abi_attr :separator_height, Integer, :header_separator_height
       abi_def :actual_height, :get_current_header_height, nil => Integer
       abi_attr :visible, "Boolean", :header_visible
+    end
+
+    # internal
+
+    api_attr :self_objects do
+      []
     end
 
     def self_add_object object, index = nil

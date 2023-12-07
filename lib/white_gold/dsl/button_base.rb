@@ -17,6 +17,7 @@ module Tgui
     abi_render_attr :text_color_down_hover, Color
     abi_render_attr :text_color_disabled, Color
     abi_render_attr :text_color_down_disabled, Color
+    abi_render_attr :text_color_focused, Color
     abi_render_attr :border_radius, Float, :rounded_border_radius
     
   end

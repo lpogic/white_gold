@@ -8,5 +8,7 @@ module Tgui
     abi_def :ignore_mouse?, :is_ignoring_mouse_events, nil => "Boolean"
     abi_signal :on_double_click, SignalVector2f
     
+    abi_render_attr :texture, Texture
+
   end
 end

@@ -43,6 +43,7 @@ module Tgui
   }.freeze
 
   module WidgetOwner
+    extend ApiDef
     CHILD_API_PREFIX = "api_child_".freeze
 
     def common_widget_nest widget, *keys, id: nil, **na, &b
@@ -70,7 +71,7 @@ module Tgui
         club_params.merge! club.params
       end
   
-      bang_nest widget, **club_params, **na, &b
+      upon! widget, **club_params, **na, &b
     end
 
     def child_methods
@@ -90,28 +91,28 @@ module Tgui
 
     WIDGETS_COLLECTION.each do |m, c|
       if c
-        define_method m do |*a, **na, &b|
+        api_def m do |*a, **na, &b|
           common_widget_post_initialize equip_child_widget(c.new), *a, **na, &b
         end
       end
     end
 
-    def picture *a, **na, &b
-      texture = na[:texture] || Tgui::Texture.from([
+    api_def :picture do |*a, **na, &b|
+      texture = na[:texture] || Tgui::Texture.from(
         na[:url],
         na.dig(:part_rect, 0),
         na.dig(:part_rect, 1),
         na.dig(:part_rect, 2),
         na.dig(:part_rect, 3),
         na[:smooth]
-      ])
+      )
       transparent = na[:transparent] || false
       pic = Tgui::Picture.new texture, transparent
       equip_child_widget pic
       common_widget_post_initialize pic, *a, **na.except(:url, :part_rect, :smooth, :transparent), &b
     end
 
-    def radio object, *a, **na, &b
+    api_def :radio do |object, *a, **na, &b|
       radio = RadioButton.new
       equip_child_widget radio
       radio.object = object
@@ -119,24 +120,25 @@ module Tgui
       common_widget_post_initialize radio, *a, **na, &b
     end
 
-    def msg text, **buttons
-      message_box text:, position: :center, label_alignment: :center, buttons: buttons.map do |k, v| 
-        procedure = proc do |w|
-          v.call()
+    api_def :msg do |text, **buttons|
+      buttons["OK"] = nil if buttons.empty?
+      api_message_box text:, position: :center, label_alignment: :center, buttons: (buttons.map do |k, v| 
+        procedure = proc do |o, b, w|
+          v&.call
           w.close true
         end
         [k, procedure]
-      end
+      end)
     end
 
     @@auto_button_name = "Button1"
 
-    def btn text = nil, **na, &on_press
+    api_def :btn do |text = nil, **na, &on_press|
       if !text
         text = @@auto_button_name
         @@auto_button_name = @@auto_button_name.next
       end
-      button text:, on_press:, **na
+      api_button text:, on_press:, **na
     end
   end
 
@@ -156,7 +158,7 @@ module Tgui
   class TabContainer
     WIDGETS_COLLECTION.each do |m, c|
       if !method_defined? m
-        define_method m do |name = nil, **na, &b|
+        api_def m do |name = nil, **na, &b|
           raise NoMethodError.new("Method `#{m}` should be called on Panel from TabContainer, not TabContainer itself")
         end
       end

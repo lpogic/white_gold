@@ -104,13 +104,16 @@ class ExternObject
     o ? 1 : 0
   end
 
-  abi_packer "SizeLayout" do |o|
-    case o
-    in [x, y]
-      [abi_pack_single_size_layout(x), abi_pack_single_size_layout(y)]
-    else
-      raise "Unable to make Size from #{o}"
+  abi_packer "SizeLayout" do |*arg|
+    case arg.size
+    when 1
+      a = arg.first
+      x = y = a
+    when 2
+      x, y = *arg
+    else raise "Unsupported argument #{arg}"
     end
+    [abi_pack_single_size_layout(x), abi_pack_single_size_layout(y)]
   end
 
   abi_packer "SingleSizeLayout" do |o|
@@ -126,20 +129,23 @@ class ExternObject
     end
   end
 
-  abi_packer "PositionLayout" do |o|
-    case o
-    in [x, y]
-      [abi_pack_single_position_layout(x), abi_pack_single_position_layout(y)]
-    else
-      raise "Unable to make Position from #{o}"
+  abi_packer "PositionLayout" do |*arg|
+    case arg.size
+    when 1
+      a = arg.first
+      x = y = a
+    when 2
+      x, y = *arg
+    else raise "Unsupported argument #{arg}"
     end
+    [abi_pack_single_position_layout(x), abi_pack_single_position_layout(y)]
   end
 
   abi_packer "SinglePositionLayout" do |o|
     o = o.first if o.is_a? Array
     case o
     when String then o
-    when Rational then p o; "(parent.innersize - size) * #{o.numerator} / #{o.denominator}"
+    when Rational then "(parent.innersize - size) * #{o.numerator} / #{o.denominator}"
     when Numeric then Unit.nominate o
     when :center then "(parent.innersize - size) / 2"
     when :begin then "0"

@@ -63,7 +63,7 @@ module Tgui
       tabs.format
     end
 
-    def tab object, index: nil, **na, &b
+    api_def :tab do |object, index: nil, **na, &b|
       text = object.then(&format)
       if !index
         panel_pointer = _abi_add_tab abi_pack_string(text), abi_pack_boolean(false)
@@ -75,7 +75,7 @@ module Tgui
       objects.insert index, object
       tab_panel = TabPanel.new self, index, panel_pointer
       tab_panel.page = page
-      bang_nest tab_panel, **na, &b
+      upon! tab_panel, **na, &b
     end
     
     def [](object)
@@ -90,10 +90,10 @@ module Tgui
       end
     end
 
-    def tabs **na, &b
+    api_def :tabs do |**na, &b|
       tabs = Tabs.new self, _abi_get_tabs
       tabs.page = page
-      bang_nest tabs, **na, &b
+      upon! tabs, **na, &b
     end
 
     def remove object

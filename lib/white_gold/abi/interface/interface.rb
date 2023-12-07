@@ -58,7 +58,7 @@ module Interface
         end
       end
     when nil
-      nil
+      proc{}
     else raise "Unknown packer type #{packer.class}"
     end
   end

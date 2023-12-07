@@ -1,6 +1,8 @@
+require_relative 'api_def'
 require_relative 'bang_nest'
 
 class WidgetLike
+  extend ApiDef
   include BangNest
 
   class << self
@@ -27,12 +29,20 @@ class WidgetLike
           k = self_packers_id_extend id, *k
           Interface.from k, v 
         end.first
-        self_abi_def_with_id name, abi_name, interface, id
+        if name.to_s.end_with? "="
+          self_abi_def_setter_with_id name, abi_name, interface, id
+        else
+          self_abi_def_with_id name, abi_name, interface, id
+        end
       else
         interface = na.map do |k, v|
           Interface.from k, v 
         end.first
-        self_abi_def name, abi_name, interface
+        if name.to_s.end_with? "="
+          self_abi_def_setter name, abi_name, interface
+        else
+          self_abi_def name, abi_name, interface
+        end
       end
     end
 
@@ -48,6 +58,18 @@ class WidgetLike
 
     def self_abi_def_with_id name, abi_name, abi_interface, id_position
       define_method name do |*a|
+        abi_interface.call host, abi_name, *a[0..id_position], id, *a[id_position..]
+      end
+    end
+
+    def self_abi_def_setter name, abi_name, abi_interface
+      define_method name do |a = VOID|
+        abi_interface.call host, abi_name, *a
+      end
+    end
+
+    def self_abi_def_setter_with_id name, abi_name, abi_interface, id_position
+      define_method name do |a = VOID|
         abi_interface.call host, abi_name, *a[0..id_position], id, *a[id_position..]
       end
     end

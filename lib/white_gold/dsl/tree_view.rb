@@ -91,7 +91,7 @@ module Tgui
         end
       end
 
-      def item object, **na, &b
+      api_def :item do |object, **na, &b|
         host.self_add_item path, object, **na, &b
       end
 
@@ -104,7 +104,7 @@ module Tgui
       end
     end
 
-    def item object, **na, &b
+    api_def :item do |object, **na, &b|
       self_add_item [], object, **na, &b
     end
 
@@ -150,6 +150,26 @@ module Tgui
     abi_signal :on_collapse, SignalItemHierarchy
     abi_signal :on_right_click, SignalItemHierarchy
 
+    abi_render_attr :borders, Outline
+    abi_render_attr :padding, Outline
+    abi_render_attr :background_color, Color
+    abi_render_attr :border_color, Color
+    abi_render_attr :text_color, Color
+    abi_render_attr :text_color_hover, Color
+    abi_render_attr :text_color_hover, Color
+    abi_render_attr :selected_text_color, Color
+    abi_render_attr :selected_text_color_hover, Color
+    abi_render_attr :selected_background_color, Color
+    abi_render_attr :background_color_hover, Color
+    abi_render_attr :selected_background_color_hover, Color
+    abi_render_attr :selected_background_color_hover, Color
+    # abi_render_attr :scrollbar
+    abi_render_attr :scrollbar_width, Float
+    abi_render_attr :texture_background, Texture
+    abi_render_attr :texture_branch_expanded, Texture
+    abi_render_attr :texture_branch_collapsed, Texture
+    abi_render_attr :texture_leaf, Texture
+
     # internal
 
     abi_def :self_selected_item_path, :get_selected_item, nil => (String..)
@@ -173,7 +193,7 @@ module Tgui
         self_tree[*_3, grow: true].object = object
       end
       item = Item.new self, new_path
-      bang_nest item, **na, &b
+      upon! item, **na, &b
     end
 
     def self_path_block path, &b

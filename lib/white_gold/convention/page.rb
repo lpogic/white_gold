@@ -42,10 +42,6 @@ class Page < Tgui::Group
     @tgui.window
   end
 
-  def g
-    self
-  end
-
   def page
     self
   end
@@ -67,10 +63,18 @@ class Page < Tgui::Group
     club
   end
 
-  def theme path = nil, **na, &b
+  api_def :theme do |path = nil, **na, &b|
     theme = Theme.default
     theme.load path if path
-    bang_nest theme, **na, &b
+    upon! theme, **na, &b
     theme.self_commit
+  end
+  
+  def title=(title)
+    window.title = title
+  end
+
+  def title
+    window.title
   end
 end

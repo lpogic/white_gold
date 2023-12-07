@@ -63,13 +63,13 @@ module Tgui
 
     end
 
-    def item object, **na, &b
+    api_def :item do |object, **na, &b|
       text = object.then(&format)
       @@auto_item_id = id = @@auto_item_id.next
       _abi_add_item abi_pack_string(text), abi_pack_string(id)
       item = Item.new self, id
       self_objects[id] = object
-      bang_nest item, **na, &b
+      upon! item, **na, &b
     end
 
     def selected

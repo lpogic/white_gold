@@ -1,3 +1,4 @@
+require_relative 'path/kernel.path'
 require_relative 'path/numeric.path'
 require_relative 'path/object.path'
 require_relative 'path/string.path'

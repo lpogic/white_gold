@@ -15,12 +15,12 @@ module Tgui
 
     @@auto_item_id = "@/"
 
-    def item object, index: -1, **na, &b
+    api_def :item do |object, index: -1, **na, &b|
       @@auto_item_id = id = @@auto_item_id.next
       panel = Panel.new pointer: _abi_add_item(id, abi_pack_integer(index))
       panel.page = page
       self_objects[object] = id
-      bang_nest panel, **na, &b
+      upon! panel, **na, &b
     end
 
     def [](object)
@@ -66,10 +66,10 @@ module Tgui
 
     abi_signal :on_item_select, SignalPanelListBoxItem
 
-    def template **na, &b
+    api_def :template do |**na, &b|
       panel = Panel.new(pointer: _abi_get_panel_template)
       panel.page = page
-      bang_nest panel, **na, &b
+      upon! panel, **na, &b
     end
 
     # internal

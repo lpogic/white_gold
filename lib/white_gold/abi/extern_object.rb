@@ -69,11 +69,11 @@ class ExternObject
 
       na = {nil => nil} if na.empty?
       interface = na.map{|k, v| Interface.from k, v }.first
-      # if name.to_s.end_with? "="
-      #   self_abi_def_setter name, abi_name, interface
-      # else
+      if name.to_s.end_with? "="
+        self_abi_def_setter name, abi_name, interface
+      else
         self_abi_def name, abi_name, interface
-      # end
+      end
     end
 
     def self_abi_def name, abi_name, abi_interface, *def_attr
@@ -82,11 +82,11 @@ class ExternObject
       end
     end
 
-    # def self_abi_def_setter name, abi_name, abi_interface
-    #   define_method name do |a|
-    #     abi_interface.call self, abi_name, *a
-    #   end
-    # end
+    def self_abi_def_setter name, abi_name, abi_interface, *def_attr
+      define_method name do |a = VOID|
+        abi_interface.call self, abi_name, *def_attr, *a
+      end
+    end
 
     def abi_attr name, type = nil, original_name = nil
       if original_name
@@ -167,6 +167,10 @@ class ExternObject
       define_singleton_method name do |*a|
         send(abi_name, *a)
       end
+    end
+
+    def api_def name, &b
+      define_method "api_#{name}", &b
     end
   end
 end

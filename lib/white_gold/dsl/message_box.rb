@@ -16,25 +16,35 @@ module Tgui
 
     def initialized
       on_button_press do |button, widget|
-        self_buttons[button]&.each{ _1.call(widget) }
+        self_buttons[button]&.press_signal_execute
       end
     end
 
     class Button < WidgetLike
+      def initialize host, id
+        super
+        @on_press_callbacks = []
+      end
 
       def on_press=(on_press)
-        host.self_buttons[id] << on_press.to_proc
+        @on_press_callbacks << on_press.to_proc
+      end
+
+      def press_signal_execute
+        @on_press_callbacks.each do |c|
+          c.call id, self, host
+        end
       end
     end
 
 
-    def button object, text: nil, **na, &b
+    api_def :button do |object, text: nil, **na, &b|
       text ||= object.then(&format)
       raise "Button with given text exists (#{text})" if self_buttons[text]
       _abi_add_button abi_pack_string(text)
       button = Button.new self, object
       self_buttons[text] = button
-      bang_nest button, **na, &b
+      upon! button, **na, &b
     end
 
     def [](object)

@@ -18,7 +18,7 @@ module Tgui
 
         return @menu_bar.self_path_block @path do
           id = @menu_bar._abi_connect_menu_item _1, _2, on_press
-          MenuBar.callback_storage[id] = _2
+          MenuBar.callback_storage[id] = on_press
           id
         end
       end
@@ -95,14 +95,14 @@ module Tgui
     end
 
     class MenuItem < WidgetLike
-      def item object, **na, &b
+      api_def :item do |object, **na, &b|
         item_path = [*path, object]
         host.self_tree[*item_path, grow: true].text = object.then(&host.format)
         host.self_path_block item_path do
           host._abi_add_menu_item _1, _2
         end
         item = Item.new host, item_path
-        bang_nest item, **na, &b
+        upon! item, **na, &b
       end
       
       def on_press(&b)
@@ -175,16 +175,16 @@ module Tgui
       end
 
       def path
-        @path
+        @id
       end
     end
 
-    def item object, **na, &b
+    api_def :item do |object, **na, &b|
       text = object.then(&format)
       self_tree[object, grow: true].text = text
       _abi_add_menu abi_pack_string(text)
       item = Menu.new self, object
-      bang_nest item, **na, &b
+      upon! item, **na, &b
     end
 
     def items=(items)
