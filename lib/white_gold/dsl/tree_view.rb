@@ -13,7 +13,9 @@ module Tgui
           end
           SignalItemHierarchy.fetch_path vector, loader
           object_path = @widget.self_tree.path_str_to_object path
-          b.(object_path.last, object_path, @widget)
+          @widget.page.upon! @widget do
+            b.(object_path.last, object_path, @widget)
+          end
         end
       end
     end

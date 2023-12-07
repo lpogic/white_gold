@@ -8,7 +8,9 @@ module Tgui
     class ListViewItemSignal < Tgui::SignalInt
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |index|
-          b.(@widget.self_objects[index], @widget)
+          @widget.page.upon! @widget do
+            b.(@widget.self_objects[index], @widget)
+          end
         end
       end
     end
@@ -16,7 +18,9 @@ module Tgui
     class ListViewColumnSignal < Tgui::SignalInt
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |index|
-          b.(@widget.columns[index], @widget)
+          @widget.page.upon! @widget do
+            b.(@widget.columns[index], @widget)
+          end
         end
       end
     end

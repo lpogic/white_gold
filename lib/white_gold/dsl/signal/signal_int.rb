@@ -5,7 +5,10 @@ module Tgui
 
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |int|
-        b.(int, @widget)
+        i = @widget.abi_unpack_integer int
+        @widget.page.upon! @widget do
+          b.(i, @widget)
+        end
       end
     end
 

@@ -5,7 +5,10 @@ module Tgui
 
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |str|
-        b.(@widget.abi_unpack_string(str), @widget)
+        string = @widget.abi_unpack_string(str)
+        @widget.page.upon! @widget do
+          b.(string, @widget)
+        end
       end
     end
     

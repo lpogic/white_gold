@@ -5,7 +5,9 @@ module Tgui
 
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |pointer|
-        b.(pointer, @widget)
+        @widget.page.upon! @widget do
+          b.(pointer, @widget)
+        end
       end
     end
 

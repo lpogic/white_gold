@@ -10,7 +10,9 @@ module Tgui
 
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [0]) do
-        b.(@widget)
+        @widget.page.upon! @widget do
+          b.(@widget)
+        end
       end
     end
 

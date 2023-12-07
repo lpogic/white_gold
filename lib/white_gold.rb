@@ -3,7 +3,7 @@ include Tgui
 
 @wg = WhiteGold.new
 
-@wg.methods.difference(Object.instance_methods, [:respond_to?, :method_missing, :go, :[]]).each do |m|
+@wg.methods.difference(Object.instance_methods, [:respond_to?, :method_missing, :go, :[], :page]).each do |m|
   define_method m do |*a, **na, &b|
     @wg.send(m, *a, **na, &b)
   end
@@ -26,9 +26,9 @@ class << self
     method(page).unbind.bind(@wg) if Symbol === page && !@wg.respond_to?(page)
     @wg.go page
   end
-
-  def top widget, &b
-    @wg.top widget, &b
+  
+  def page
+    @wg.page
   end
 end
 

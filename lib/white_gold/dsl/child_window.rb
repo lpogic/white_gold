@@ -7,7 +7,9 @@ module Tgui
     class SignalClosing < Tgui::Signal
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |ptr|
-          b.(ptr)
+          @widget.page.upon! @widget do
+            b.(ptr, @widget)
+          end
         end
       end
     end

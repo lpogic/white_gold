@@ -4,8 +4,10 @@ module Tgui
   class SignalVector2f < Signal
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |ptr|
-        vector = ptr.parse('Vector2f')
-        b.([vector.x, vector.y], @widget)
+        vector = @widget.abi_unpack Vector2f, ptr
+        @widget.page.upon! @widget do
+          b.(vector, @widget)
+        end
       end
     end
   end

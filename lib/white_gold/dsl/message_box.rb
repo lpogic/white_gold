@@ -31,8 +31,10 @@ module Tgui
       end
 
       def press_signal_execute
-        @on_press_callbacks.each do |c|
-          c.call id, self, host
+        host.page.upon! host do
+          @on_press_callbacks.each do |c|
+            c.(id, self, host)
+          end
         end
       end
     end

@@ -75,6 +75,7 @@ module Tgui
     end
 
     def child_methods
+      ## TO OPTIMIZE
       methods.filter{ _1.start_with? CHILD_API_PREFIX }
     end
 
