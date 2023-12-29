@@ -42,7 +42,7 @@ module Tgui
     end
 
     def to_s
-      to_a.to_s
+      "(#{to_a.join(", ")})"
     end
 
     def inspect

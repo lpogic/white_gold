@@ -42,8 +42,8 @@ module Tgui
       abi_attr :text, String, :column_text, id: 0
       abi_attr :width, Integer, :column_width, id: 0
       abi_def :design_width, :get_column_, id: 0, nil => Integer
-      abi_attr :auto_resize?, "Boolean", :column_auto_resize, id: 0
-      abi_attr :expanded?, "Boolean", :column_expanded, id: 0
+      abi_attr :auto_resize?, Boolean, :column_auto_resize, id: 0
+      abi_attr :expanded?, Boolean, :column_expanded, id: 0
       abi_attr :alignment, ColumnAlignment, :column_alignment, id: 0
     end
 
@@ -66,14 +66,14 @@ module Tgui
       abi_attr :icon, Texture, :item_icon, id: 0
     end
 
-    api_def :column do |**na, &b|
+    def! :column do |**na, &b|
       index = _abi_add_column
       column = Column.new self, index
       columns << column
       upon! column, **na, &b
     end
 
-    api_def :item do |object, **na, &b|
+    def! :item do |object, **na, &b|
       self_add_object object, na[:index]
       item = Item.new self, object
       na.delete :index
@@ -148,7 +148,7 @@ module Tgui
     abi_signal :on_right_click, ListViewItemSignal
     abi_signal :on_header_click, ListViewColumnSignal
     
-    api_def :grid_lines do | **na, &b|
+    def! :grid_lines do | **na, &b|
       lines = GridLines.new self
       upon! lines, **na, &b
     end
@@ -170,11 +170,11 @@ module Tgui
       end
 
       abi_attr :width, Integer, :grid_lines_width
-      abi_attr :horizontal?, "Boolean", :show_horizontal_grid_lines
-      abi_attr :vertical?, "Boolean", :show_vertical_grid_lines
+      abi_attr :horizontal?, Boolean, :show_horizontal_grid_lines
+      abi_attr :vertical?, Boolean, :show_vertical_grid_lines
     end
 
-    api_def :header do |**na, &b|
+    def! :header do |**na, &b|
       header = Header.new self
       upon! header, **na, &b
     end
@@ -199,7 +199,7 @@ module Tgui
       abi_attr :text_size, Integer, :header_text_size
       abi_attr :separator_height, Integer, :header_separator_height
       abi_def :actual_height, :get_current_header_height, nil => Integer
-      abi_attr :visible, "Boolean", :header_visible
+      abi_attr :visible, Boolean, :header_visible
     end
 
     # internal
@@ -229,7 +229,7 @@ module Tgui
         _abi_insert_item index, abi_pack(String..., item)
         index
       else
-        _abi_add_item abi_pack(String..., item)
+        _abi_add_item abi_pack(String..., *item)
       end
     end
 

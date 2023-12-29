@@ -26,7 +26,7 @@ module Tgui
       end
     end
 
-    api_def :line do |object, color: nil, style: nil, **na, &b|
+    def! :line do |object, color: nil, style: nil, **na, &b|
       text = object.then(&format)
       color ||= text_color
       style ||= text_style
@@ -60,5 +60,6 @@ module Tgui
     abi_attr :lines_start_from_top?
     abi_attr :new_lines_below_others?
     abi_attr :scrollbar_value, Integer
+
   end
 end

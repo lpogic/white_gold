@@ -24,22 +24,10 @@ module Tgui
     abi_attr :vertical_scrollbar_value, Integer
     abi_attr :horizontal_scrollbar_value, Integer
     abi_def :lines_count, nil => Integer
-    abi_def :monospace_boost=, :set_monospace_font_optimization, "Boolean" => nil
+    abi_def :monospace_boost=, :set_monospace_font_optimization, Boolean => nil
     abi_signal :on_text_change, SignalString
     abi_signal :on_selection_change, Signal
     abi_signal :on_caret_change, Signal, :on_caret_position_change
 
-    abi_render_attr :borders, Outline
-    abi_render_attr :padding, Outline
-    abi_render_attr :background_color, Color
-    abi_render_attr :text_color, Color
-    abi_render_attr :default_text_color, Color
-    abi_render_attr :selected_text_color, Color
-    abi_render_attr :selected_text_background_color, Color
-    abi_render_attr :border_color, Color
-    abi_render_attr :caret_color, Color
-    abi_render_attr :texture_background, Texture
-    # abi_render_attr :scrollbar
-    abi_render_attr :scrollbar_width, Float
   end
 end

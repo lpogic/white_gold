@@ -43,7 +43,7 @@ module Alias
       end
       setter = "_abi_set_#{name}".delete_suffix("?").to_sym
     end
-    type ||= "Boolean" if name.end_with? "?"
+    type ||= Boolean if name.end_with? "?"
     abi_def "#{name.to_s.delete_suffix("?")}=".to_sym, setter, type => nil
     abi_def name, getter, nil => type
   end

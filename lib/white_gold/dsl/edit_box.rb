@@ -22,8 +22,8 @@ module Tgui
     abi_def :selected_text, :get_, nil => String
     abi_attr :password_character, String
     abi_attr :characters_limit, Integer, :maximum_characters
-    abi_def :limited_text_width=, :limit_text_width, "Boolean" => nil
-    abi_def :limited_text_width?, :is_text_width_limited, nil => "Boolean"
+    abi_def :limited_text_width=, :limit_text_width, Boolean => nil
+    abi_def :limited_text_width?, :is_text_width_limited, nil => Boolean
     abi_attr :read_only?
     abi_attr :caret_position, Integer
     abi_attr :suffix, String

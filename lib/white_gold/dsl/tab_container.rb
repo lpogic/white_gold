@@ -63,7 +63,7 @@ module Tgui
       tabs.format
     end
 
-    api_def :tab do |object, index: nil, **na, &b|
+    def! :tab do |object, index: nil, **na, &b|
       text = object.then(&format)
       if !index
         panel_pointer = _abi_add_tab abi_pack_string(text), abi_pack_boolean(false)
@@ -90,7 +90,7 @@ module Tgui
       end
     end
 
-    api_def :tabs do |**na, &b|
+    def! :tabs do |**na, &b|
       tabs = Tabs.new self, _abi_get_tabs
       tabs.page = page
       upon! tabs, **na, &b

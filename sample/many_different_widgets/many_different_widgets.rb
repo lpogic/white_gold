@@ -1,8 +1,8 @@
 require_relative '../../lib/white_gold'
 
-Theme.default = "Black.txt"
+title! "TGUI window"
+tgui_theme! "Black.txt"
 picture! url: "RedBackground.jpg"
-Unit.default = :px
 
 tabs! tab_height: 30, position: [70, 40] do
   tab! "Tab - 1"

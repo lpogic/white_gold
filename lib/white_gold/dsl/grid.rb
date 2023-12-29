@@ -3,11 +3,29 @@ require_relative 'container'
 module Tgui
   class Grid < Container
 
-    api_child :padding= do |w, padding|
-      _abi_set_widget_padding w, *abi_pack_padding(padding)
+    api_attr :cell do
+      [0, 0]
     end
 
-    api_child :padding, :get_widget_
+    api_attr :alignment do
+      nil
+    end
+
+    api_attr :direction do
+      :column
+    end
+
+    api_attr :padding do
+      nil
+    end
+
+    api_child :padding= do |w, padding|
+      _abi_set_widget_padding w, abi_pack(Outline, *padding)
+    end
+
+    api_child :padding do |w|
+      abi_unpack(Outline, _abi_get_widget_padding(w))
+    end
 
     abi_enum "Alignment", :center, :upper_left, :up, :upper_right, :right, :bottom_right, :bottom, :bottom_left, :left,
       top_left: :upper_left, left_top: :upper_left,
@@ -15,51 +33,47 @@ module Tgui
       right_bottom: :bottom_right, left_bottom: :bottom_left
 
     api_child :alignment= do |w, alignment|
-      _abi_set_widget_alignment w, Alignment[alignment]
+      _abi_set_widget_alignment w, abi_pack(Alignment, alignment)
+    end
+
+    api_child :alignment do |w|
+      abi_unpack(Alignment, _abi_get_widget_alignment(w))
     end
 
     api_child :alignment do |w|
       Alignment[_abi_get_widget_alignment]
     end
 
-    api_child :cell=, :set_widget_cell
-
-    def abi_pack_padding v
-      padding = if !v
-        Array.new(4, 0)
-      elsif Array === v
-        case v.size
-        when 1 then Array.new(4, v[0])
-        when 2 then [v[0], v[0], v[1], v[1]]
-        when 3 then [v[0], v[1], v[2], v[2]]
-        when 4 then v
-        else raise "Invalid array size #{v}"
-        end
-      else
-        Array.new(4, v)
-      end
-      padding.map{ abi_pack_pad _1 }
-    end
-
-    def abi_pack_pad value
-      case value
-      when String then value
-      when Numeric then "#{value}"
-      else raise "Invalid value `#{value}` given"
-      end
+    api_child :cell= do |w, cell|
+      _abi_set_widget_cell w, abi_pack_integer(cell[0]), abi_pack_integer(cell[1])
     end
 
     abi_attr :auto_size?
 
     def initialized
       super
-      @current_row = 0
-      @current_column = 0
     end
 
-    def next_row
-      @current_column = 0
-      @current_row += 1
+    def next_row reset_column = true
+      c = cell
+      self.cell = [c[0] + 1, reset_column ? 0 : c[1]]
+    end
+
+    def! :next_row do
+      next_row
+    end
+
+    def next_column reset_row = true
+      c = cell
+      self.cell = [reset_row ? 0 : c[0], c[1] + 1]
+    end
+
+    def! :next_column do
+      next_column
+    end
+
+    def! :next do
+      direction == :column ? next_row : next_column
     end
 
     def widgets
@@ -74,8 +88,14 @@ module Tgui
 
     def add widget, id
       super
-      _abi_set_widget_cell abi_pack_widget(widget), @current_row, @current_column
-      @current_column += 1
+      _abi_set_widget_cell abi_pack_widget(widget), *p(cell)
+      _abi_set_widget_alignment abi_pack_widget(widget), abi_pack(Alignment, p(alignment)) if alignment
+      _abi_set_widget_padding abi_pack_widget(widget), abi_pack(Outline, *padding) if padding
+      if direction == :column
+        next_column false
+      else
+        next_row false
+      end
     end
 
     def get(*keys)

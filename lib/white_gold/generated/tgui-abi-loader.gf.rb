@@ -90,6 +90,7 @@ module Tgui
     extern 'void* ABI_STATIC_Widget_getUnshared(std::shared_ptr<Widget>* pointer)'
     extern 'void* ABI_STATIC_Widget_getType(Widget::Ptr* self)'
     extern 'void* ABI_Widget_getName(Widget::Ptr* self)'
+    extern 'void ABI_Widget_setRenderer(Widget::Ptr* self, char* renderer)'
     extern 'void ABI_Widget_setSize(Widget::Ptr* self, const char* width, const char* height)'
     extern 'void* ABI_Widget_getSize(Widget::Ptr* self)'
     extern 'void* ABI_Widget_getFullSize(Widget::Ptr* self)'
@@ -354,7 +355,7 @@ module Tgui
     extern 'int ABI_Grid_isAutoSize(Grid::Ptr* self)'
     extern 'int ABI_Grid_setWidgetCell(Grid::Ptr* self, Widget::Ptr* widget, int row, int column)'
     extern 'void* ABI_Grid_getWidget(Grid::Ptr* self, int row, int column)'
-    extern 'void ABI_Grid_setWidgetPadding(Grid::Ptr* self, Widget::Ptr* widget, char* paddingLeft, char* paddingRight, char* paddingTop, char* paddingBottom)'
+    extern 'void ABI_Grid_setWidgetPadding(Grid::Ptr* self, Widget::Ptr* widget, Outline* padding)'
     extern 'void* ABI_Grid_getWidgetPadding(Grid::Ptr* self, Widget::Ptr* widget)'
     extern 'void ABI_Grid_setWidgetAlignment(Grid::Ptr* self, Widget::Ptr* widget, int alignment)'
     extern 'int ABI_Grid_getWidgetAlignment(Grid::Ptr* self, Widget::Ptr* widget)'
@@ -961,6 +962,7 @@ module Tgui
     def self._abi_get_unshared(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Widget_getUnshared(*a); end
     def self._abi_get_type(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Widget_getType(*a); end
     def _abi_get_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getName(@pointer, *a); end
+    def _abi_set_renderer(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setRenderer(@pointer, *a); end
     def _abi_set_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setSize(@pointer, *a); end
     def _abi_get_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getSize(@pointer, *a); end
     def _abi_get_full_size(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getFullSize(@pointer, *a); end

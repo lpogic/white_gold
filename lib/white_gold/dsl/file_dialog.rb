@@ -71,8 +71,8 @@ module Tgui
     end
 
     abi_attr :file_must_exist?, :get_
-    abi_def :dir_only=, :set_selecting_directory, "Boolean" => nil
-    abi_def :dir_only?, :get_selecting_directory, nil => "Boolean"
+    abi_def :dir_only=, :set_selecting_directory, Boolean => nil
+    abi_def :dir_only?, :get_selecting_directory, nil => Boolean
     abi_attr :multi_select?, :get_
     abi_signal :on_file_select, Signal
     abi_signal :on_cancel, Signal

@@ -1,12 +1,12 @@
 module BangNestedCaller
   def bang_respond_to? name
-    name.end_with?("!") && (respond_to?("#{name[...-1]}=") || respond_to?("api_#{name[...-1]}") || (@bang_target && @bang_target.respond_to?(name)))
+    name.end_with?("!") && (respond_to?("#{name[...-1]}=") || respond_to?("api_bang_#{name[...-1]}") || (@bang_target && @bang_target.respond_to?(name)))
   end
 
   def bang_method_missing name, *a, **na, &b
     return @bang_target.send(name, *a, **na, &b) if @bang_target && @bang_target.respond_to?(name)
 
-    api_name = "api_#{name[...-1]}".to_sym
+    api_name = "api_bang_#{name[...-1]}".to_sym
     return send(api_name, *a, **na, &b) if respond_to? api_name
 
     setter = "#{name[...-1]}=".to_sym

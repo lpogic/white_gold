@@ -30,6 +30,10 @@ class << self
   def page
     @wg.page
   end
+
+  def def! name, &b
+    @wg.page.class.def! name, &b
+  end
 end
 
 @wg.init Page

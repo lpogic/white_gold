@@ -1,3 +1,4 @@
+require_relative 'convention/boolean'
 require_relative 'path/kernel.path'
 require_relative 'path/numeric.path'
 require_relative 'path/object.path'

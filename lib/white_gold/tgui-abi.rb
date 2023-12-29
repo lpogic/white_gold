@@ -1,5 +1,4 @@
 require 'fiddle/import'
-require_relative 'path/fiddle-pointer.path'
 require_relative 'tgui-config'
 require_relative 'abi/extern_object'
 require_relative 'abi/enum'
@@ -99,7 +98,7 @@ class ExternObject
     o.to_f
   end
 
-  abi_packer "Boolean" do |o|
+  abi_packer Boolean do |o|
     o = o.first if o.is_a? Array
     o ? 1 : 0
   end
@@ -164,6 +163,16 @@ class ExternObject
     end
   end
 
+  abi_packer Tgui::Abi::Vector2u do |o|
+    case o
+    when Array
+      raise "Invalid array size excepted: #{2}, given: #{o.size}" if o.size != 2
+      return o.map{ abi_pack_integer _1 }
+    else
+      raise "Unable to make Vector2u from #{o}"
+    end
+  end
+
   abi_packer Tgui::Abi::UIntRect do |o|
     case o
     when Array
@@ -199,7 +208,7 @@ class ExternObject
     o
   end
 
-  abi_unpacker "Boolean" do |o|
+  abi_unpacker Boolean do |o|
     o.odd?
   end
 
@@ -213,6 +222,13 @@ class ExternObject
 
   abi_unpacker Tgui::Vector2f do |o|
     v = Tgui::Vector2f.new o
+    r = [v.x, v.y]
+    Util.free(o)
+    r
+  end
+
+  abi_unpacker Tgui::Vector2u do |o|
+    v = Tgui::Vector2u.new o
     r = [v.x, v.y]
     Util.free(o)
     r

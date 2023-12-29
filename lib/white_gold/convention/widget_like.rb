@@ -1,8 +1,8 @@
-require_relative 'api_def'
+require_relative 'bang_def'
 require_relative 'bang_nest'
 
 class WidgetLike
-  extend ApiDef
+  extend BangDef
   include BangNest
 
   class << self
@@ -47,7 +47,7 @@ class WidgetLike
     end
 
     def self_packers_id_extend id_position, *packers
-      [*packers[0..id_position], Object, *packers[id_position..]]
+      [*packers[0...id_position], Object, *packers[id_position..]]
     end
 
     def self_abi_def name, abi_name, abi_interface
@@ -58,7 +58,7 @@ class WidgetLike
 
     def self_abi_def_with_id name, abi_name, abi_interface, id_position
       define_method name do |*a|
-        abi_interface.call host, abi_name, *a[0..id_position], id, *a[id_position..]
+        abi_interface.call host, abi_name, *a[0...id_position], id, *a[id_position..]
       end
     end
 
@@ -70,28 +70,29 @@ class WidgetLike
 
     def self_abi_def_setter_with_id name, abi_name, abi_interface, id_position
       define_method name do |a = VOID|
-        abi_interface.call host, abi_name, *a[0..id_position], id, *a[id_position..]
+        a = [a] if !a.is_a? Array
+        abi_interface.call host, abi_name, *a[0...id_position], id, *a[id_position..]
       end
     end
 
     def abi_attr name, type = nil, original_name = nil, id: false
       if original_name
         if original_name.end_with? "_"
-          getter = "_abi_#{original_name}#{name}".delete_suffix("?").to_sym
-          setter = "_abi_set_#{name}".delete_suffix("?").to_sym
+          getter = "get_#{original_name}#{name}".delete_suffix("?").to_sym
+          setter = "set_#{original_name}#{name}".delete_suffix("?").to_sym
         else
-          getter = "_abi_get_#{original_name}".to_sym
-          setter = "_abi_set_#{original_name}".to_sym
+          getter = "get_#{original_name}".to_sym
+          setter = "set_#{original_name}".to_sym
         end
       else
         if name.end_with? "?"
-          getter = "_abi_is_#{name}".delete_suffix("?").to_sym
+          getter = "is_#{name}".delete_suffix("?").to_sym
         else 
-          getter = "_abi_get_#{name}".to_sym
+          getter = "get_#{name}".to_sym
         end
-        setter = "_abi_set_#{name}".delete_suffix("?").to_sym
+        setter = "set_#{name}".delete_suffix("?").to_sym
       end
-      type ||= "Boolean" if name.end_with? "?"
+      type ||= Boolean if name.end_with? "?"
       abi_def "#{name.to_s.delete_suffix("?")}=".to_sym, setter, id: id, type => nil
       abi_def name, getter, id: id, nil => type
     end

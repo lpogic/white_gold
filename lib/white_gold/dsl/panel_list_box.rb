@@ -17,7 +17,7 @@ module Tgui
 
     @@auto_item_id = "@/"
 
-    api_def :item do |object, index: -1, **na, &b|
+    def! :item do |object, index: -1, **na, &b|
       @@auto_item_id = id = @@auto_item_id.next
       panel = Panel.new pointer: _abi_add_item(id, abi_pack_integer(index))
       panel.page = page
@@ -68,7 +68,7 @@ module Tgui
 
     abi_signal :on_item_select, SignalPanelListBoxItem
 
-    api_def :template do |**na, &b|
+    def! :template do |**na, &b|
       panel = Panel.new(pointer: _abi_get_panel_template)
       panel.page = page
       upon! panel, **na, &b

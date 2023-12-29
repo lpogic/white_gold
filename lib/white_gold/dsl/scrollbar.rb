@@ -11,7 +11,7 @@ module Tgui
     abi_attr :viewport_size, Integer
     abi_attr :speed, Integer, :scroll_amount
     abi_attr :auto_hide?
-    abi_attr :vertical?, "Boolean", :vertical_scroll
+    abi_attr :vertical?, Boolean, :vertical_scroll
 
     def horizontal=(horizontal)
       self.vertical = !horizontal

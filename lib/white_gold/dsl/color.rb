@@ -26,7 +26,7 @@ module Tgui
         when Numeric
           r = g = b = arg
           a = 255
-        else raise "Unsupported argument #{arg}"
+        else raise "Unsupported argument #{arg} #{arg.class}"
         end
       when 2
         r = g = b = arg[0]
@@ -66,7 +66,7 @@ module Tgui
     end
 
     def to_s
-      "##{to_a.map{ _1.to_s 16}.join}"
+      "##{to_a.map{ _1.to_s(16).ljust(2, '0') }.join}"
     end
 
     def inspect

@@ -31,7 +31,7 @@ module Interface
           host.send packer, *a
         end
       end
-    when Class, Enum
+    when Class, Module, Enum
       parse_packer "abi_pack#{abi_const_string_method_suffix packer.name}".to_sym
     when String
       parse_packer "abi_pack#{abi_const_string_method_suffix packer}".to_sym
@@ -42,8 +42,9 @@ module Interface
         proc do |host, *a|
           it = a.each
           block_caller = Fiddle::Closure::BlockCaller.new(fiddle_type, [0]) do
-            subpacker.call host, it.next
+            subpacker.call host, p(it.next)
           rescue StopIteration
+            p "B"
             subpacker.call host, nil
           end
           block_caller
@@ -64,7 +65,7 @@ module Interface
   end
 
   def self.packer_fiddle_type type
-    if type == Integer || type == "Boolean" then Fiddle::TYPE_INT
+    if type == Integer || type == Boolean then Fiddle::TYPE_INT
     elsif type == Float then Fiddle::TYPE_FLOAT
     elsif type == String then Fiddle::TYPE_CONST_STRING
     else Fiddle::TYPE_VOIDP
@@ -83,7 +84,7 @@ module Interface
           host.send unpacker, *a
         end
       end
-    when Class, Enum
+    when Class, Module, Enum
       parse_unpacker "abi_unpack#{abi_const_string_method_suffix unpacker.name}".to_sym
     when String
       parse_unpacker "abi_unpack#{abi_const_string_method_suffix unpacker}".to_sym
@@ -94,7 +95,7 @@ module Interface
   end
 
   def self.fiddle_type type
-    if type == Integer || type == "Boolean" then Fiddle::TYPE_INT
+    if type == Integer || type == Boolean then Fiddle::TYPE_INT
     elsif type == Float then Fiddle::TYPE_FLOAT
     else Fiddle::TYPE_VOIDP
     end

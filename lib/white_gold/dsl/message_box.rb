@@ -40,7 +40,7 @@ module Tgui
     end
 
 
-    api_def :button do |object, text: nil, **na, &b|
+    def! :button do |object, text: nil, **na, &b|
       text ||= object.then(&format)
       raise "Button with given text exists (#{text})" if self_buttons[text]
       _abi_add_button abi_pack_string(text)

@@ -2,6 +2,8 @@ require_relative '../abi/extern_object'
 require_relative '../convention/bang_nested_caller'
 require_relative '../convention/unit'
 require_relative '../convention/widget_like'
+require_relative '../convention/api_child'
+require_relative 'theme/widget_theme'
 require_relative 'color'
 require_relative 'outline'
 require_relative 'texture'
@@ -14,17 +16,22 @@ require_relative 'tool_tip'
 module Tgui
   class Widget < ExternObject
     include BangNestedCaller
-    extend ApiDef
+    extend BangDef
 
     attr_accessor :page
+
+    def window
+      page.window
+    end
 
     abi_attr :text_size, Integer
     abi_attr :enabled?
 
-    api_def :disabled do |disabled = true|
+    def! :disabled do |disabled = true|
       self.enabled = !disabled
     end
 
+    abi_def :renderer=, proc.self_renderer => nil
     abi_attr :focused?
     abi_attr :focusable?
     abi_signal :on_position_change, Tgui::SignalVector2f
@@ -51,10 +58,10 @@ module Tgui
       size[0]
     end
 
-    abi_def :can_gain_focus?, :can_gain_focus, nil => "Boolean"
-    abi_def :container?, nil => "Boolean"
+    abi_def :can_gain_focus?, :can_gain_focus, nil => Boolean
+    abi_def :container?, nil => Boolean
 
-    api_def :tooltip do |*a, **na, &b|
+    def! :tooltip do |*a, **na, &b|
       if block_given?
         tooltip = ToolTip.new
         tooltip.page = page
@@ -70,8 +77,8 @@ module Tgui
     end
 
     abi_attr :mouse_cursor, CursorType
-    abi_def :draggable?, :is_widget_, nil => "Boolean"
-    abi_def :mouse_down?, nil => "Boolean"
+    abi_def :draggable?, :is_widget_, nil => Boolean
+    abi_def :mouse_down?, nil => Boolean
 
     abi_enum "ShowEffectType", :fade, :scale, :slide_to_right, :slide_to_left, :slide_to_bottom,
     :slide_to_top, slide_from_left: :slide_to_right, slide_from_right: :slide_to_left,
@@ -89,7 +96,7 @@ module Tgui
       end
     end
 
-    abi_def :visible?, nil => "Boolean"
+    abi_def :visible?, nil => Boolean
 
     def show effect = nil, duration = 1000
       if effect
@@ -171,7 +178,7 @@ module Tgui
       abi_def :tooltip, :ask_toop_tip, [Float, Float] => nil
     end
 
-    api_def :robot do |**na, &b|
+    def! :robot do |**na, &b|
       robot = Robot.new self
       upon! robot, **na, &b if block_given?
       robot
@@ -218,61 +225,23 @@ module Tgui
     abi_static :get_type
     abi_static :get_unshared
 
-    def self.finalizer pointer
-      _abi_finalizer pointer
-    end
+    class << self
+      include ApiChild
 
-    def self.api_child name, original_name = nil, &b
-      if block_given?
-        define_method "api_child_#{name}", &b
-      else
-        if original_name
-          if original_name.end_with? "_"
-            abi_name = "_abi_#{original_name}#{name}".delete_suffix("=").delete_suffix("?").to_sym
-          else
-            abi_name = "_abi_#{original_name}".to_sym
-          end
+      def self_renderer widget, renderer
+        case renderer
+        when Module
+          renderer.name.split("::").last
+        when nil, VOID
+          self_renderer widget, widget.class
         else
-          if name.end_with? "?"
-            abi_name = "_abi_is_#{name}".delete_suffix("?").to_sym
-          elsif name.end_with? "="
-            abi_name = "_abi_set_#{name}".delete_suffix("=").to_sym
-          else
-            abi_name = "_abi_#{name}".to_sym
-          end
-        end
-        define_method "api_child_#{name}" do |*a|
-          send(abi_name, *a)
+          renderer.to_s
         end
       end
-    end
 
-    @@renderer_property_types = {
-      Color => [:_abi_set_color_renderer_property, :_abi_get_color_renderer_property],
-      String => [:_abi_set_string_renderer_property, :_abi_get_string_renderer_property],
-      Font => [:_abi_set_font_renderer_property, :_abi_get_font_renderer_property],
-      "Boolean" => [:_abi_set_boolean_renderer_property, :_abi_get_boolean_renderer_property],
-      Float => [:_abi_set_float_renderer_property, :_abi_get_float_renderer_property],
-      Outline => [:_abi_set_outline_renderer_property, :_abi_get_outline_renderer_property],
-      Texture => [:_abi_set_texture_renderer_property, :_abi_get_texture_renderer_property],
-      TextStyles => [:_abi_set_text_styles_renderer_property, :_abi_get_text_styles_renderer_property],
-    }
-
-    def self.renderer_property_types
-      @@renderer_property_types
-    end
-
-    def self.abi_render_attr name, type, original_name = nil
-      property_name = original_name || name
-      property_name = property_name.to_s.pascalcase if !property_name.is_a? String
-      property_methods = renderer_property_types[type]
-      raise "Unknown property type #{type}" if !property_methods
-
-      interface = Interface.from [Object, type], nil
-      self_abi_def_setter "#{name}=".to_sym, property_methods[0], interface, property_name
-      
-      interface = Interface.from nil, type
-      self_abi_def name.to_sym, property_methods[1], interface, property_name
+      def finalizer pointer
+        _abi_finalizer pointer
+      end
     end
   end
 end

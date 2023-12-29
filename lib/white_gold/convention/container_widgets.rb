@@ -1,3 +1,5 @@
+require_relative '../convention/api_child'
+
 module Tgui
 
   WIDGETS_COLLECTION = {
@@ -14,7 +16,7 @@ module Tgui
     vela: Tgui::VerticalLayout,
     howr: Tgui::HorizontalWrap,
     group: Tgui::Group,
-    radio_group: Tgui::RadioButtonGroup,
+    radio_button_group: Tgui::RadioButtonGroup,
     grid: Tgui::Grid,
     list_view: Tgui::ListView,
     picture: false,
@@ -43,8 +45,7 @@ module Tgui
   }.freeze
 
   module WidgetOwner
-    extend ApiDef
-    CHILD_API_PREFIX = "api_child_".freeze
+    extend BangDef
 
     def common_widget_nest widget, *keys, id: nil, **na, &b
       club_params = {}
@@ -76,14 +77,14 @@ module Tgui
 
     def child_methods
       ## TO OPTIMIZE
-      methods.filter{ _1.start_with? CHILD_API_PREFIX }
+      methods.filter{ _1.start_with? ApiChild::API_CHILD_PREFIX }
     end
 
     def equip_child_widget widget
       widget.page = page
       parent = self
       child_methods.each do |method|
-        widget.define_singleton_method method[CHILD_API_PREFIX.length..] do |*a|
+        widget.define_singleton_method method[ApiChild::API_CHILD_PREFIX.length..] do |*a|
           parent.send(method, self, *a)
         end
       end
@@ -92,13 +93,13 @@ module Tgui
 
     WIDGETS_COLLECTION.each do |m, c|
       if c
-        api_def m do |*a, **na, &b|
+        def! m do |*a, **na, &b|
           common_widget_post_initialize equip_child_widget(c.new), *a, **na, &b
         end
       end
     end
 
-    api_def :picture do |*a, **na, &b|
+    def! :picture do |*a, **na, &b|
       texture = na[:texture] || Tgui::Texture.from(
         na[:url],
         na.dig(:part_rect, 0),
@@ -113,7 +114,7 @@ module Tgui
       common_widget_post_initialize pic, *a, **na.except(:url, :part_rect, :smooth, :transparent), &b
     end
 
-    api_def :radio do |object, *a, **na, &b|
+    def! :radio do |object, *a, **na, &b|
       radio = RadioButton.new
       equip_child_widget radio
       radio.object = object
@@ -121,9 +122,9 @@ module Tgui
       common_widget_post_initialize radio, *a, **na, &b
     end
 
-    api_def :msg do |text, **buttons|
+    def! :msg do |text, **buttons|
       buttons["OK"] = nil if buttons.empty?
-      api_message_box text:, position: :center, label_alignment: :center, buttons: (buttons.map do |k, v| 
+      api_bang_message_box text:, position: :center, label_alignment: :center, buttons: (buttons.map do |k, v| 
         procedure = proc do |o, b, w|
           v&.call
           w.close true
@@ -134,12 +135,12 @@ module Tgui
 
     @@auto_button_name = "Button1"
 
-    api_def :btn do |text = nil, **na, &on_press|
+    def! :btn do |text = nil, **na, &on_press|
       if !text
         text = @@auto_button_name
         @@auto_button_name = @@auto_button_name.next
       end
-      api_button text:, on_press:, **na
+      api_bang_button text:, on_press:, **na
     end
   end
 
@@ -159,7 +160,7 @@ module Tgui
   class TabContainer
     WIDGETS_COLLECTION.each do |m, c|
       if !method_defined? m
-        api_def m do |name = nil, **na, &b|
+        def! m do |name = nil, **na, &b|
           raise NoMethodError.new("Method `#{m}` should be called on Panel from TabContainer, not TabContainer itself")
         end
       end

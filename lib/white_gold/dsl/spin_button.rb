@@ -7,7 +7,7 @@ module Tgui
     abi_attr :max, Float, :maximum
     abi_attr :value, Float
     abi_attr :step, Float
-    abi_attr :vertical?, "Boolean", :vertical_scroll
+    abi_attr :vertical?, Boolean, :vertical_scroll
 
     def horizontal=(horizontal)
       self.vertical = !horizontal

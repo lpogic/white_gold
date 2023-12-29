@@ -1,9 +1,11 @@
+require_relative '../convention/bang_def'
 require_relative 'packer'
 require_relative 'unpacker'
 
 class ExternObject
   extend Packer
   extend Unpacker
+  extend BangDef
 
   def initialize pointer:, autofree: true
     @pointer = pointer
@@ -105,7 +107,7 @@ class ExternObject
         end
         setter = "set_#{name}".delete_suffix("?").to_sym
       end
-      type ||= "Boolean" if name.end_with? "?"
+      type ||= Boolean if name.end_with? "?"
       abi_def "#{name.to_s.delete_suffix("?")}=".to_sym, setter, type => nil
       abi_def name, getter, nil => type
     end
@@ -167,10 +169,6 @@ class ExternObject
       define_singleton_method name do |*a|
         send(abi_name, *a)
       end
-    end
-
-    def api_def name, &b
-      define_method "api_#{name}", &b
     end
   end
 end

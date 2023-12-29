@@ -58,7 +58,7 @@ module Tgui
       end
     end
 
-    api_def :item do |object = nil, **na, &b|
+    def! :item do |object = nil, **na, &b|
       text = object.then(&format)
       @@auto_item_id = id = @@auto_item_id.next
       _abi_add_item abi_pack_string(text), abi_pack_string(id)

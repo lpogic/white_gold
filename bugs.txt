@@ -7,3 +7,6 @@ FileDialog:
 
 TabContainer:
   tab lose focus even if disabled tab is clicked
+
+Grid:
+  last element alignment is broken (col & row size > 1)

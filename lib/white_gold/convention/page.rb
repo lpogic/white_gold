@@ -63,10 +63,22 @@ class Page < Tgui::Group
     club
   end
 
-  api_def :theme do |path = nil, **na, &b|
+  def! :theme do |seed = nil, **na, &b|
     theme = Theme.default
-    theme.load path if path
+    if seed
+      theme.reset_attributes
+      upon! theme do
+        load Theme.loadpath(seed)
+      end
+    end
     upon! theme, **na, &b
+    theme.self_commit
+  end
+
+  def! :tgui_theme do |path|
+    theme = Theme.default
+    theme.reset_attributes
+    theme.source = path
     theme.self_commit
   end
   

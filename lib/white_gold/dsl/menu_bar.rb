@@ -99,7 +99,7 @@ module Tgui
     end
 
     class MenuItem < WidgetLike
-      api_def :item do |object, **na, &b|
+      def! :item do |object, **na, &b|
         item_path = [*path, object]
         host.self_tree[*item_path, grow: true].text = object.then(&host.format)
         host.self_path_block item_path do
@@ -107,6 +107,10 @@ module Tgui
         end
         item = Item.new host, item_path
         upon! item, **na, &b
+      end
+
+      def! :separator do
+        item! "-"
       end
       
       def on_press(&b)
@@ -145,7 +149,7 @@ module Tgui
 
       alias_method :id, :text
 
-      abi_attr :enabled?, "Boolean", :menu_enabled, id: 0
+      abi_attr :enabled?, Boolean, :menu_enabled, id: 0
       abi_def :remove, :remove_menu, id: 0
 
       def path
@@ -183,7 +187,7 @@ module Tgui
       end
     end
 
-    api_def :item do |object, **na, &b|
+    def! :item do |object, **na, &b|
       text = object.then(&format)
       self_tree[object, grow: true].text = text
       _abi_add_menu abi_pack_string(text)
@@ -208,7 +212,7 @@ module Tgui
     end
 
     abi_attr :min_item_width, Integer, :minimum_sub_menu_width
-    abi_attr :direction_inverted?, "Boolean", :inverted_menu_direction
+    abi_attr :direction_inverted?, Boolean, :inverted_menu_direction
     abi_def :close, :close_menu
     abi_def :remove_all
 

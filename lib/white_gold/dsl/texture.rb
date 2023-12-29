@@ -33,10 +33,14 @@ module Tgui
     end
 
     abi_def :id, :get_, nil => String
-    abi_def :image_size, :get_, nil => Vector2f
+    abi_def :image_size, :get_, nil => Vector2u
     abi_def :part_rect, :get_, nil => UIntRect
-    abi_def :smooth?, nil => "Boolean"
+    abi_def :smooth?, nil => Boolean
     abi_attr :color, Color
+
+    def to_theme
+      "#{id} Part(#{part_rect.join(",")})"
+    end
 
     def self.default_smooth=(smooth)
       _abi_set_default_smooth smooth

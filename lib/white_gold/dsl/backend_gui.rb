@@ -11,8 +11,8 @@ module Tgui
     abi_def :viewport=, :set_absolute_, [Integer] * 4 => nil
     abi_def :viewport, :get_, nil => [Float] * 4
     abi_def :relative_viewport=, [Float] * 4 => nil
-    abi_def :tab_focus_pass?, :is_tab_key_usage_enabled, nil => "Boolean"
-    abi_def :tab_focus_pass=, :tab_key_usage_enabled, "Boolean" => nil
+    abi_def :tab_focus_pass?, :is_tab_key_usage_enabled, nil => Boolean
+    abi_def :tab_focus_pass=, :tab_key_usage_enabled, Boolean => nil
     abi_attr :font, Font
     abi_def :unfocus, :unfocus_all_widgets
     abi_attr :opacity, Float
