@@ -1,4 +1,5 @@
 require_relative 'widget'
+require_relative 'scrollbar'
 require_relative 'signal/signal'
 require_relative 'signal/signal_string'
 

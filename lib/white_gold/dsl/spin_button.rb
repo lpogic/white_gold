@@ -1,4 +1,5 @@
 require_relative 'clickable_widget'
+require_relative 'signal/signal_float'
 
 module Tgui
   class SpinButton < ClickableWidget
