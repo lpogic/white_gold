@@ -6,26 +6,18 @@ module Tgui
     include BangNest
     extend ThemeAttributed
 
-    def initialize name
+    def initialize name, custom_name
       @name = name
+      @custom_name = custom_name
       @attributes = {}
     end
 
-    attr :name
-
-    DEFINED_ATTRIBUTES = {}
-
-    def self.defined_attributes rise = false
-      if rise
-        ThemeComponent::DEFINED_ATTRIBUTES[self] ||= {}
-      else
-        ThemeComponent::DEFINED_ATTRIBUTES[self] || {}
-      end
-    end
+    attr :name, :attributes
 
     def to_theme
       return "" if @attributes.empty?
-      "#{name} {\n#{@attributes.values.map(&:to_theme).join("\n")}\n}"
+      header = @custom_name ? "#{@custom_name} : #{@name}" : @name
+      "#{header} {\n#{@attributes.values.map(&:to_theme).join("\n")}\n}"
     end
   end
 end

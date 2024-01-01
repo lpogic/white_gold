@@ -25,20 +25,26 @@ module Tgui
       attr_name = name.to_s.pascalcase
       attr_type = ATTRIBUTE_TYPES[type]
       def! name do |*value|
-        @attributes[attr_name] = attr_type.new attr_name, value
-      end
-
-      if self < ThemeComponent
-        self.defined_attributes(true)[name] = type
+        attributes[attr_name] = attr_type.new attr_name, value
       end
     end
 
-    def theme_comp name, type, custom_attr_name = nil
-      attr_name = custom_attr_name || name.to_s.pascalcase
-      def! name do |custom_name = nil, **na, &b|
-        a_name = custom_name || attr_name
-        comp = @attributes[a_name] ||= type.new a_name
-        upon! comp, **na, &b
+    def theme_comp name, type, tgui_attr_name = nil
+      attr_name = tgui_attr_name || name.to_s.pascalcase
+      def! name do |custom_name = nil, base_name = nil, **na, &b|
+        if base_name
+          attribute = attributes[custom_name]
+          if !attribute || attribute.name != base_name
+            attribute = attributes[custom_name] = type.new base_name, custom_name
+          end
+        else
+          a_name = custom_name || attr_name
+          attribute = attributes[a_name]
+          if !attribute || attribute.name != attr_name
+            attribute = attributes[a_name] = type.new attr_name, custom_name
+          end
+        end
+        upon! attribute, **na, &b
       end
     end
   end

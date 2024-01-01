@@ -7,13 +7,13 @@ def login username, password
   puts "Password: " + password.text
 end
 
-def update_text_size gui
+def update_text_size
   window_height = gui.view[3]
   gui.text_size = (0.07 * window_height).round
 end
 
-update_text_size gui
-gui.on_view_change{ update_text_size gui }
+update_text_size
+on_view_change! &proc.update_text_size
 
 picture! url: "xubuntu_bg_aluminium.jpg", size: [100, 100]
 

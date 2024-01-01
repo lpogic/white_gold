@@ -1,9 +1,19 @@
 require_relative '../abi/extern_object'
-require_relative 'signal/signal'
+require_relative '../convention/bang_nest'
+require_relative 'signal/global_signal'
 require_relative 'font'
 
 module Tgui
   class BackendGui < ExternObject
+    include BangNest
+
+    class ViewSignal < GlobalSignal
+      def block_caller &b
+        Fiddle::Closure::BlockCaller.new(0, [0]) do
+            b.(@widget.view, @widget)
+        end
+      end
+    end
 
     abi_def :view=, :set_absolute_, [Integer] * 4 => nil
     abi_def :relative_view=, [Float] * 4 => nil
@@ -21,7 +31,7 @@ module Tgui
     abi_def :pop_mouse_cursor, :restore_override_mouse_cursor
     abi_def :px_to_crd, :map_pixel_to_coords, [Integer, Integer] => [Float, Float]
     abi_def :crd_to_px, :map_coords_to_pixel, [Float, Float] => [Float, Float]
-    abi_signal :on_view_change, Signal
+    abi_signal :on_view_change, ViewSignal
     
   end
 end

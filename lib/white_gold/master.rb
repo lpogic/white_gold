@@ -40,6 +40,7 @@ class WhiteGold
         if @current_page_id
           page = @preserved_pages[@current_page_id]
           @gui.self_remove page
+          page.disconnect
           @preserved_pages.delete(@current_page_id)
         end
         load_page @next_page_id
@@ -58,21 +59,24 @@ class WhiteGold
       page = @preserved_pages[page_id] = Page.new self
       @gui.self_add page, "main_container"
       @current_page = page
-      ExternObject.callback_storage = page.callbacks
+      ExternObject.callback_storage = page.widget_callbacks
+      ExternObject.global_callback_storage = page.global_callbacks
       ExternObject.data_storage = page.custom_data
       send(page_id)
     when Class
       page = @preserved_pages[page_id] = page_id.new self
       @gui.self_add page, "main_container"
       @current_page = page
-      ExternObject.callback_storage = page.callbacks
+      ExternObject.callback_storage = page.widget_callbacks
+      ExternObject.global_callback_storage = page.global_callbacks
       ExternObject.data_storage = page.custom_data
       page.build
     when Proc
       page = @preserved_pages[page_id] = Page.new self
       @gui.self_add page, "main_container"
       @current_page = page
-      ExternObject.callback_storage = page.callbacks
+      ExternObject.callback_storage = page.widget_callbacks
+      ExternObject.global_callback_storage = page.global_callbacks
       ExternObject.data_storage = page.custom_data
       instance_exec &page_id
     end
@@ -151,7 +155,16 @@ class WhiteGold
     super || @current_page.respond_to?(name)
   end
 
-  def method_missing *a, **na, &b
-    @current_page.send(*a, **na, &b)
+  def method_missing name, *a, **na, &b
+    if @current_page.respond_to? name
+      @current_page.send(name, *a, **na, &b)
+    elsif @gui.respond_to? name
+      @gui.send(name, *a, **na, &b)
+    elsif @window.respond_to? name
+      @window.send(name, *a, **na, &b)
+    else
+      no_method_error = "method missing in Page/Gui/Window"
+      raise no_method_error
+    end
   end
 end

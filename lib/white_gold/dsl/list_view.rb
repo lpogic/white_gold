@@ -156,11 +156,11 @@ module Tgui
     def grid_lines=(grid_lines)
       case grid_lines
       when Numeric
-        api_grid_lines width: grid_lines
+        api_bang_grid_lines width: grid_lines
       when false
-        api_grid_lines horizontal: false, vertical: false
+        api_bang_grid_lines horizontal: false, vertical: false
       when Hash
-        api_grid_lines **grid_lines
+        api_bang_grid_lines **grid_lines
       end
     end
 
@@ -182,11 +182,11 @@ module Tgui
     def header=(header)
       case header
       when true, false
-        api_header visible: header
+        api_bang_header visible: header
       when Hash
-        api_header **header
+        api_bang_header **header
       when Proc
-        api_header &header
+        api_bang_header &header
       end
     end
 

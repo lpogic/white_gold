@@ -5,11 +5,13 @@ class Page < Tgui::Group
   def initialize tgui
     super()
     @tgui = tgui
-    @callbacks = {}
+    @widget_callbacks = {}
+    @global_callbacks = {}
     @custom_data = Hash.new do |h, name|
       h[name] = {}
     end
     @clubs = {}
+    @custom_renderers = {}
     self.size = [100.pc, 100.pc]
   end
 
@@ -20,7 +22,13 @@ class Page < Tgui::Group
   def build
   end
 
-  attr :callbacks, :custom_data, :clubs
+  def disconnect
+    @global_callbacks.each do |id, signal|
+      signal.disconnect id
+    end
+  end
+
+  attr :widget_callbacks, :global_callbacks, :custom_data, :clubs, :custom_renderers
 
   def go page
     @tgui.next_page_id = page
@@ -63,8 +71,12 @@ class Page < Tgui::Group
     club
   end
 
+  def theme
+    Theme.default
+  end
+
   def! :theme do |seed = nil, **na, &b|
-    theme = Theme.default
+    theme = self.theme
     if seed
       theme.reset_attributes
       upon! theme do
@@ -72,21 +84,13 @@ class Page < Tgui::Group
       end
     end
     upon! theme, **na, &b
-    theme.self_commit
+    theme.self_commit @custom_renderers
   end
 
   def! :tgui_theme do |path|
-    theme = Theme.default
+    theme = self.theme
     theme.reset_attributes
     theme.source = path
-    theme.self_commit
-  end
-  
-  def title=(title)
-    window.title = title
-  end
-
-  def title
-    window.title
+    theme.self_commit @custom_renderers
   end
 end

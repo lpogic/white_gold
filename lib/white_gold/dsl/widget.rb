@@ -31,7 +31,39 @@ module Tgui
       self.enabled = !disabled
     end
 
-    abi_def :renderer=, proc.self_renderer => nil
+    def theme_comp
+      :widget
+    end
+
+    def! :renderer do |seed = VOID, **na, &b|
+      seed = page.custom_renderers[self] if seed == VOID
+      if !na.empty? || b
+        upon! page.theme do
+          seed = custom! theme_comp, seed, **na, &b
+        end
+        page.custom_renderers[self] = seed
+      elsif !seed
+        page.custom_renderers.delete self
+      else
+        page.custom_renderers[self] = seed
+      end
+      self.self_renderer = seed
+    end
+
+    def renderer=(renderer)
+      case renderer
+      when Hash
+        api_bang_renderer **renderer
+      when Proc
+        api_bang_renderer &renderer
+      else
+        page.custom_renderers[self] = renderer
+        self.self_renderer = renderer
+      end
+    end
+
+    abi_def :self_renderer=, :set_renderer, proc.self_renderer => nil
+    
     abi_attr :focused?
     abi_attr :focusable?
     abi_signal :on_position_change, Tgui::SignalVector2f
@@ -232,7 +264,7 @@ module Tgui
         case renderer
         when Module
           renderer.name.split("::").last
-        when nil, VOID
+        when nil, false, VOID
           self_renderer widget, widget.class
         else
           renderer.to_s

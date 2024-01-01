@@ -3,6 +3,10 @@ require_relative 'clickable_widget'
 module Tgui
   class ButtonBase < ClickableWidget
 
+    def theme_comp
+      :button
+    end
+
     def abi_pack_text_position_vector o
       "(#{abi_pack_float o[0]},#{abi_pack_float o[1]})"
     end

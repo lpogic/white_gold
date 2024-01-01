@@ -3,7 +3,6 @@ require_relative 'scrollbar_theme'
 
 module Tgui
   class ChatBoxTheme < WidgetTheme
-    DEFINED_ATTRIBUTES = {}
 
     theme_attr :borders, :outline
     theme_attr :padding, :outline

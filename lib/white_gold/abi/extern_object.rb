@@ -25,6 +25,7 @@ class ExternObject
   attr :pointer
 
   @@callback_storage = {}
+  @@global_callback_storage = {}
   @@data_storage = {}
 
   def abi_pack type, *a
@@ -46,6 +47,14 @@ class ExternObject
 
     def callback_storage
       @@callback_storage
+    end
+
+    def global_callback_storage=(global_callback_storage)
+      @@global_callback_storage = global_callback_storage
+    end
+
+    def global_callback_storage
+      @@global_callback_storage
     end
 
     def data_storage=(data_storage)

@@ -29,11 +29,27 @@ module Tgui
         else raise "#{seed} not available"
         end
       end
+
+      def api_attr name, &init
+        define_method "#{name}=" do |value|
+          @@data_storage[Theme.get_unshared(@pointer).to_i][name] = value
+        end
+  
+        init ||= proc{ nil }
+  
+        define_method name do
+          @@data_storage[Theme.get_unshared(@pointer).to_i][name] ||= init.()
+        end
+      end
     end
 
-    def initialize ...
-      super
-      @attributes = {}
+    abi_static :get_unshared
+
+    api_attr :attributes do
+      {}
+    end
+    api_attr :next_renderer_id do
+      "_0"
     end
 
     attr :source
@@ -42,8 +58,16 @@ module Tgui
     end
 
     def reset_attributes
-      @attributes = {}
+      self.attributes = {}
     end
+
+    def! :custom do |comp, seed, **na, &b|
+      self.next_renderer_id = renderer_id = next_renderer_id.next
+      send("#{comp}!", renderer_id, seed, **na, &b)
+      self_commit
+      renderer_id
+    end
+
 
     theme_attr :text_color, :color
     theme_attr :text_color_hover, :color
@@ -90,8 +114,8 @@ module Tgui
     theme_comp :tree_view, TreeViewTheme
     theme_comp :widget, WidgetTheme
     
-    def self_commit
-      if @attributes.size > 0
+    def self_commit custom_rendered = nil
+      if attributes.size > 0
         file = Tempfile.new
         begin
           if @source
@@ -99,7 +123,7 @@ module Tgui
               file << line
             end
           end
-          @attributes.each do |k, v|
+          attributes.each do |k, v|
             file << v.to_theme << "\n"
           end
           file.close
@@ -109,6 +133,9 @@ module Tgui
         end
       else
         _abi_load @source if @source
+      end
+      custom_rendered&.each do |widget, renderer|
+        widget.self_renderer = renderer
       end
     end
   end

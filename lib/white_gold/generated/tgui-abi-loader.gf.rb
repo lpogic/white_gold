@@ -77,6 +77,7 @@ module Tgui
     extern 'void* ABI_STATIC_Theme_getDefault()'
     extern 'void ABI_STATIC_Theme_finalizer(std::shared_ptr<Theme>* pointer)'
     extern 'void ABI_Theme_load(std::shared_ptr<Theme>* self, char* primary)'
+    extern 'void* ABI_STATIC_Theme_getUnshared(std::shared_ptr<Theme>* pointer)'
     extern 'void* ABI_Texture_new(char* id, int partRectX, int partRectY, int partRectW, int partRectH, int middlePartX, int middlePartY, int middlePartW, int middlePartH, int smooth)'
     extern 'void* ABI_Texture_getId(Texture* self)'
     extern 'void* ABI_Texture_getImageSize(Texture* self)'
@@ -943,6 +944,7 @@ module Tgui
     def self._abi_get_default(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Theme_getDefault(*a); end
     def self._abi_finalizer(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Theme_finalizer(*a); end
     def _abi_load(*a);    Abi.call_arg_map! a; Abi.ABI_Theme_load(@pointer, *a); end
+    def self._abi_get_unshared(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Theme_getUnshared(*a); end
   end
 
   class Texture
