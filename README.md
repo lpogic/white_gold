@@ -47,7 +47,7 @@ gem install white_gold-0.0.1.gem
 ```
 2) From official
 ```
-Will be possible one day
+gem install white_gold
 ```
 
 Basic usage
