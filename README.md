@@ -2,7 +2,7 @@ White Gold
 ===
 
 Ruby gem for building pure ruby graphical user interface.<br>
-Uses [TGUI](https://tgui.eu/) & [SFML](https://www.sfml-dev.org/) as backend.
+Uses [TGUI](https://tgui.eu/) & [SFML](https://www.sfml-dev.org/) as a backend.
 
 Taste
 ---
@@ -10,8 +10,8 @@ Taste
 ```RUBY
 require 'white_gold'
 
-window.title = "Greeting app"
-gui.text_size = 30
+title! "Greeting app"
+text_size! 30
 
 label! text: "Enter your name:", position: [100, 150], size: [340, 44]
 editbox! :name, position: [375, 146], size: [280, 44]
