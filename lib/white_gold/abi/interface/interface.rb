@@ -42,9 +42,8 @@ module Interface
         proc do |host, *a|
           it = a.each
           block_caller = Fiddle::Closure::BlockCaller.new(fiddle_type, [0]) do
-            subpacker.call host, p(it.next)
+            subpacker.call host, it.next
           rescue StopIteration
-            p "B"
             subpacker.call host, nil
           end
           block_caller

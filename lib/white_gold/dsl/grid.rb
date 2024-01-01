@@ -50,10 +50,6 @@ module Tgui
 
     abi_attr :auto_size?
 
-    def initialized
-      super
-    end
-
     def next_row reset_column = true
       c = cell
       self.cell = [c[0] + 1, reset_column ? 0 : c[1]]
@@ -88,8 +84,8 @@ module Tgui
 
     def add widget, id
       super
-      _abi_set_widget_cell abi_pack_widget(widget), *p(cell)
-      _abi_set_widget_alignment abi_pack_widget(widget), abi_pack(Alignment, p(alignment)) if alignment
+      _abi_set_widget_cell abi_pack_widget(widget), *cell
+      _abi_set_widget_alignment abi_pack_widget(widget), abi_pack(Alignment, alignment) if alignment
       _abi_set_widget_padding abi_pack_widget(widget), abi_pack(Outline, *padding) if padding
       if direction == :column
         next_column false

@@ -109,10 +109,3 @@ tabs! do
   text_color_disabled! 80
   distance_to_side! 8
 end
-
-button! :green_button do
-  background_color! 0, 180, 0
-  background_color_hover! 0, 200, 0
-  background_color_down! 0, 160, 0
-  border_color! 0, 200, 0
-end
