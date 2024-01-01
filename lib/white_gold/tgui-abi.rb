@@ -78,6 +78,12 @@ require_relative 'generated/tgui-abi-loader.gf'
 require_relative 'convention/container_widgets'
 
 class ExternObject
+  class << self
+    def finalizer pointer
+      Tgui::Util.free(pointer)
+    end
+  end
+
   abi_packer Object do |o|
     o = o.first if o.is_a? Array
     o

@@ -39,8 +39,8 @@ module Tgui
       end
     end
 
-
-    def! :button do |object, text: nil, **na, &b|
+    def! :button do |object = VOID, text: nil, **na, &b|
+      object = self.self_next_button_id = self_next_button_id.next if object == VOID
       text ||= object.then(&format)
       raise "Button with given text exists (#{text})" if self_buttons[text]
       _abi_add_button abi_pack_string(text)
@@ -82,6 +82,9 @@ module Tgui
 
     api_attr :self_buttons do
       {}
+    end
+    api_attr :self_next_button_id do
+      "Button-0"
     end
   end
 end

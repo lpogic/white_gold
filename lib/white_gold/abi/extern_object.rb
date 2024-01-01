@@ -37,9 +37,6 @@ class ExternObject
   end
 
   class << self
-    def finalizer pointer
-      Util.free(pointer)
-    end
 
     def callback_storage=(callback_storage)
       @@callback_storage = callback_storage
