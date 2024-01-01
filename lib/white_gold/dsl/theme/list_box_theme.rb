@@ -1,4 +1,5 @@
 require_relative 'widget_theme'
+require_relative 'scrollbar_theme'
 
 module Tgui
   class ListBoxTheme < WidgetTheme

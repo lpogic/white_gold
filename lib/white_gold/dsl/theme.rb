@@ -1,7 +1,9 @@
 require 'tempfile'
 require_relative '../abi/extern_object'
 require_relative '../convention/bang_nest'
-require_relative 'theme/theme_attributed'
+Dir.each_child File.dirname(__FILE__) + "/theme" do |filename|
+  require_relative "theme/#{filename}"
+end
 
 module Tgui
   class Theme < ExternObject
