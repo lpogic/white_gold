@@ -21,7 +21,7 @@ module Tgui
     listbox: Tgui::ListBox,
     listview: Tgui::ListView,
     menu: Tgui::MenuBar,
-    message: Tgui::MessageBox,
+    messagebox: Tgui::MessageBox,
     panel: Tgui::Panel,
     panel_listbox: Tgui::PanelListBox,
     panel_tabs: Tgui::TabContainer,
