@@ -1,6 +1,3 @@
-require_relative '../color'
-require_relative '../outline'
-require_relative '../texture'
 require_relative 'boolean_attribute'
 require_relative 'color_attribute'
 require_relative 'float_attribute'
@@ -29,21 +26,10 @@ module Tgui
       end
     end
 
-    def theme_comp name, type, tgui_attr_name = nil
-      attr_name = tgui_attr_name || name.to_s.pascalcase
+    def theme_comp name, type
       def! name do |custom_name = nil, base_name = nil, **na, &b|
-        if base_name
-          attribute = attributes[custom_name]
-          if !attribute || attribute.name != base_name
-            attribute = attributes[custom_name] = type.new base_name, custom_name
-          end
-        else
-          a_name = custom_name || attr_name
-          attribute = attributes[a_name]
-          if !attribute || attribute.name != attr_name
-            attribute = attributes[a_name] = type.new attr_name, custom_name
-          end
-        end
+        attribute = type.new(base_name, custom_name)
+        attribute = attributes[attribute.name] ||= attribute
         upon! attribute, **na, &b
       end
     end

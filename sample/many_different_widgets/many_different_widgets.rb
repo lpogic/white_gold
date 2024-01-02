@@ -45,9 +45,9 @@ end
 
 label! text: "It's the progress bar below", position: [10, 470], text_size: 18
 
-@progress_bar = progress_bar! position: [10, 500], size: [200, 20], value: 50
+@progressbar = progressbar! position: [10, 500], size: [200, 20], value: 50
 
-label! text: "#{@progress_bar.value}%", position: [220, 500], text_size: 18
+label! text: "#{@progressbar.value}%", position: [220, 500], text_size: 18
 
 label! text: "That's the slider", position: [10, 530], text_size: 18
 
@@ -80,7 +80,7 @@ checkbox! position: [570, 240], text: "No, I didn't", size: [25, 25]
 
 label! text: "Chatbox", position: [420, 280], text_size: 18
 
-chat_box! size: [300, 100], text_size: 18, position: [420, 310], lines_start_from_top: true do
+chatbox! size: [300, 100], text_size: 18, position: [420, 310], lines_start_from_top: true do
   line! "texus: Hey, this is TGUI!", color: :green
   line! "Me: Looks awesome! ;)", color: :yellow
   line! "texus: Thanks! :)", color: :green

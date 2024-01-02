@@ -163,7 +163,7 @@ class WhiteGold
     elsif @window.respond_to? name
       @window.send(name, *a, **na, &b)
     else
-      no_method_error = "method missing in Page/Gui/Window"
+      no_method_error = "method '#{name}' missing in Page/Gui/Window"
       raise no_method_error
     end
   end

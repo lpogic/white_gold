@@ -1,3 +1,5 @@
+require_relative '../../dsl/outline'
+
 class OutlineAttribute
   def initialize name, value
     @name = name

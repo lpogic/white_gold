@@ -3,7 +3,7 @@ require_relative '../convention/bang_nested_caller'
 require_relative '../convention/unit'
 require_relative '../convention/widget_like'
 require_relative '../convention/api_child'
-require_relative 'theme/widget_theme'
+require_relative '../convention/theme/theme_component'
 require_relative 'color'
 require_relative 'outline'
 require_relative 'texture'
@@ -17,6 +17,15 @@ module Tgui
   class Widget < ExternObject
     include BangNestedCaller
     extend BangDef
+
+    class Theme < ThemeComponent
+    
+      theme_attr :opacity, :float
+      theme_attr :opacity_disabled, :float
+      theme_attr :text_size, :float
+      theme_attr :transparent_texture, :boolean
+  
+    end
 
     attr_accessor :page
 
@@ -39,7 +48,7 @@ module Tgui
       seed = page.custom_renderers[self] if seed == VOID
       if !na.empty? || b
         upon! page.theme do
-          seed = custom! theme_comp, seed, **na, &b
+          seed = custom! self.class::Theme, seed, **na, &b
         end
         page.custom_renderers[self] = seed
       elsif !seed

@@ -72,7 +72,7 @@ class Page < Tgui::Group
   end
 
   def theme
-    Theme.default
+    Tgui::Theme.default
   end
 
   def! :theme do |seed = nil, **na, &b|
@@ -80,7 +80,7 @@ class Page < Tgui::Group
     if seed
       theme.reset_attributes
       upon! theme do
-        load Theme.loadpath(seed)
+        load Tgui::Theme.loadpath(seed)
       end
     end
     upon! theme, **na, &b

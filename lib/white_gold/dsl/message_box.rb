@@ -1,9 +1,15 @@
+require_relative 'child_window'
 require_relative 'button'
 require_relative 'signal/signal_string'
 require_relative '../convention/widget_like'
 
 module Tgui
   class MessageBox < ChildWindow
+
+    class Theme < ChildWindow::Theme
+      theme_attr :text_color, :color
+      theme_comp :button, Button::Theme
+    end
 
     api_attr :format do
       :to_s

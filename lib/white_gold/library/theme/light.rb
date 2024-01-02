@@ -49,7 +49,7 @@ text_area! do
   selected_text_background_color! 157, 185, 240
 end
 
-chat_box! do
+chatbox! do
   background_color! 240
 end
 
@@ -64,7 +64,7 @@ listbox! do
   background_color_hover! 220
 end
 
-list_view! do
+listview! do
   background_color! 240
   header_background_color! 220
 end
@@ -76,7 +76,7 @@ menu! do
   separator_side_padding! 2
 end
 
-progress_bar! do
+progressbar! do
   borders! 1
 end
 
@@ -87,12 +87,24 @@ radio_button! do
   text_distance_ratio! 0.3
 end
 
+range_slider! do
+  track_color! 220
+  thumb_color! 200
+  thumb_color_hover! 190
+  borders! 0
+  selected_track_color_hover! 157, 185, 240
+end
+
 scrollbar! do
   track_color! 220
   thumb_color! 200
   thumb_color_hover! 190
   arrow_background_color! 200
   arrow_background_color_hover! 190
+end
+
+separator! do
+  color! 220
 end
 
 slider! do

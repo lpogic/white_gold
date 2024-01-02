@@ -6,6 +6,22 @@ require_relative 'signal/signal_string'
 module Tgui
   class TextArea < Widget
 
+    class Theme < Widget::Theme
+      theme_attr :borders, :outline
+      theme_attr :padding, :outline
+      theme_attr :background_color, :color
+      theme_attr :text_color, :color
+      theme_attr :default_text_color, :color
+      theme_attr :selected_text_color, :color
+      theme_attr :selected_text_background_color, :color
+      theme_attr :border_color, :color
+      theme_attr :caret_color, :color
+      theme_attr :texture_background, :texture
+      theme_attr :caret_width, :float
+      theme_comp :scrollbar, Scrollbar::Theme
+      theme_attr :scrollbar_width, :float
+    end
+
     abi_attr :text, String
     abi_def :add_text, String => nil
     abi_attr :default_text, String

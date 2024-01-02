@@ -4,6 +4,26 @@ require_relative 'signal/signal_item_hierarchy'
 module Tgui
   class TreeView < Widget
 
+    class Theme < Widget::Theme
+      theme_attr :borders, :outline
+      theme_attr :padding, :outline
+      theme_attr :background_color, :color
+      theme_attr :background_color_hover, :color
+      theme_attr :selected_background_color, :color
+      theme_attr :selected_background_color_hover, :color
+      theme_attr :border_color, :color
+      theme_attr :text_color, :color
+      theme_attr :text_color_hover, :color
+      theme_attr :selected_text_color, :color
+      theme_attr :selected_text_color_hover, :color
+      theme_comp :scrollbar, Scrollbar::Theme
+      theme_attr :scrollbar_width, :float
+      theme_attr :texture_background, :texture
+      theme_attr :texture_branch_expanded, :texture
+      theme_attr :texture_branch_collapsed, :texture
+      theme_attr :texture_leaf, :texture
+    end
+
     class SignalItemHierarchy < Tgui::SignalItemHierarchy
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |vector|

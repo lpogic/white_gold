@@ -1,9 +1,7 @@
 require 'tempfile'
 require_relative '../abi/extern_object'
 require_relative '../convention/bang_nest'
-Dir.each_child File.dirname(__FILE__) + "/theme" do |filename|
-  require_relative "theme/#{filename}"
-end
+require_relative '../convention/theme/theme_attributed'
 
 module Tgui
   class Theme < ExternObject
@@ -63,59 +61,20 @@ module Tgui
       self.attributes = {}
     end
 
-    def! :custom do |comp, seed, **na, &b|
+    @@debug = false
+    def debug=(debug)
+      @@debug = debug
+    end
+
+    def! :custom do |type, seed, **na, &b|
       self.next_renderer_id = renderer_id = next_renderer_id.next
-      send("#{comp}!", renderer_id, seed, **na, &b)
+      attribute = type.new(seed, renderer_id)
+      attributes[attribute.name] = attribute
+      upon! attribute, **na, &b
       self_commit
       renderer_id
     end
 
-
-    theme_attr :text_color, :color
-    theme_attr :text_color_hover, :color
-    theme_attr :text_color_disabled, :color
-    theme_attr :background_color, :color
-    theme_attr :background_color_hover, :color
-    theme_attr :background_color_disabled, :color
-    theme_attr :selected_text_color, :color
-    theme_attr :selected_text_color_hover, :color
-    theme_attr :selected_background_color, :color
-    theme_attr :selected_background_color_hover, :color
-    theme_attr :border_color, :color
-    theme_attr :borders, :outline
-    theme_attr :scrollbar_width, :float
-    theme_attr :arrow_background_color, :color
-    theme_attr :arrow_background_color_hover, :color
-    theme_attr :arrow_background_color_disabled, :color
-    theme_attr :arrow_color, :color
-    theme_attr :arrow_color_hover, :color
-    theme_attr :arrow_color_disabled, :color
-
-    theme_comp :button, ButtonTheme
-    theme_comp :chat_box, ChatBoxTheme
-    theme_comp :child_window, ChildWindowTheme
-    theme_comp :color_picker, ColorPickerTheme
-    theme_comp :combobox, ComboBoxTheme, "ComboBox"
-    theme_comp :editbox, EditBoxTheme, "EditBox"
-    theme_comp :file_dialog, FileDialogTheme
-    theme_comp :group, GroupTheme
-    theme_comp :knob, KnobTheme
-    theme_comp :label, LabelTheme
-    theme_comp :listbox, ListBoxTheme, "ListBox"
-    theme_comp :list_view, ListViewTheme
-    theme_comp :menu, MenuBarTheme, "MenuBar"
-    theme_comp :message_box, MessageBoxTheme
-    theme_comp :progress_bar, ProgressBarTheme
-    theme_comp :radio_button, RadioButtonTheme
-    theme_comp :scrollbar, ScrollbarTheme
-    theme_comp :separator, SeparatorLineTheme
-    theme_comp :slider, SliderTheme
-    theme_comp :spin_button, SpinButtonTheme
-    theme_comp :tabs, TabsTheme
-    theme_comp :text_area, TextAreaTheme
-    theme_comp :tree_view, TreeViewTheme
-    theme_comp :widget, WidgetTheme
-    
     def self_commit custom_rendered = nil
       if attributes.size > 0
         file = Tempfile.new
@@ -129,6 +88,7 @@ module Tgui
             file << v.to_theme << "\n"
           end
           file.close
+          puts File.readlines(file.path) if @@debug
           _abi_load file.path
         ensure
           file.close!

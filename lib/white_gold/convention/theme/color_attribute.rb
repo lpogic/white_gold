@@ -1,3 +1,5 @@
+require_relative '../../dsl/color'
+
 class ColorAttribute
   def initialize name, value
     @name = name

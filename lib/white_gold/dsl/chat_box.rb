@@ -1,8 +1,19 @@
 require_relative 'widget'
+require_relative 'scrollbar'
 require_relative '../convention/widget_like'
 
 module Tgui
   class ChatBox < Widget
+
+    class Theme < Widget::Theme
+      theme_attr :borders, :outline
+      theme_attr :padding, :outline
+      theme_attr :background_color, :color
+      theme_attr :border_color, :color
+      theme_attr :texture_background, :texture
+      theme_comp :scrollbar, Scrollbar::Theme
+      theme_attr :scrollbar_width, :float
+    end
 
     api_attr :objects do
       []

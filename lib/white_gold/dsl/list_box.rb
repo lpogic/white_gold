@@ -1,9 +1,29 @@
 require_relative 'widget'
+require_relative 'scrollbar'
 require_relative 'signal/signal_item'
 require_relative 'signal/signal_u_int'
 
 module Tgui
   class ListBox < Widget
+
+    class Theme < Widget::Theme
+      theme_attr :borders, :outline
+      theme_attr :padding, :outline
+      theme_attr :text_style, :text_styles
+      theme_attr :selected_text_style, :text_styles
+      theme_attr :background_color, :color
+      theme_attr :background_color_hover, :color
+      theme_attr :selected_background_color, :color
+      theme_attr :selected_background_color_hover, :color
+      theme_attr :text_color, :color
+      theme_attr :text_color_hover, :color
+      theme_attr :selected_text_color, :color
+      theme_attr :selected_text_color_hover, :color
+      theme_attr :border_color, :color
+      theme_attr :texture_background, :texture
+      theme_comp :scrollbar, Scrollbar::Theme
+      theme_attr :scrollbar_width, :float
+    end
 
     class SignalItem < Tgui::SignalItem
       def block_caller &b

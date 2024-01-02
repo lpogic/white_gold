@@ -1,7 +1,24 @@
 require_relative 'child_window'
+require_relative 'list_view'
+require_relative 'edit_box'
+require_relative 'label'
+require_relative 'combo_box'
+require_relative 'button'
 
 module Tgui
   class FileDialog < ChildWindow
+
+    class Theme < ChildWindow::Theme
+      theme_comp :list_view, ListView::Theme
+      theme_comp :edit_box, EditBox::Theme
+      theme_comp :filename_label, Label::Theme
+      theme_comp :file_type_combo_box, ComboBox::Theme
+      theme_comp :button, Button::Theme
+      theme_comp :back_button, Button::Theme
+      theme_comp :forward_button, Button::Theme
+      theme_comp :up_button, Button::Theme
+      theme_attr :arrow_on_navigation_buttons_visible, :boolean
+    end
 
     abi_def :selected_paths, nil => (String..) # not empty only in onFileSelected callback
     abi_attr :path, String

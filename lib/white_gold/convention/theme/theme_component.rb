@@ -1,5 +1,4 @@
 require_relative 'theme_attributed'
-require_relative 'common_renderer'
 
 module Tgui
   class ThemeComponent
@@ -14,9 +13,21 @@ module Tgui
 
     attr :name, :attributes
 
+    def default_name
+      self.class.name.split("::")[-2]
+    end
+
+    def base_name
+      @name || default_name
+    end
+
+    def name
+      @custom_name || base_name
+    end
+
     def to_theme
-      return "" if @attributes.empty?
-      header = @custom_name ? "#{@custom_name} : #{@name}" : @name
+      return "" if @attributes.empty? && !@custom_name
+      header = @custom_name ? "#{@custom_name} : #{base_name}" : name
       "#{header} {\n#{@attributes.values.map(&:to_theme).join("\n")}\n}"
     end
   end

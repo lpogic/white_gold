@@ -1,3 +1,5 @@
+require_relative '../../dsl/texture'
+
 class TextureAttribute
   def initialize name, value
     @name = name

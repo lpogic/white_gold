@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name        = "white_gold"
-  s.version     = "0.0.1"
+  s.version     = "0.0.2"
   s.summary     = "TGUI based Ruby gem for quick native application developing"
   s.description = <<-EOT
     Ruby gem for building pure ruby graphical user interface. 
-    Uses [TGUI](https://tgui.eu/) & [SFML](https://www.sfml-dev.org/) as a backend."
+    Uses TGUI & SFML as a backend.
   EOT
   s.authors     = ["Łukasz Pomietło"]
   s.email       = "oficjalnyadreslukasza@gmail.com"

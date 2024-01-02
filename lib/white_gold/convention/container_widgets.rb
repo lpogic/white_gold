@@ -3,45 +3,45 @@ require_relative '../convention/api_child'
 module Tgui
 
   WIDGETS_COLLECTION = {
-    label: Tgui::Label,
+    bitmap_button: Tgui::BitmapButton,
     button: Tgui::Button,
-    radio: false,
-    radio_button: Tgui::RadioButton,
+    chatbox: Tgui::ChatBox,
     checkbox: Tgui::CheckBox,
     child_window: Tgui::ChildWindow,
-    editbox: Tgui::EditBox,
-    combobox: Tgui::ComboBox,
     color_picker: Tgui::ColorPicker,
-    hola: Tgui::HorizontalLayout,
-    vela: Tgui::VerticalLayout,
-    howr: Tgui::HorizontalWrap,
-    group: Tgui::Group,
-    radio_button_group: Tgui::RadioButtonGroup,
-    grid: Tgui::Grid,
-    list_view: Tgui::ListView,
-    picture: false,
-    bitmap_button: Tgui::BitmapButton,
-    knob: Tgui::Knob,
-    message_box: Tgui::MessageBox,
+    combobox: Tgui::ComboBox,
+    editbox: Tgui::EditBox,
     file_dialog: Tgui::FileDialog,
+    grid: Tgui::Grid,
+    group: Tgui::Group,
+    hola: Tgui::HorizontalLayout,
+    howr: Tgui::HorizontalWrap,
+    knob: Tgui::Knob,
+    label: Tgui::Label,
     listbox: Tgui::ListBox,
+    listview: Tgui::ListView,
     menu: Tgui::MenuBar,
-    panel_list_box: Tgui::PanelListBox,
-    progress_bar: Tgui::ProgressBar,
+    message: Tgui::MessageBox,
+    panel: Tgui::Panel,
+    panel_listbox: Tgui::PanelListBox,
+    panel_tabs: Tgui::TabContainer,
+    picture: false,
+    progressbar: Tgui::ProgressBar,
+    radio: false,
+    radio_button: Tgui::RadioButton,
+    radio_button_group: Tgui::RadioButtonGroup,
     range_slider: Tgui::RangeSlider,
-    rich_text_label: Tgui::RichTextLabel,
-    separator_line: Tgui::SeparatorLine,
+    fancy_label: Tgui::RichTextLabel,
+    scrollbar: Tgui::Scrollbar,
+    separator: Tgui::SeparatorLine,
     slider: Tgui::Slider,
     spin_button: Tgui::SpinButton,
     spin_control: Tgui::SpinControl,
     tabs: Tgui::Tabs,
-    tab_container: Tgui::TabContainer,
-    text_area: Tgui::TextArea,
+    textarea: Tgui::TextArea,
     toggle_button: Tgui::ToggleButton,
-    tree_view: Tgui::TreeView,
-    scrollbar: Tgui::Scrollbar,
-    panel: Tgui::Panel,
-    chat_box: Tgui::ChatBox
+    treeview: Tgui::TreeView,
+    vela: Tgui::VerticalLayout,
   }.freeze
 
   module WidgetOwner
@@ -133,13 +133,10 @@ module Tgui
       end)
     end
 
-    @@auto_button_name = "Button1"
+    @@auto_button_name = "Button0"
 
     def! :btn do |text = nil, **na, &on_press|
-      if !text
-        text = @@auto_button_name
-        @@auto_button_name = @@auto_button_name.next
-      end
+      text = @@auto_button_name = @@auto_button_name.next if !text
       api_bang_button text:, on_press:, **na
     end
   end

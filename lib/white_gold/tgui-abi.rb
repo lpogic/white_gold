@@ -76,6 +76,7 @@ end
 # ABI loader should be required after dsl directory files because of class hierarchy
 require_relative 'generated/tgui-abi-loader.gf'
 require_relative 'convention/container_widgets'
+require_relative 'convention/theme_attributes'
 
 class ExternObject
   class << self
