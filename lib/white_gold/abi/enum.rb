@@ -32,12 +32,4 @@ class Enum
   def symbols
     @symbol_to_int
   end
-
-  def to_abi o
-    self[o]
-  end
-
-  def to_api o
-    self[o]
-  end
 end
