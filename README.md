@@ -227,7 +227,7 @@ upon! button, text: "Button", position: [50, 50] do # note: 'upon!' puts first a
 end
 ```
 
-## Method to proc conversion:<br>
+### Method to proc conversion:<br>
 
 To convert method to proc, prefix it with 'proc.':
 
