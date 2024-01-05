@@ -1,0 +1,26 @@
+Gui
+===
+- `#clear_color=`
+- `#clipboard`
+- `#clipboard=`
+- `#crd_to_px`
+- `#font`
+- `#font=`
+- `#on_view_change`
+- `#on_view_change=`
+- `#opacity`
+- `#opacity=`
+- `#pop_mouse_cursor`
+- `#push_mouse_cursor`
+- `#px_to_crd`
+- `#relative_view=`
+- `#relative_viewport=`
+- `#tab_focus_pass=`
+- `#tab_focus_pass?`
+- `#text_size`
+- `#text_size=`
+- `#unfocus`
+- `#view`
+- `#view=`
+- `#viewport`
+- `#viewport=`

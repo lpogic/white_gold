@@ -155,12 +155,12 @@ module Tgui
       end
     end
 
-    def pack_animation_time o
+    def self_pack_animation_time o
       o ? o.to_i : 1000
     end
 
-    abi_def :move, :move_with_animation, ["SizeLayout", :pack_animation_time] => nil
-    abi_def :resize, :resize_with_animation, ["PositionLayout", :pack_animation_time] => nil
+    abi_def :move, :move_with_animation, ["SizeLayout", :self_pack_animation_time] => nil
+    abi_def :resize, :resize_with_animation, ["PositionLayout", :self_pack_animation_time] => nil
 
     abi_enum "AnimationType", :move, :resize, :opacity
 

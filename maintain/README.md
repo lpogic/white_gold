@@ -15,4 +15,4 @@ TGUI_DLL = # absolute path to compiled shared library (.../TGUI-ABI/bin/lib/Rele
 
 available flags:
 
--c - run TGUI-ABI compilation before generating abi loader file
+**-c** - run TGUI-ABI compilation before generating abi loader file

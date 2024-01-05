@@ -155,13 +155,11 @@ module Tgui
   end
 
   class TabContainer
-    WIDGETS_COLLECTION.each do |m, c|
-      if !method_defined? m
-        def! m do |name = nil, **na, &b|
-          raise NoMethodError.new("Method `#{m}` should be called on Panel from TabContainer, not TabContainer itself")
-        end
-      end
+
+    def add widget, name
+      raise NoMethodError.new("Widget can't be added to TabContainer directly. Add it to TabContainer panel instead.")
     end
+    
   end
 
   class ToolTip

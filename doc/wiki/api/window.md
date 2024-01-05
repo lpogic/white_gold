@@ -1,0 +1,5 @@
+Window
+===
+- `#close`
+- `#open?`
+- `#title=`
