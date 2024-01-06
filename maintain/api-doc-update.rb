@@ -1,5 +1,5 @@
 require_relative '../lib/white_gold/master'
-require_relative '../doc/doc'
+require_relative '../doc/draft/doc'
 include Tgui
 
 def write_file filepath, &b
@@ -21,14 +21,14 @@ def base_dir
   File.dirname(File.dirname(__FILE__))
 end
 
-def wiki_dir
-  "#{base_dir}/doc/wiki"
+def wiki_draft
+  "#{base_dir}/doc/draft/wiki.md"
 end
 
 def update_api_doc type
   type_name = type.name.split("::").last
   file_name = type_name.gsub(/([A-Z])/, '_\1').downcase.delete_prefix("_") + ".md"
-  write_file "#{wiki_dir}/api/#{file_name}" do |f|
+  write_file "#{base_dir}/doc/wiki/api/widget/#{file_name}" do |f|
     f << type_name << "\n" << "===" << "\n"
     public_api_instance_methods(type, ExternObject.instance_methods + BangNest.instance_methods).each do |m|
       f << "- `#" << m << "`"
@@ -95,19 +95,19 @@ WIDGETS = [
   Window
 ].freeze
 
-write_file "#{wiki_dir}/api.md" do |f|
+write_file "#{base_dir}/doc/wiki/api/README.md" do |f|
   f << "Widgets" << "\n" << "===" << "\n"
   widget_set = Tgui.widget_set
   widget_set.keys.sort.each do |method|
     type = widget_set[method]
     type_name, file_name = *update_api_doc(type)
-    f << "- `##{method}!` => [#{type_name}](./api/#{file_name})" << "\n"
+    f << "- `##{method}!` => [#{type_name}](./widget/#{file_name})" << "\n"
   end
 end
 
-write_file "#{base_dir}/doc/README.md" do |f|
+write_file "#{base_dir}/doc/wiki/README.md" do |f|
   warning_line = true
-  File.foreach "#{wiki_dir}/wiki.md" do |line|
+  File.foreach wiki_draft do |line|
     if warning_line
       warning_line = false
       next
