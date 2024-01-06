@@ -1,6 +1,6 @@
 **This is the draft version of the white_gold wiki home page.**<br><br>
 
-Welcome to the _white_gold_ wiki!
+Welcome to the _white_gold_ documentation home page!
 ===
 
 Basics
