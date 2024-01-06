@@ -76,4 +76,4 @@ loader_file.write "end\n"
 loader_file.close
 
 ## copy generated shared library
-FileUtils.cp TGUI_DLL, script_path('../ext/dll/tgui.dll')
+FileUtils.cp TGUI_COMPILED_BIN, TGUI_TARGET_BIN
