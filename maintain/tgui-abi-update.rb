@@ -51,7 +51,7 @@ File.new(TGUI_CABI_HPP).each_line do |line|
     case lm[2]
     when "ABI"
       if method_name == "new"
-        classes[lm[3]] << "def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.#{function_name}(*a)); initialized(); end"
+        classes[lm[3]] << "def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.#{function_name}(*a)); end"
       else
         classes[lm[3]] << "def _abi_#{method_name}(*a);    Abi.call_arg_map! a; Abi.#{function_name}(@pointer, *a)#{parser}; end"
       end

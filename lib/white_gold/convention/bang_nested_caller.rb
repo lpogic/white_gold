@@ -17,7 +17,7 @@ module BangNestedCaller
       return send(setter)
     end
 
-    no_method_error = NoMethodError.new("undefined bang nested method `#{name}` for #{bang_object_stack.map(&:class).join("/")}")
+    no_method_error = NoMethodError.new("undefined bang nested method `#{name}` for #{self_bang_object_stack.map(&:class).join("/")}")
     raise no_method_error
   end
 
@@ -25,11 +25,11 @@ module BangNestedCaller
     @bang_target&.respond_to?(:self!) ? @bang_target.self! : self
   end
 
-  def bang_object_stack root = true
+  def self_bang_object_stack root = true
     stack = []
     stack << self if root
     stack << @bang_target if @bang_target
-    stack += @bang_target.bang_object_stack(false) if @bang_target&.respond_to? :bang_object_stack
+    stack += @bang_target.self_bang_object_stack(false) if @bang_target&.respond_to? :self_bang_object_stack
     return stack
   end
 

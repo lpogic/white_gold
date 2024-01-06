@@ -1,12 +1,5 @@
 MessageBox:
-  onButtonPress is called twice when happen
   malformed signal string when FileDialog::file_type_filters= called in callback
 
 FileDialog:
   getFileTypeFilterIndex broken if *.* given
-
-TabContainer:
-  tab lose focus even if disabled tab is clicked
-
-Grid:
-  last element alignment is broken (col & row size > 1)

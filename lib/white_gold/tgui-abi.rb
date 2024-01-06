@@ -219,20 +219,18 @@ class ExternObject
     o.odd?
   end
 
-  abi_unpacker "SizeLayout" do |o|
-    [o.x, o.y]
-  end
-
-  abi_unpacker "PositionLayout" do |o|
-    [o.x, o.y]
-  end
-
-  abi_unpacker Tgui::Vector2f do |o|
+  vector2f_unpacker = proc do |o|
     v = Tgui::Vector2f.new o
     r = [v.x, v.y]
     Util.free(o)
     r
   end
+
+  abi_unpacker "SizeLayout", &vector2f_unpacker
+
+  abi_unpacker "PositionLayout", &vector2f_unpacker
+
+  abi_unpacker Tgui::Vector2f, &vector2f_unpacker
 
   abi_unpacker Tgui::Vector2u do |o|
     v = Tgui::Vector2u.new o

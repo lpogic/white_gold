@@ -802,7 +802,7 @@ module Tgui
   end
 
   class Color
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Color_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Color_new(*a)); end
     def _abi_get_red(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_red(@pointer, *a); end
     def _abi_get_green(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_green(@pointer, *a); end
     def _abi_get_blue(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_blue(@pointer, *a); end
@@ -811,7 +811,7 @@ module Tgui
   end
 
   class Outline
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Outline_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Outline_new(*a)); end
     def _abi_get_left(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getLeft(@pointer, *a); end
     def _abi_get_right(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getRight(@pointer, *a); end
     def _abi_get_top(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getTop(@pointer, *a); end
@@ -891,7 +891,7 @@ module Tgui
   end
 
   class Window
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Window_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Window_new(*a)); end
     def _abi_close(*a);    Abi.call_arg_map! a; Abi.ABI_Window_close(@pointer, *a); end
     def _abi_is_open(*a);    Abi.call_arg_map! a; Abi.ABI_Window_isOpen(@pointer, *a); end
     def _abi_set_title(*a);    Abi.call_arg_map! a; Abi.ABI_Window_setTitle(@pointer, *a); end
@@ -921,11 +921,11 @@ module Tgui
   end
 
   class Font
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Font_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Font_new(*a)); end
   end
 
   class Gui
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Gui_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Gui_new(*a)); end
     def _abi_is_active(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_isActive(@pointer, *a); end
     def _abi_poll_events(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_pollEvents(@pointer, *a); end
     def _abi_draw(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_draw(@pointer, *a); end
@@ -948,7 +948,7 @@ module Tgui
   end
 
   class Texture
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Texture_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Texture_new(*a)); end
     def _abi_get_id(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getId(@pointer, *a); end
     def _abi_get_image_size(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getImageSize(@pointer, *a); end
     def _abi_get_part_rect(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getPartRect(@pointer, *a); end
@@ -1051,12 +1051,12 @@ module Tgui
   end
 
   class Button
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Button_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Button_new(*a)); end
     def _abi_on_press(*a);    Abi.call_arg_map! a; Abi.ABI_Button_onPress(@pointer, *a); end
   end
 
   class BitmapButton
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_BitmapButton_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_BitmapButton_new(*a)); end
     def _abi_set_image(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_setImage(@pointer, *a); end
     def _abi_get_image(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_getImage(@pointer, *a); end
     def _abi_set_image_scaling(*a);    Abi.call_arg_map! a; Abi.ABI_BitmapButton_setImageScaling(@pointer, *a); end
@@ -1064,7 +1064,7 @@ module Tgui
   end
 
   class EditBox
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_EditBox_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_EditBox_new(*a)); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setText(@pointer, *a); end
     def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getText(@pointer, *a); end
     def _abi_set_default_text(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setDefaultText(@pointer, *a); end
@@ -1092,7 +1092,7 @@ module Tgui
   end
 
   class Label
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Label_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Label_new(*a)); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_Label_setText(@pointer, *a); end
     def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getText(@pointer, *a); end
     def _abi_set_horizontal_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_Label_setHorizontalAlignment(@pointer, *a); end
@@ -1112,7 +1112,7 @@ module Tgui
   end
 
   class RadioButton
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RadioButton_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RadioButton_new(*a)); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_setText(@pointer, *a); end
     def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_getText(@pointer, *a); end
     def _abi_set_checked(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButton_setChecked(@pointer, *a); end
@@ -1125,11 +1125,11 @@ module Tgui
   end
 
   class CheckBox
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_CheckBox_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_CheckBox_new(*a)); end
   end
 
   class Knob
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Knob_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Knob_new(*a)); end
     def _abi_set_start_rotation(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_setStartRotation(@pointer, *a); end
     def _abi_get_start_rotation(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_getStartRotation(@pointer, *a); end
     def _abi_set_end_rotation(*a);    Abi.call_arg_map! a; Abi.ABI_Knob_setEndRotation(@pointer, *a); end
@@ -1146,7 +1146,7 @@ module Tgui
   end
 
   class ChatBox
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ChatBox_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ChatBox_new(*a)); end
     def _abi_add_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_addLine(@pointer, *a); end
     def _abi_get_line(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLine(@pointer, *a); end
     def _abi_get_line_color(*a);    Abi.call_arg_map! a; Abi.ABI_ChatBox_getLineColor(@pointer, *a); end
@@ -1190,7 +1190,7 @@ module Tgui
   end
 
   class ChildWindow
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ChildWindow_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ChildWindow_new(*a)); end
     def _abi_set_client_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setClientSize(@pointer, *a); end
     def _abi_get_client_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getClientSize(@pointer, *a); end
     def _abi_set_maximum_size(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setMaximumSize(@pointer, *a); end
@@ -1222,7 +1222,7 @@ module Tgui
   end
 
   class Group
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Group_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Group_new(*a)); end
   end
 
   class BoxLayout
@@ -1241,25 +1241,25 @@ module Tgui
   end
 
   class HorizontalLayout
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_HorizontalLayout_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_HorizontalLayout_new(*a)); end
   end
 
   class VerticalLayout
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_VerticalLayout_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_VerticalLayout_new(*a)); end
   end
 
   class HorizontalWrap
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_HorizontalWrap_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_HorizontalWrap_new(*a)); end
   end
 
   class RadioButtonGroup
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RadioButtonGroup_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RadioButtonGroup_new(*a)); end
     def _abi_uncheck_radio_buttons(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButtonGroup_uncheckRadioButtons(@pointer, *a); end
     def _abi_get_checked_radio_button(*a);    Abi.call_arg_map! a; Abi.ABI_RadioButtonGroup_getCheckedRadioButton(@pointer, *a); end
   end
 
   class Panel
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Panel_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Panel_new(*a)); end
     def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onMousePress(@pointer, *a); end
     def _abi_on_mouse_release(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onMouseRelease(@pointer, *a); end
     def _abi_on_click(*a);    Abi.call_arg_map! a; Abi.ABI_Panel_onClick(@pointer, *a); end
@@ -1270,7 +1270,7 @@ module Tgui
   end
 
   class ScrollablePanel
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ScrollablePanel_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ScrollablePanel_new(*a)); end
     def _abi_set_content_size(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_setContentSize(@pointer, *a); end
     def _abi_get_content_size(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_getContentSize(@pointer, *a); end
     def _abi_get_content_offset(*a);    Abi.call_arg_map! a; Abi.ABI_ScrollablePanel_getContentOffset(@pointer, *a); end
@@ -1290,7 +1290,7 @@ module Tgui
   end
 
   class Grid
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Grid_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Grid_new(*a)); end
     def _abi_set_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_setAutoSize(@pointer, *a); end
     def _abi_is_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_isAutoSize(@pointer, *a); end
     def _abi_set_widget_cell(*a);    Abi.call_arg_map! a; Abi.ABI_Grid_setWidgetCell(@pointer, *a); end
@@ -1303,7 +1303,7 @@ module Tgui
   end
 
   class ListBox
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ListBox_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ListBox_new(*a)); end
     def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_addItem(@pointer, *a); end
     def _abi_set_selected_item(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setSelectedItem(@pointer, *a); end
     def _abi_set_selected_item_by_id(*a);    Abi.call_arg_map! a; Abi.ABI_ListBox_setSelectedItemById(@pointer, *a); end
@@ -1346,7 +1346,7 @@ module Tgui
   end
 
   class ListView
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ListView_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ListView_new(*a)); end
     def _abi_add_column(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_addColumn(@pointer, *a); end
     def _abi_set_column_text(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_setColumnText(@pointer, *a); end
     def _abi_get_column_text(*a);    Abi.call_arg_map! a; Abi.ABI_ListView_getColumnText(@pointer, *a); end
@@ -1419,7 +1419,7 @@ module Tgui
   end
 
   class ComboBox
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ComboBox_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ComboBox_new(*a)); end
     def _abi_set_items_to_display(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_setItemsToDisplay(@pointer, *a); end
     def _abi_get_items_to_display(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_getItemsToDisplay(@pointer, *a); end
     def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_ComboBox_addItem(@pointer, *a); end
@@ -1448,7 +1448,7 @@ module Tgui
   end
 
   class ColorPicker
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ColorPicker_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ColorPicker_new(*a)); end
     def _abi_set_color(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_setColor(@pointer, *a); end
     def _abi_get_color(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_getColor(@pointer, *a); end
     def _abi_on_color_change(*a);    Abi.call_arg_map! a; Abi.ABI_ColorPicker_onColorChange(@pointer, *a); end
@@ -1456,7 +1456,7 @@ module Tgui
   end
 
   class FileDialog
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_FileDialog_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_FileDialog_new(*a)); end
     def _abi_get_selected_paths(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getSelectedPaths(@pointer, *a); end
     def _abi_set_path(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_setPath(@pointer, *a); end
     def _abi_get_path(*a);    Abi.call_arg_map! a; Abi.ABI_FileDialog_getPath(@pointer, *a); end
@@ -1488,7 +1488,7 @@ module Tgui
   end
 
   class MessageBox
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_MessageBox_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_MessageBox_new(*a)); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_setText(@pointer, *a); end
     def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_getText(@pointer, *a); end
     def _abi_add_button(*a);    Abi.call_arg_map! a; Abi.ABI_MessageBox_addButton(@pointer, *a); end
@@ -1502,14 +1502,14 @@ module Tgui
   end
 
   class Picture
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Picture_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Picture_new(*a)); end
     def _abi_ignore_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_ignoreMouseEvents(@pointer, *a); end
     def _abi_is_ignoring_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_isIgnoringMouseEvents(@pointer, *a); end
     def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_onDoubleClick(@pointer, *a); end
   end
 
   class MenuBar
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_MenuBar_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_MenuBar_new(*a)); end
     def _abi_add_menu(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_addMenu(@pointer, *a); end
     def _abi_connect_menu_item(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_connectMenuItem(@pointer, *a); end
     def _abi_add_menu_item(*a);    Abi.call_arg_map! a; Abi.ABI_MenuBar_addMenuItem(@pointer, *a); end
@@ -1532,7 +1532,7 @@ module Tgui
   end
 
   class PanelListBox
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_PanelListBox_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_PanelListBox_new(*a)); end
     def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_addItem(@pointer, *a); end
     def _abi_get_panel_template(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getPanelTemplate(@pointer, *a); end
     def _abi_get_items_width(*a);    Abi.call_arg_map! a; Abi.ABI_PanelListBox_getItemsWidth(@pointer, *a); end
@@ -1568,7 +1568,7 @@ module Tgui
   end
 
   class ProgressBar
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ProgressBar_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ProgressBar_new(*a)); end
     def _abi_set_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_setMinimum(@pointer, *a); end
     def _abi_get_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_getMinimum(@pointer, *a); end
     def _abi_set_maximum(*a);    Abi.call_arg_map! a; Abi.ABI_ProgressBar_setMaximum(@pointer, *a); end
@@ -1585,7 +1585,7 @@ module Tgui
   end
 
   class RangeSlider
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RangeSlider_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RangeSlider_new(*a)); end
     def _abi_set_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_RangeSlider_setMinimum(@pointer, *a); end
     def _abi_get_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_RangeSlider_getMinimum(@pointer, *a); end
     def _abi_set_maximum(*a);    Abi.call_arg_map! a; Abi.ABI_RangeSlider_setMaximum(@pointer, *a); end
@@ -1600,15 +1600,15 @@ module Tgui
   end
 
   class RichTextLabel
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RichTextLabel_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RichTextLabel_new(*a)); end
   end
 
   class SeparatorLine
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_SeparatorLine_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_SeparatorLine_new(*a)); end
   end
 
   class Slider
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Slider_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Slider_new(*a)); end
     def _abi_set_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_setMinimum(@pointer, *a); end
     def _abi_get_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_getMinimum(@pointer, *a); end
     def _abi_set_maximum(*a);    Abi.call_arg_map! a; Abi.ABI_Slider_setMaximum(@pointer, *a); end
@@ -1627,7 +1627,7 @@ module Tgui
   end
 
   class SpinButton
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_SpinButton_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_SpinButton_new(*a)); end
     def _abi_set_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_setMinimum(@pointer, *a); end
     def _abi_get_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_getMinimum(@pointer, *a); end
     def _abi_set_maximum(*a);    Abi.call_arg_map! a; Abi.ABI_SpinButton_setMaximum(@pointer, *a); end
@@ -1646,7 +1646,7 @@ module Tgui
   end
 
   class SpinControl
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_SpinControl_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_SpinControl_new(*a)); end
     def _abi_set_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_setMinimum(@pointer, *a); end
     def _abi_get_minimum(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_getMinimum(@pointer, *a); end
     def _abi_set_maximum(*a);    Abi.call_arg_map! a; Abi.ABI_SpinControl_setMaximum(@pointer, *a); end
@@ -1663,7 +1663,7 @@ module Tgui
   end
 
   class Tabs
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Tabs_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Tabs_new(*a)); end
     def _abi_set_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_setAutoSize(@pointer, *a); end
     def _abi_get_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_getAutoSize(@pointer, *a); end
     def _abi_add(*a);    Abi.call_arg_map! a; Abi.ABI_Tabs_add(@pointer, *a); end
@@ -1692,7 +1692,7 @@ module Tgui
   end
 
   class TabContainer
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TabContainer_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TabContainer_new(*a)); end
     def _abi_set_tabs_height(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_setTabsHeight(@pointer, *a); end
     def _abi_add_tab(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_addTab(@pointer, *a); end
     def _abi_insert_tab(*a);    Abi.call_arg_map! a; Abi.ABI_TabContainer_insertTab(@pointer, *a); end
@@ -1716,7 +1716,7 @@ module Tgui
   end
 
   class TextArea
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TextArea_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TextArea_new(*a)); end
     def _abi_set_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_setText(@pointer, *a); end
     def _abi_add_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_addText(@pointer, *a); end
     def _abi_get_text(*a);    Abi.call_arg_map! a; Abi.ABI_TextArea_getText(@pointer, *a); end
@@ -1752,7 +1752,7 @@ module Tgui
   end
 
   class ToggleButton
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ToggleButton_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ToggleButton_new(*a)); end
     def _abi_set_down(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_setDown(@pointer, *a); end
     def _abi_is_down(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_isDown(@pointer, *a); end
     def _abi_on_toggle(*a);    Abi.call_arg_map! a; Abi.ABI_ToggleButton_onToggle(@pointer, *a); end
@@ -1768,7 +1768,7 @@ module Tgui
   end
 
   class TreeView
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TreeView_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TreeView_new(*a)); end
     def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_addItem(@pointer, *a); end
     def _abi_expand(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_expand(@pointer, *a); end
     def _abi_expand_all(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_expandAll(@pointer, *a); end
@@ -1794,7 +1794,7 @@ module Tgui
   end
 
   class Scrollbar
-    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Scrollbar_new(*a)); initialized(); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Scrollbar_new(*a)); end
     def _abi_set_maximum(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setMaximum(@pointer, *a); end
     def _abi_get_maximum(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getMaximum(@pointer, *a); end
     def _abi_set_value(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_setValue(@pointer, *a); end

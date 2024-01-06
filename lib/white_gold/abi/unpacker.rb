@@ -2,15 +2,17 @@ require_relative 'interface/interface'
 
 module Unpacker
   def abi_unpacker base, &body
+    method_name = abi_unpacker_method_name(base)
     if block_given?
-      define_method abi_unpacker_method_name(base), &body
+      define_method method_name, &body
     elsif base.is_a? Module
-      define_method abi_unpacker_method_name(base) do |o|
+      define_method method_name do |o|
         base.new pointer: o
       end
     else
       raise "..."
     end
+    method_name
   end
 
   def abi_unpacker_method_name base

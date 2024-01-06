@@ -17,6 +17,7 @@ class ExternObject
       end
       ObjectSpace.define_finalizer(self, cl.proc.finalizer(pointer))
     end
+    initialized
   end
 
   def initialized

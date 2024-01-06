@@ -29,19 +29,11 @@ module Tgui
 
     attr_accessor :page
 
-    def window
-      page.window
-    end
-
     abi_attr :text_size, Integer
     abi_attr :enabled?
 
     def! :disabled do |disabled = true|
       self.enabled = !disabled
-    end
-
-    def theme_comp
-      :widget
     end
 
     def! :renderer do |seed = VOID, **na, &b|
@@ -259,7 +251,7 @@ module Tgui
       return nil if widget.null?
       type = abi_unpack_string(Widget.get_type widget) if !type
       casted = Tgui.const_get(type).new pointer: widget
-      equip_child_widget casted if equip
+      self_equip_child_widget casted if equip
       casted
     end
 
@@ -269,7 +261,7 @@ module Tgui
     class << self
       include ApiChild
 
-      def self_renderer widget, renderer
+      def self_renderer widget, renderer = nil
         case renderer
         when Module
           renderer.name.split("::").last

@@ -2,7 +2,7 @@ require_relative '../convention/api_child'
 
 module Tgui
 
-  WIDGETS_COLLECTION = {
+  ORDINARY_WIDGETS = {
     bitmap_button: Tgui::BitmapButton,
     button: Tgui::Button,
     chatbox: Tgui::ChatBox,
@@ -25,9 +25,7 @@ module Tgui
     panel: Tgui::Panel,
     panel_listbox: Tgui::PanelListBox,
     panel_tabs: Tgui::TabContainer,
-    picture: false,
     progressbar: Tgui::ProgressBar,
-    radio: false,
     radio_button: Tgui::RadioButton,
     radio_button_group: Tgui::RadioButtonGroup,
     range_slider: Tgui::RangeSlider,
@@ -44,10 +42,18 @@ module Tgui
     vela: Tgui::VerticalLayout,
   }.freeze
 
+  UNORDINARY_WIDGETS = {
+    picture: Tgui::Picture
+  }
+
+  def self.widget_set
+    {}.merge ORDINARY_WIDGETS, UNORDINARY_WIDGETS
+  end
+
   module WidgetOwner
     extend BangDef
 
-    def common_widget_nest widget, *keys, id: nil, **na, &b
+    def self_common_widget_nest widget, *keys, id: nil, **na, &b
       club_params = {}
       Enumerator.new do |e|
         cl = widget.class
@@ -75,15 +81,15 @@ module Tgui
       upon! widget, **club_params, **na, &b
     end
 
-    def child_methods
+    def self_child_methods
       ## TO OPTIMIZE
       methods.filter{ _1.start_with? ApiChild::API_CHILD_PREFIX }
     end
 
-    def equip_child_widget widget
+    def self_equip_child_widget widget
       widget.page = page
       parent = self
-      child_methods.each do |method|
+      self_child_methods.each do |method|
         widget.define_singleton_method method[ApiChild::API_CHILD_PREFIX.length..] do |*a|
           parent.send(method, self, *a)
         end
@@ -91,10 +97,10 @@ module Tgui
       widget
     end
 
-    WIDGETS_COLLECTION.each do |m, c|
+    ORDINARY_WIDGETS.each do |m, c|
       if c
         def! m do |*a, **na, &b|
-          common_widget_post_initialize equip_child_widget(c.new), *a, **na, &b
+          self_common_widget_equip self_equip_child_widget(c.new), *a, **na, &b
         end
       end
     end
@@ -110,16 +116,16 @@ module Tgui
       )
       transparent = na[:transparent] || false
       pic = Tgui::Picture.new texture, transparent
-      equip_child_widget pic
-      common_widget_post_initialize pic, *a, **na.except(:url, :part_rect, :smooth, :transparent), &b
+      self_equip_child_widget pic
+      self_common_widget_equip pic, *a, **na.except(:url, :part_rect, :smooth, :transparent), &b
     end
 
     def! :radio do |object, *a, **na, &b|
       radio = RadioButton.new
-      equip_child_widget radio
+      self_equip_child_widget radio
       radio.object = object
       na[:text] ||= object.to_s
-      common_widget_post_initialize radio, *a, **na, &b
+      self_common_widget_equip radio, *a, **na, &b
     end
 
     def! :msg do |text, **buttons|
@@ -146,10 +152,10 @@ module Tgui
 
     @@auto_widget_id = "@/"
 
-    def common_widget_post_initialize widget, *keys, **na, &b
+    def self_common_widget_equip widget, *keys, **na, &b
       @@auto_widget_id = id = @@auto_widget_id.next
       add widget, id
-      common_widget_nest widget, *keys, id:, **na, &b
+      self_common_widget_nest widget, *keys, id:, **na, &b
     end
 
   end
@@ -167,9 +173,9 @@ module Tgui
 
     attr :widget
 
-    def common_widget_post_initialize widget, *keys, **na, &b
+    def self_common_widget_equip widget, *keys, **na, &b
       @widget = widget
-      common_widget_nest widget, *keys, **na, &b
+      self_common_widget_nest widget, *keys, **na, &b
     end
   end
 

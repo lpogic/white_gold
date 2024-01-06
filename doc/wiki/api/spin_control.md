@@ -7,6 +7,7 @@ SpinControl
 - `#container?`
 - `#decimals`
 - `#decimals=`
+- `#disabled!`
 - `#draggable?`
 - `#enabled=`
 - `#enabled?`
@@ -51,8 +52,10 @@ SpinControl
 - `#page=`
 - `#position`
 - `#position=`
+- `#renderer!`
 - `#renderer=`
 - `#resize`
+- `#robot!`
 - `#show`
 - `#size`
 - `#size=`
@@ -60,7 +63,7 @@ SpinControl
 - `#step=`
 - `#text_size`
 - `#text_size=`
-- `#theme_comp`
+- `#tooltip!`
 - `#value`
 - `#value=`
 - `#visible=`
@@ -69,4 +72,8 @@ SpinControl
 - `#wide_arrows?`
 - `#width`
 - `#width=`
-- `#window`
+## Theme
+- `#opacity!`
+- `#opacity_disabled!`
+- `#text_size!`
+- `#transparent_texture!`
