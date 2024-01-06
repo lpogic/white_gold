@@ -91,7 +91,7 @@ end
 WhiteGold.new.run FirstPage
 ```
 
-Check out [doc](https://github.com/lpogic/white_gold/tree/master/doc) pages for more info.
+Check out [wiki](https://github.com/lpogic/white_gold/tree/master/doc/wiki) pages for more info.
 
 Status
 ---
