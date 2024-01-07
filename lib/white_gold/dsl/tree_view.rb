@@ -1,4 +1,5 @@
 require_relative 'widget'
+require_relative '../convention/tree_node'
 require_relative 'signal/signal_item_hierarchy'
 
 module Tgui
@@ -32,39 +33,11 @@ module Tgui
             path << @widget.abi_unpack_string(str)
           end
           SignalItemHierarchy.fetch_path vector, loader
-          object_path = @widget.self_tree.path_str_to_object path
+          object_path = @widget.self_tree.path_str_to_object *path
           @widget.page.upon! @widget do
             b.(object_path.last, object_path, @widget)
           end
         end
-      end
-    end
-
-    class TreeNode
-      def initialize object
-        @object = object
-        @nodes = {}
-      end
-
-      attr_accessor :object
-      attr :nodes
-
-      def [](*path, grow: false)
-        if grow
-          path.reduce(self){|node, str| node.nodes[str] ||= TreeNode.new nil }
-        else
-          path.reduce(self){|node, str| node&.nodes[str] }
-        end
-      end
-
-      def cut *path, last
-        self[*path].nodes.delete last
-      end
-
-      def path_str_to_object path
-        objects = []
-        path.reduce(self){|node, str| node[str].tap{|n| objects << n.object } }
-        objects
       end
     end
 
@@ -119,6 +92,14 @@ module Tgui
 
       def [](*path_end)
         Item.new host, [*path, *path_end]
+      end
+
+      def text=(text)
+        host.self_change_item path, text
+      end
+
+      def text
+        host.self_tree[*path].text
       end
 
       def object
@@ -192,15 +173,22 @@ module Tgui
       new_path = [*path, object]
       self_path_block new_path do
         _abi_add_item _1, _2, abi_pack_boolean(true)
-        self_tree[*_3, grow: true].object = object
+        self_tree[*new_path, grow: true].text = _3
       end
       item = Item.new self, new_path
       upon! item, **na, &b
     end
 
+    def self_change_item path, text, **na, &b
+      self_path_block path do
+        _abi_change_item _1, _2, text
+        self_tree[*path].text = text
+      end
+    end
+
     def self_path_block path, &b
       path = path.map(&format)
-      b.(*abi_pack(String.., *path), path)
+      b.(*abi_pack(String.., *path), path.last)
     end
   end
 end

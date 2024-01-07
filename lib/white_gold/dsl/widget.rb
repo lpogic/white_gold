@@ -160,6 +160,50 @@ module Tgui
     abi_def :front, :move_to_
     abi_def :back, :move_to_
 
+    class Navigation < WidgetLike
+
+      def left=(widget)
+        host._abi_set_navigation host.abi_pack(Widget, widget), host.abi_pack_integer(0)
+      end
+
+      def left
+        abi_unpack(Widget, host._abi_get_navigation(host.abi_pack_integer(0)))
+      end
+
+      def right=(widget)
+        host._abi_set_navigation host.abi_pack(Widget, widget), host.abi_pack_integer(1)
+      end
+
+      def right
+        host.abi_unpack(Widget, host._abi_get_navigation(host.abi_pack_integer(1)))
+      end
+
+      def up=(widget)
+        host._abi_set_navigation host.abi_pack(Widget, widget), host.abi_pack_integer(2)
+      end
+
+      def up
+        host.abi_unpack(Widget, host._abi_get_navigation(host.abi_pack_integer(2)))
+      end
+
+      def down=(widget)
+        host._abi_set_navigation host.abi_pack(Widget, widget), host.abi_pack_integer(3)
+      end
+
+      def down
+        host.abi_unpack(Widget, host._abi_get_navigation(host.abi_pack_integer(3)))
+      end
+
+    end
+
+    def! :navigation do |**na, &b|
+      upon! navigation, **na, &b
+    end
+
+    def navigation
+      Navigation.new self, nil
+    end
+
     abi_enum "KeyCode", nil, :a, :b, :c, :d, :e, :f, :g, :h, :i, :j, :k, 
       :l, :m, :n, :o, :p, :q, :r, :s, :t, :u, :v, :w, :x, :y, :z,
       :num0, :num1, :num2, :num3, :num4, :num5, :num6, :num7, :num8, :num9,
@@ -253,6 +297,20 @@ module Tgui
       casted = Tgui.const_get(type).new pointer: widget
       self_equip_child_widget casted if equip
       casted
+    end
+
+    abi_packer Widget do |o|
+      o = o.first if o.is_a? Array
+      case o
+      when Widget
+        o
+      else
+        raise "Unable to make Widget from #{o}(#{o.class})"
+      end
+    end
+
+    abi_unpacker Widget do |o|
+      self_cast_up o
     end
 
     abi_static :get_type

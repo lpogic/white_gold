@@ -43,7 +43,15 @@ module Tgui
     abi_def :index, :get_widget_, Widget => Integer
     abi_def :focused_child, :get_, nil => Widget
     abi_def :focused_leaf, :get_, nil => Widget
-    abi_def :leaf_at_position, :get_widget_at_position, [Float, Float] => Widget
+
+    def leaf_at_position x, y
+      abi_unpack(Widget, _abi_get_widget_at_pos(api_pack_float(x), abi_pack_float(y), abi_pack_boolean(true)))
+    end
+
+    def child_at_position x, y
+      abi_unpack(Widget, _abi_get_widget_at_pos(api_pack_float(x), abi_pack_float(y), abi_pack_boolean(false)))
+    end
+
     abi_def :focus_next, :focus_next_widget
     abi_def :focus_previous, :focus_previous_widget
 
@@ -66,21 +74,19 @@ module Tgui
 
     # internal
 
-    def abi_pack_widget o
+
+    abi_packer Widget do |o|
+      o = o.first if o.is_a? Array
       case o
       when Symbol
         self[o]
       when Widget
         o
       else
-        raise "Unable to make Widget from #{o}"
+        raise "Unable to make Widget from #{o}(#{o.class})"
       end
     end
-
-    def abi_unpack_widget o
-      self_cast_up o
-    end
-
+    
     def self_get_widget_name a
       case a
       when Widget

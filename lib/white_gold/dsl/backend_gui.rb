@@ -31,6 +31,7 @@ module Tgui
     abi_def :pop_mouse_cursor, :restore_override_mouse_cursor
     abi_def :px_to_crd, :map_pixel_to_coords, [Integer, Integer] => [Float, Float]
     abi_def :crd_to_px, :map_coords_to_pixel, [Float, Float] => [Float, Float]
+    abi_attr :keyboard_navigation?, Boolean, :keyboard_navigation_enabled
     abi_signal :on_view_change, ViewSignal
     
   end

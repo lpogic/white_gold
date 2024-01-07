@@ -59,6 +59,8 @@ module Tgui
     extern 'void ABI_BackendGui_restoreOverrideMouseCursor(BackendGui* self)'
     extern 'void ABI_BackendGui_mapPixelToCoords(BackendGui* self, int x, int y, void(*f)(float, float))'
     extern 'void ABI_BackendGui_mapCoordsToPixel(BackendGui* self, float x, float y, void(*f)(float, float))'
+    extern 'void ABI_BackendGui_setKeyboardNavigationEnabled(BackendGui* self, int enabled)'
+    extern 'int ABI_BackendGui_isKeyboardNavigationEnabled(BackendGui* self)'
     extern 'void* ABI_BackendGui_onViewChange(BackendGui* self)'
     extern 'void* ABI_Font_new(char * id)'
     extern 'void* ABI_Gui_new(sf::RenderWindow* window)'
@@ -116,6 +118,8 @@ module Tgui
     extern 'void* ABI_Widget_getToolTip(Widget::Ptr* self)'
     extern 'void ABI_Widget_setMouseCursor(Widget::Ptr* self, int cursor)'
     extern 'int ABI_Widget_getMouseCursor(Widget::Ptr* self)'
+    extern 'void ABI_Widget_setNavigation(Widget::Ptr* self, Widget::Ptr* that, int direction)'
+    extern 'void* ABI_Widget_getNavigation(Widget::Ptr* self, int direction)'
     extern 'int ABI_Widget_isMouseDown(Widget::Ptr* self)'
     extern 'void ABI_Widget_showWithEffect(Widget::Ptr* self, int effect, int duration)'
     extern 'void ABI_Widget_hideWithEffect(Widget::Ptr* self, int effect, int duration)'
@@ -278,7 +282,7 @@ module Tgui
     extern 'int ABI_Container_getWidgetIndex(Container::Ptr* self, Widget::Ptr* widget)'
     extern 'void* ABI_Container_getFocusedChild(Container::Ptr* self)'
     extern 'void* ABI_Container_getFocusedLeaf(Container::Ptr* self)'
-    extern 'void* ABI_Container_getWidgetAtPosition(Container::Ptr* self, float x, float y)'
+    extern 'void* ABI_Container_getWidgetAtPos(Container::Ptr* self, float x, float y, int recursive)'
     extern 'int ABI_Container_focusNextWidget(Container::Ptr* self, int recursive)'
     extern 'int ABI_Container_focusPreviousWidget(Container::Ptr* self, int recursive)'
     extern 'void* ABI_ChildWindow_new()'
@@ -759,6 +763,7 @@ module Tgui
     extern 'int ABI_STATIC_ToolTip_getShowOnDisabledWidget()'
     extern 'void* ABI_TreeView_new()'
     extern 'int ABI_TreeView_addItem(TreeView::Ptr* self, int hierarchySize, char*(*f)(void), int createParents)'
+    extern 'int ABI_TreeView_changeItem(TreeView::Ptr* self, int hierarchySize, char*(*f)(void), char* leafText)'
     extern 'void ABI_TreeView_expand(TreeView::Ptr* self, int hierarchySize, char*(*f)(void))'
     extern 'void ABI_TreeView_expandAll(TreeView::Ptr* self)'
     extern 'void ABI_TreeView_collapse(TreeView::Ptr* self, int hierarchySize, char*(*f)(void))'
@@ -917,6 +922,8 @@ module Tgui
     def _abi_restore_override_mouse_cursor(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_restoreOverrideMouseCursor(@pointer, *a); end
     def _abi_map_pixel_to_coords(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_mapPixelToCoords(@pointer, *a); end
     def _abi_map_coords_to_pixel(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_mapCoordsToPixel(@pointer, *a); end
+    def _abi_set_keyboard_navigation_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_setKeyboardNavigationEnabled(@pointer, *a); end
+    def _abi_is_keyboard_navigation_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_isKeyboardNavigationEnabled(@pointer, *a); end
     def _abi_on_view_change(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_onViewChange(@pointer, *a); end
   end
 
@@ -989,6 +996,8 @@ module Tgui
     def _abi_get_tool_tip(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getToolTip(@pointer, *a); end
     def _abi_set_mouse_cursor(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setMouseCursor(@pointer, *a); end
     def _abi_get_mouse_cursor(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getMouseCursor(@pointer, *a); end
+    def _abi_set_navigation(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setNavigation(@pointer, *a); end
+    def _abi_get_navigation(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getNavigation(@pointer, *a); end
     def _abi_is_mouse_down(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_isMouseDown(@pointer, *a); end
     def _abi_show_with_effect(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_showWithEffect(@pointer, *a); end
     def _abi_hide_with_effect(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_hideWithEffect(@pointer, *a); end
@@ -1184,7 +1193,7 @@ module Tgui
     def _abi_get_widget_index(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getWidgetIndex(@pointer, *a); end
     def _abi_get_focused_child(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getFocusedChild(@pointer, *a); end
     def _abi_get_focused_leaf(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getFocusedLeaf(@pointer, *a); end
-    def _abi_get_widget_at_position(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getWidgetAtPosition(@pointer, *a); end
+    def _abi_get_widget_at_pos(*a);    Abi.call_arg_map! a; Abi.ABI_Container_getWidgetAtPos(@pointer, *a); end
     def _abi_focus_next_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Container_focusNextWidget(@pointer, *a); end
     def _abi_focus_previous_widget(*a);    Abi.call_arg_map! a; Abi.ABI_Container_focusPreviousWidget(@pointer, *a); end
   end
@@ -1770,6 +1779,7 @@ module Tgui
   class TreeView
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_TreeView_new(*a)); end
     def _abi_add_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_addItem(@pointer, *a); end
+    def _abi_change_item(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_changeItem(@pointer, *a); end
     def _abi_expand(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_expand(@pointer, *a); end
     def _abi_expand_all(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_expandAll(@pointer, *a); end
     def _abi_collapse(*a);    Abi.call_arg_map! a; Abi.ABI_TreeView_collapse(@pointer, *a); end

@@ -103,7 +103,11 @@ class ExternObject
           getter = "#{original_name}#{name}".delete_suffix("?").to_sym
           setter = "set_#{name}".delete_suffix("?").to_sym
         else
-          getter = "get_#{original_name}".to_sym
+          if name.end_with? "?"
+            getter = "is_#{original_name}".to_sym
+          else 
+            getter = "get_#{original_name}".to_sym
+          end
           setter = "set_#{original_name}".to_sym
         end
       else
