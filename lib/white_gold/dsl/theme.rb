@@ -70,7 +70,7 @@ module Tgui
       self.next_renderer_id = renderer_id = next_renderer_id.next
       attribute = type.new(seed, renderer_id)
       attributes[attribute.name] = attribute
-      upon! attribute, **na, &b
+      attribute.send! **na, &b
       self_commit
       renderer_id
     end

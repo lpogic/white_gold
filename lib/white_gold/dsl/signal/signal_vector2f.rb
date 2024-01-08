@@ -5,7 +5,7 @@ module Tgui
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |ptr|
         vector = @widget.abi_unpack Vector2f, ptr
-        @widget.page.upon! @widget do
+        @widget.send! do
           b.(vector, @widget)
         end
       end

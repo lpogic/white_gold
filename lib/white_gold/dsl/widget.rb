@@ -1,5 +1,5 @@
 require_relative '../abi/extern_object'
-require_relative '../convention/bang_nested_caller'
+require_relative '../convention/bang_nest'
 require_relative '../convention/unit'
 require_relative '../convention/widget_like'
 require_relative '../convention/api_child'
@@ -15,7 +15,7 @@ require_relative 'tool_tip'
 
 module Tgui
   class Widget < ExternObject
-    include BangNestedCaller
+    include BangNest
     extend BangDef
 
     class Theme < ThemeComponent
@@ -39,7 +39,7 @@ module Tgui
     def! :renderer do |seed = VOID, **na, &b|
       seed = page.custom_renderers[self] if seed == VOID
       if !na.empty? || b
-        upon! page.theme do
+        page.theme.send! do
           seed = custom! self.class::Theme, seed, **na, &b
         end
         page.custom_renderers[self] = seed
@@ -98,7 +98,7 @@ module Tgui
       if block_given?
         tooltip = ToolTip.new
         tooltip.page = page
-        upon! tooltip, **na, &b
+        tooltip.send! **na, &b
         _abi_set_tool_tip tooltip.widget if tooltip.widget
       else
         widget = _abi_get_tool_tip
@@ -197,7 +197,7 @@ module Tgui
     end
 
     def! :navigation do |**na, &b|
-      upon! navigation, **na, &b
+      navigation.send! **na, &b
     end
 
     def navigation
@@ -257,14 +257,8 @@ module Tgui
 
     def! :robot do |**na, &b|
       robot = Robot.new self
-      upon! robot, **na, &b if block_given?
+      robot.send! **na, &b if block_given?
       robot
-    end
-    
-    def flags=(flags)
-      flags.each do |f|
-        send("#{f}=", true)
-      end
     end
 
     def self.api_attr name, &init
@@ -276,18 +270,6 @@ module Tgui
 
       define_method name do
         @@data_storage[Widget.get_unshared(@pointer).to_i][name] ||= init.()
-      end
-    end
-
-
-    def respond_to? name
-      super || bang_respond_to?(name)
-    end
-
-    def method_missing name, *a, **na, &b
-      if name.end_with? "!"
-        bang_method_missing name, *a, **na, &b
-      else super
       end
     end
 

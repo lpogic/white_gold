@@ -78,7 +78,7 @@ module Tgui
         club_params.merge! club.params
       end
   
-      upon! widget, **club_params, **na, &b
+      widget.send! **club_params, **na, &b
     end
 
     def self_child_methods

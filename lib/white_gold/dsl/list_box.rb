@@ -29,7 +29,7 @@ module Tgui
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP]) do |str1, str2|
           id = @widget.abi_unpack_string(str2)
-          @widget.page.upon! @widget do
+          @widget.send! do
             b.(@widget.self_get_object_by_id(id), @widget)
           end
         end
@@ -55,26 +55,22 @@ module Tgui
     abi_signal :on_scroll, SignalUInt
     abi_attr :text_alignment, TextAlignment
 
-    class Item
-      def initialize list_box, id
-        @list_box = list_box
-        @id = id
-      end
+    class Item < WidgetLike
 
       def object=(object)
-        @list_box.self_objects[@id] = object
+        host.self_objects[id] = object
       end
 
       def object
-        return @list_box.self_objects[@id]
+        return host.self_objects[id]
       end
 
       def text=(text)
-        @list_box._abi_change_item_by_id @id, abi_pack_string(text)
+        host._abi_change_item_by_id id, abi_pack_string(text)
       end
 
       def remove
-        @list_box._abi_remove_item_by_id @id
+        host._abi_remove_item_by_id id
       end
     end
 
@@ -84,7 +80,7 @@ module Tgui
       _abi_add_item abi_pack_string(text), abi_pack_string(id)
       item = Item.new self, id
       na[:object] ||= object
-      upon! item, **na, &b
+      item.send! **na, &b
     end
 
     def remove_all

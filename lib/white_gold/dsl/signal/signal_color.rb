@@ -6,7 +6,7 @@ module Tgui
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |ptr|
         c = @widget.abi_unpack Color, ptr
-        @widget.page.upon! @widget do
+        @widget.send! do
           b.(c, @widget)
         end
       end

@@ -8,7 +8,7 @@ module Tgui
     class SignalPanelListBoxItem < Tgui::SignalPanelListBoxItem
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |id|
-          @widget.page.upon! @widget do
+          @widget.send! do
             b.(@widget.self_objects.key(@widget.abi_unpack_string(id)), @widget)
           end
         end
@@ -22,7 +22,7 @@ module Tgui
       panel = Panel.new pointer: _abi_add_item(id, abi_pack_integer(index))
       panel.page = page
       self_objects[object] = id
-      upon! panel, **na, &b
+      panel.send! **na, &b
     end
 
     def [](object)
@@ -71,7 +71,7 @@ module Tgui
     def! :template do |**na, &b|
       panel = Panel.new(pointer: _abi_get_panel_template)
       panel.page = page
-      upon! panel, **na, &b
+      panel.send! **na, &b
     end
 
     # internal

@@ -30,7 +30,7 @@ module Tgui
       def! name do |custom_name = nil, base_name = nil, **na, &b|
         attribute = type.new(base_name, custom_name)
         attribute = attributes[attribute.name] ||= attribute
-        upon! attribute, **na, &b
+        attribute.send! **na, &b
       end
     end
   end

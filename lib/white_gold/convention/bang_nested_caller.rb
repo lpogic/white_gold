@@ -1,48 +1,60 @@
 module BangNestedCaller
-  def bang_respond_to? name
-    name.end_with?("!") && (respond_to?("#{name[...-1]}=") || respond_to?("api_bang_#{name[...-1]}") || (@bang_target && @bang_target.respond_to?(name)))
+
+  @@bang_stack = []
+
+  def self.push object
+    @@bang_stack.push object
   end
 
-  def bang_method_missing name, *a, **na, &b
-    return @bang_target.send(name, *a, **na, &b) if @bang_target && @bang_target.respond_to?(name)
+  def self.pop
+    @@bang_stack.pop
+  end
 
-    api_name = "api_bang_#{name[...-1]}".to_sym
-    return send(api_name, *a, **na, &b) if respond_to? api_name
-
-    setter = "#{name[...-1]}=".to_sym
-    if respond_to? setter
-      return send(setter, a) if !a.empty?
-      return send(setter, na) if !na.empty?
-      return send(setter, b) if block_given?
-      return send(setter)
-    end
-
-    no_method_error = NoMethodError.new("undefined bang nested method `#{name}` for #{self_bang_object_stack.map(&:class).join("/")}")
-    raise no_method_error
+  def self.peek
+    @@bang_stack.last
   end
 
   def self!
-    @bang_target&.respond_to?(:self!) ? @bang_target.self! : self
+    @bang_nest ? BangNestedCaller.peek : self
   end
 
-  def self_bang_object_stack root = true
-    stack = []
-    stack << self if root
-    stack << @bang_target if @bang_target
-    stack += @bang_target.self_bang_object_stack(false) if @bang_target&.respond_to? :self_bang_object_stack
-    return stack
+  def bang_respond_to? name
+    top = self!
+    top.respond_to?("#{name}=") || top.respond_to?("api_bang_#{name}")
   end
 
-
-  def upon! item, **na, &b
-    na.each do |k, v|
-      item.send("#{k}=", v)
+  def bang_method_missing name, *a, **na, &b
+    top = self!
+    api_bang_name = "api_bang_#{name[...-1]}".to_sym
+    return top.send(api_bang_name, *a, **na, &b) if top.respond_to? api_bang_name
+    setter = "#{name[...-1]}=".to_sym
+    if top.respond_to? setter
+      return top.send(setter, a) if !a.empty?
+      return top.send(setter, na) if !na.empty?
+      return top.send(setter, b) if block_given?
+      return top.send(setter)
     end
+
+    no_method_error = NoMethodError.new("bang method missing `#{name}` for #{top.class}")
+    raise no_method_error
+  end
+
+  def nest! &b
+    @bang_nest = true
+    BangNestedCaller.push self
     if b
-      @bang_target, original_bang_target = item, @bang_target
-      b.call item
-      @bang_target = original_bang_target
+      b.call
+      BangNestedCaller.pop
+      @bang_nest = false
     end
-    item
+  end
+
+  def send! &b
+    if b
+      BangNestedCaller.push self
+      b.call self
+      BangNestedCaller.pop
+    end
+    self
   end
 end

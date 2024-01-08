@@ -30,7 +30,7 @@ module Tgui
 
       def connect &b
         on_press = Fiddle::Closure::BlockCaller.new(0, [0]) do
-          @menu_bar.page.upon! @menu_bar do
+          @menu_bar.send! do
             b.(@path.last, @path, @menu_bar)
           end
         end
@@ -57,7 +57,7 @@ module Tgui
           end
           SignalItemHierarchy.fetch_path vector, loader
           object_path = @widget.self_object_path path
-          @widget.page.upon! @widget do
+          @widget.send! do
             b.(object_path.last, object_path, @widget)
           end
         end
@@ -79,7 +79,7 @@ module Tgui
           host._abi_add_menu_item _1, _2
         end
         item = Item.new host, item_path
-        upon! item, **na, &b
+        item.send! **na, &b
       end
 
       def! :separator do
@@ -165,7 +165,7 @@ module Tgui
       self_tree[object, grow: true].text = text
       _abi_add_menu abi_pack_string(text)
       item = Menu.new self, object
-      upon! item, **na, &b
+      item.send! **na, &b
     end
 
     def items=(items)

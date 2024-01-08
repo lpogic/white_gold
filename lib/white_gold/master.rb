@@ -17,7 +17,7 @@ class WhiteGold
     @frame_delay = 1.0 / fps
   end
 
-  def init init_page = :main_page, fps: nil, theme: nil
+  def init fps: nil, theme: nil
     @window = Window.new
     @gui = Gui.new window
     @preserved_pages = {}
@@ -25,12 +25,12 @@ class WhiteGold
     self.fps = fps if fps
     @frame_delay = 0.015 if !@frame_delay
     @jobs = []
-    @next_page_id = init_page
-    load_page init_page
+    @initialized = true
   end
 
-  def run init_page = :main_page, fps: nil, theme: nil, init: true
-    self.init init_page, fps: fps, theme: theme if init
+  def run page = nil, fps: nil, theme: nil
+    self.init fps: fps, theme: theme if !@initialized
+    load_page page if page
 
     next_frame_time = Time.now
     while @gui.self_active?
@@ -53,33 +53,29 @@ class WhiteGold
   end
 
   def load_page page_id
-    @current_page_id = page_id
+    @next_page_id = @current_page_id = page_id
     case page_id
     when Symbol
       page = @preserved_pages[page_id] = Page.new self
-      @gui.self_add page, "main_container"
-      @current_page = page
-      ExternObject.callback_storage = page.widget_callbacks
-      ExternObject.global_callback_storage = page.global_callbacks
-      ExternObject.data_storage = page.custom_data
+      init_page page
       send(page_id)
     when Class
       page = @preserved_pages[page_id] = page_id.new self
-      @gui.self_add page, "main_container"
-      @current_page = page
-      ExternObject.callback_storage = page.widget_callbacks
-      ExternObject.global_callback_storage = page.global_callbacks
-      ExternObject.data_storage = page.custom_data
+      init_page page
       page.build
     when Proc
       page = @preserved_pages[page_id] = Page.new self
-      @gui.self_add page, "main_container"
-      @current_page = page
-      ExternObject.callback_storage = page.widget_callbacks
-      ExternObject.global_callback_storage = page.global_callbacks
-      ExternObject.data_storage = page.custom_data
-      instance_exec &page_id
+      init_page page
+      page_id.call
     end
+  end
+
+  def init_page page
+    @gui.self_add page, "main_container"
+    @current_page = page
+    ExternObject.callback_storage = page.widget_callbacks
+    ExternObject.global_callback_storage = page.global_callbacks
+    ExternObject.data_storage = page.custom_data
   end
 
   attr_accessor :next_page_id
@@ -149,22 +145,5 @@ class WhiteGold
   def timer delay_ = nil, delay: nil, repeat: false, &b
     job delay: delay || delay_, repeat: do
     end.on_done &b
-  end
-
-  def respond_to? name
-    super || @current_page.respond_to?(name)
-  end
-
-  def method_missing name, *a, **na, &b
-    if @current_page.respond_to? name
-      @current_page.send(name, *a, **na, &b)
-    elsif @gui.respond_to? name
-      @gui.send(name, *a, **na, &b)
-    elsif @window.respond_to? name
-      @window.send(name, *a, **na, &b)
-    else
-      no_method_error = "method '#{name}' missing in Page/Gui/Window"
-      raise no_method_error
-    end
   end
 end

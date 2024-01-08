@@ -37,7 +37,7 @@ module Tgui
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP]) do |str1, str2|
           id = @widget.abi_unpack_string(str2)
-          @widget.page.upon! @widget do
+          @widget.send! do
             b.(@widget.self_get_object_by_id(id), @widget)
           end
         end
@@ -99,7 +99,7 @@ module Tgui
       _abi_add_item abi_pack_string(text), abi_pack_string(id)
       item = Item.new self, id
       self_objects[id] = object
-      upon! item, **na, &b
+      item.send! **na, &b
     end
 
     def selected

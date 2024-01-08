@@ -34,7 +34,7 @@ module Tgui
           end
           SignalItemHierarchy.fetch_path vector, loader
           object_path = @widget.self_tree.path_str_to_object *path
-          @widget.page.upon! @widget do
+          @widget.send! do
             b.(object_path.last, object_path, @widget)
           end
         end
@@ -176,7 +176,7 @@ module Tgui
         self_tree[*new_path, grow: true].text = _3
       end
       item = Item.new self, new_path
-      upon! item, **na, &b
+      item.send! **na, &b
     end
 
     def self_change_item path, text, **na, &b

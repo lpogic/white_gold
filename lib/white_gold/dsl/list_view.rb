@@ -31,7 +31,7 @@ module Tgui
     class ListViewItemSignal < Tgui::SignalInt
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |index|
-          @widget.page.upon! @widget do
+          @widget.send! do
             b.(@widget.self_objects[index], @widget)
           end
         end
@@ -41,7 +41,7 @@ module Tgui
     class ListViewColumnSignal < Tgui::SignalInt
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |index|
-          @widget.page.upon! @widget do
+          @widget.send! do
             b.(@widget.columns[index], @widget)
           end
         end
@@ -93,14 +93,14 @@ module Tgui
       index = _abi_add_column
       column = Column.new self, index
       columns << column
-      upon! column, **na, &b
+      column.send! **na, &b
     end
 
     def! :item do |object, **na, &b|
       self_add_object object, na[:index]
       item = Item.new self, object
       na.delete :index
-      upon! item, **na, &b
+      item.send! **na, &b
     end
     
     def items=(items)
@@ -173,7 +173,7 @@ module Tgui
     
     def! :grid_lines do | **na, &b|
       lines = GridLines.new self
-      upon! lines, **na, &b
+      lines.send! **na, &b
     end
 
     def grid_lines=(grid_lines)
@@ -199,7 +199,7 @@ module Tgui
 
     def! :header do |**na, &b|
       header = Header.new self
-      upon! header, **na, &b
+      header.send! **na, &b
     end
 
     def header=(header)

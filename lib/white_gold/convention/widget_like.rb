@@ -137,10 +137,4 @@ class WidgetLike
 
   attr :host
   attr :id
-
-  def flags=(flags)
-    flags.each do |f|
-      send("#{f}=", true)
-    end
-  end
 end

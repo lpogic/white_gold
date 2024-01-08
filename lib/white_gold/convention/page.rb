@@ -22,6 +22,24 @@ class Page < Tgui::Group
   def build
   end
 
+  def respond_to? name
+    super || 
+    (name.end_with?("!") && bang_respond_to?(name[...-1])) ||
+    @tgui.gui.respond_to?(name) ||
+    @tgui.window.respond_to?(name)
+  end
+
+  def method_missing name, *a, **na, &b
+    if name.end_with? "!"
+      bang_method_missing name, *a, **na, &b
+    elsif @tgui.gui.respond_to? name
+      @tgui.gui.send name, *a, **na, &b
+    elsif @tgui.window.respond_to? name
+      @tgui.window.send name, *a, **na, &b
+    else super
+    end
+  end
+
   def disconnect
     @global_callbacks.each do |id, signal|
       signal.disconnect id
@@ -79,11 +97,11 @@ class Page < Tgui::Group
     theme = self.theme
     if seed
       theme.reset_attributes
-      upon! theme do
+      theme.send! do
         load Tgui::Theme.loadpath(seed)
       end
     end
-    upon! theme, **na, &b
+    theme.send! **na, &b
     theme.self_commit @custom_renderers
   end
 

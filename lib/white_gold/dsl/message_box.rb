@@ -37,7 +37,7 @@ module Tgui
       end
 
       def press_signal_execute
-        host.page.upon! host do
+        host.send! do
           @on_press_callbacks.each do |c|
             c.(id, self, host)
           end
@@ -52,7 +52,7 @@ module Tgui
       _abi_add_button abi_pack_string(text)
       button = Button.new self, object
       self_buttons[text] = button
-      upon! button, **na, &b
+      button.send! **na, &b
     end
 
     def [](object)

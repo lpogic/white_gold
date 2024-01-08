@@ -44,7 +44,7 @@ module Tgui
       _abi_add_line abi_pack_string(text), abi_pack(Color, color), abi_pack(TextStyles, *style)
       line = Line.new self, objects.size
       objects << object
-      upon! line, **na, &b
+      line.send! **na, &b
     end
 
     def [](index)
