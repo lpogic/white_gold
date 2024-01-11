@@ -1,6 +1,8 @@
 BitmapButton
 ===
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#can_gain_focus?`
 - `#container?`
@@ -9,7 +11,6 @@ BitmapButton
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -27,6 +28,8 @@ BitmapButton
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_click`

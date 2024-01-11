@@ -5,6 +5,8 @@ FileDialog
 - `#add`
 - `#allow_create_folder=`
 - `#allow_create_folder?`
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#bitmap_button!`
 - `#btn!`
@@ -12,8 +14,10 @@ FileDialog
 - `#can_gain_focus?`
 - `#cancel_text`
 - `#cancel_text=`
+- `#canvas!`
 - `#chatbox!`
 - `#checkbox!`
+- `#child_at_position`
 - `#child_offset`
 - `#child_window!`
 - `#client_size`
@@ -45,7 +49,6 @@ FileDialog
 - `#filename_label`
 - `#filename_label=`
 - `#finish_animations`
-- `#flags=`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -94,6 +97,8 @@ FileDialog
 - `#multi_select?`
 - `#name_label`
 - `#name_label=`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_cancel`

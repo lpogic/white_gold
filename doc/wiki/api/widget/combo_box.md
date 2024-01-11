@@ -2,6 +2,8 @@ ComboBox
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#can_gain_focus?`
 - `#container?`
@@ -17,7 +19,6 @@ ComboBox
 - `#expand_direction`
 - `#expand_direction=`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -36,6 +37,8 @@ ComboBox
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_focus`

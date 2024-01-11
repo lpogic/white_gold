@@ -5,6 +5,8 @@ Grid
 - `#add`
 - `#alignment`
 - `#alignment=`
+- `#auto_layout`
+- `#auto_layout=`
 - `#auto_size=`
 - `#auto_size?`
 - `#back`
@@ -12,10 +14,12 @@ Grid
 - `#btn!`
 - `#button!`
 - `#can_gain_focus?`
+- `#canvas!`
 - `#cell`
 - `#cell=`
 - `#chatbox!`
 - `#checkbox!`
+- `#child_at_position`
 - `#child_offset`
 - `#child_window!`
 - `#color_picker!`
@@ -31,7 +35,6 @@ Grid
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
-- `#flags=`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -67,6 +70,8 @@ Grid
 - `#move_back`
 - `#move_front`
 - `#msg!`
+- `#navigation`
+- `#navigation!`
 - `#next!`
 - `#next_column`
 - `#next_column!`

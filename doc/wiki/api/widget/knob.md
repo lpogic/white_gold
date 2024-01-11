@@ -1,6 +1,8 @@
 Knob
 ===
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#can_gain_focus?`
 - `#clockwise=`
@@ -13,7 +15,6 @@ Knob
 - `#end`
 - `#end=`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -31,6 +32,8 @@ Knob
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_change`

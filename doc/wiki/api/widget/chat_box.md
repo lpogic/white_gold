@@ -2,6 +2,8 @@ ChatBox
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#can_gain_focus?`
 - `#container?`
@@ -10,7 +12,6 @@ ChatBox
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -31,6 +32,8 @@ ChatBox
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#new_lines_below_others=`
 - `#new_lines_below_others?`
 - `#objects`

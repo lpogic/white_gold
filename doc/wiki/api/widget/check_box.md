@@ -1,6 +1,8 @@
 CheckBox
 ===
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#can_gain_focus?`
 - `#checked=`
@@ -11,7 +13,6 @@ CheckBox
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -25,6 +26,8 @@ CheckBox
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#object`
 - `#object=`
 - `#on_animation_finish`

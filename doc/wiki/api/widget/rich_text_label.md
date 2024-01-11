@@ -1,6 +1,8 @@
 RichTextLabel
 ===
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#auto_layout`
+- `#auto_layout=`
 - `#auto_size=`
 - `#auto_size?`
 - `#back`
@@ -11,7 +13,6 @@ RichTextLabel
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -31,6 +32,8 @@ RichTextLabel
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_click`

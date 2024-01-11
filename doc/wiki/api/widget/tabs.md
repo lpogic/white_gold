@@ -2,6 +2,8 @@ Tabs
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#auto_layout`
+- `#auto_layout=`
 - `#auto_size=`
 - `#auto_size?`
 - `#back`
@@ -13,7 +15,6 @@ Tabs
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -34,6 +35,8 @@ Tabs
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#objects`
 - `#objects=`
 - `#on_animation_finish`

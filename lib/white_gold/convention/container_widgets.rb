@@ -5,6 +5,7 @@ module Tgui
   ORDINARY_WIDGETS = {
     bitmap_button: Tgui::BitmapButton,
     button: Tgui::Button,
+    canvas: Tgui::Canvas,
     chatbox: Tgui::ChatBox,
     checkbox: Tgui::CheckBox,
     child_window: Tgui::ChildWindow,

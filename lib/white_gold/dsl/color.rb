@@ -21,6 +21,9 @@ module Tgui
           return arg
         when String
           r, g, b, a = *tones_from_string(arg)
+        when :random
+          r, g, b = 5.times.map{ rand 255 }
+          a = 255
         when Symbol
           r, g, b, a = *PREDEFINED_COLORS[arg]
         when Numeric
@@ -61,12 +64,12 @@ module Tgui
       Color.new *Color.hsv_to_rgb(h, s, (v - shadow).clamp(0, 255)), alpha
     end
 
-    def to_a
+    def to_arr
       [red, green, blue, alpha]
     end
 
     def to_s
-      "##{to_a.map{ _1.to_s(16).ljust(2, '0') }.join}"
+      "##{to_arr.map{ _1.to_s(16).ljust(2, '0') }.join}"
     end
 
     def inspect

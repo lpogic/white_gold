@@ -2,6 +2,8 @@ ListBox
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#auto_layout`
+- `#auto_layout=`
 - `#auto_scroll=`
 - `#auto_scroll?`
 - `#back`
@@ -13,7 +15,6 @@ ListBox
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -36,6 +37,8 @@ ListBox
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_double_click`

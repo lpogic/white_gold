@@ -91,6 +91,9 @@ module Tgui
       size[0]
     end
 
+    abi_enum "AutoLayout", :disabled, :top, :left, :right, :bottom, :leftmost, :rightmost, :fill
+
+    abi_attr :auto_layout, AutoLayout
     abi_def :can_gain_focus?, :can_gain_focus, nil => Boolean
     abi_def :container?, nil => Boolean
 

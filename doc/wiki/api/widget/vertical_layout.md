@@ -3,13 +3,17 @@ VerticalLayout
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
 - `#add`
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#bitmap_button!`
 - `#btn!`
 - `#button!`
 - `#can_gain_focus?`
+- `#canvas!`
 - `#chatbox!`
 - `#checkbox!`
+- `#child_at_position`
 - `#child_offset`
 - `#child_window!`
 - `#color_picker!`
@@ -23,7 +27,6 @@ VerticalLayout
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
-- `#flags=`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -59,6 +62,8 @@ VerticalLayout
 - `#move_back`
 - `#move_front`
 - `#msg!`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_focus`

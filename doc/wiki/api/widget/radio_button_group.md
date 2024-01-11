@@ -3,15 +3,19 @@ RadioButtonGroup
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
 - `#add`
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#bitmap_button!`
 - `#btn!`
 - `#button!`
 - `#can_gain_focus?`
+- `#canvas!`
 - `#chatbox!`
 - `#checkbox!`
 - `#checked`
 - `#checked_radio_button`
+- `#child_at_position`
 - `#child_offset`
 - `#child_window!`
 - `#color_picker!`
@@ -25,7 +29,6 @@ RadioButtonGroup
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
-- `#flags=`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -61,6 +64,8 @@ RadioButtonGroup
 - `#move_back`
 - `#move_front`
 - `#msg!`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_focus`

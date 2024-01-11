@@ -2,6 +2,7 @@ Widgets
 ===
 - `#bitmap_button!` => [BitmapButton](./widget/bitmap_button.md)
 - `#button!` => [Button](./widget/button.md)
+- `#canvas!` => [Canvas](./widget/canvas.md)
 - `#chatbox!` => [ChatBox](./widget/chat_box.md)
 - `#checkbox!` => [CheckBox](./widget/check_box.md)
 - `#child_window!` => [ChildWindow](./widget/child_window.md)

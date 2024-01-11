@@ -2,6 +2,8 @@ TextArea
 ===
 - `#absolute_position` - () => [float, float] - absolute widget position
 - `#add_text`
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#can_gain_focus?`
 - `#caret_column`
@@ -16,7 +18,6 @@ TextArea
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -36,6 +37,8 @@ TextArea
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_caret_change`

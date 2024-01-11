@@ -2,6 +2,8 @@ ListView
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#auto_layout`
+- `#auto_layout=`
 - `#auto_scroll=`
 - `#auto_scroll?`
 - `#back`
@@ -18,7 +20,6 @@ ListView
 - `#finish_animations`
 - `#fixed_icon_size`
 - `#fixed_icon_size=`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -45,6 +46,8 @@ ListView
 - `#move`
 - `#multi_select=`
 - `#multi_select?`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_double_click`

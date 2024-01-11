@@ -160,14 +160,16 @@ class ExternObject
     end
   end
 
-  abi_packer Tgui::Abi::Vector2f do |o|
-    case o
-    when Array
-      raise "Invalid array size excepted: #{2}, given: #{o.size}" if o.size != 2
-      return o.map{ abi_pack_float _1 }
-    else
-      raise "Unable to make Vector2f from #{o}"
+  abi_packer Tgui::Abi::Vector2f do |*arg|
+    case arg.size
+    when 1
+      a = arg.first
+      x = y = a
+    when 2
+      x, y = *arg
+    else raise "Unsupported argument #{arg}"
     end
+    [abi_pack_float(x), abi_pack_float(y)]
   end
 
   abi_packer Tgui::Abi::Vector2u do |o|

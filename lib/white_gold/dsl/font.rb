@@ -18,6 +18,10 @@ module Tgui
       end
       Font.new id
     end
-    
+
+    def self.default
+      Font.new pointer: _abi_get_global_font
+    end
+
   end
 end

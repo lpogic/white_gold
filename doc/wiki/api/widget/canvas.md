@@ -1,15 +1,14 @@
-Label
+Canvas
 ===
 - `#absolute_position` - () => [float, float] - absolute widget position
 - `#auto_layout`
 - `#auto_layout=`
-- `#auto_size=`
-- `#auto_size?`
 - `#back`
 - `#can_gain_focus?`
 - `#container?`
 - `#disabled!`
 - `#draggable?`
+- `#draw!`
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
@@ -22,12 +21,6 @@ Label
 - `#height`
 - `#height=`
 - `#hide`
-- `#horizontal_alignment`
-- `#horizontal_alignment=`
-- `#ignore_mouse_events`
-- `#ignore_mouse_events?`
-- `#max_width`
-- `#max_width=`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
@@ -70,37 +63,18 @@ Label
 - `#renderer=`
 - `#resize`
 - `#robot!`
-- `#scrollbar_policy`
-- `#scrollbar_policy=`
-- `#scrollbar_value`
-- `#scrollbar_value=`
 - `#show`
 - `#size`
 - `#size=`
-- `#text`
-- `#text=`
 - `#text_size`
 - `#text_size=`
 - `#tooltip!`
-- `#vertical_alignment`
-- `#vertical_alignment=`
 - `#visible=`
 - `#visible?`
 - `#width`
 - `#width=`
 ## Theme
-- `#background_color!`
-- `#border_color!`
-- `#borders!`
 - `#opacity!`
 - `#opacity_disabled!`
-- `#padding!`
-- `#scrollbar!`
-- `#scrollbar_width!`
-- `#text_color!`
-- `#text_outline_color!`
-- `#text_outline_thickness!`
 - `#text_size!`
-- `#text_style!`
-- `#texture_background!`
 - `#transparent_texture!`

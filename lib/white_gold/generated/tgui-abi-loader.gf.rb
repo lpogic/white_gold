@@ -63,6 +63,7 @@ module Tgui
     extern 'int ABI_BackendGui_isKeyboardNavigationEnabled(BackendGui* self)'
     extern 'void* ABI_BackendGui_onViewChange(BackendGui* self)'
     extern 'void* ABI_Font_new(char * id)'
+    extern 'void* ABI_STATIC_Font_getGlobalFont()'
     extern 'void* ABI_Gui_new(sf::RenderWindow* window)'
     extern 'int ABI_Gui_isActive(Gui* self)'
     extern 'void ABI_Gui_pollEvents(Gui* self)'
@@ -139,6 +140,8 @@ module Tgui
     extern 'void ABI_Widget_scrolled(Widget::Ptr* self, float delta, float x, float y, int touch)'
     extern 'void ABI_Widget_askToolTip(Widget::Ptr* self, float x, float y)'
     extern 'void ABI_Widget_setWidgetName(Widget::Ptr* self, char * name)'
+    extern 'void ABI_Widget_setAutoLayout(Widget::Ptr* self, int autoLayout)'
+    extern 'int ABI_Widget_getAutoLayout(Widget::Ptr* self)'
     extern 'void* ABI_Widget_getWidgetName(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onPositionChange(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onSizeChange(Widget::Ptr* self)'
@@ -800,6 +803,64 @@ module Tgui
     extern 'int ABI_Scrollbar_getVerticalScroll(Scrollbar::Ptr* self)'
     extern 'float ABI_Scrollbar_getDefaultWidth(Scrollbar::Ptr* self)'
     extern 'void* ABI_Scrollbar_onValueChange(Scrollbar::Ptr* self)'
+    extern 'void* ABI_Canvas_new()'
+    extern 'void ABI_Canvas_clear(CanvasSFML::Ptr* self, Color* color)'
+    extern 'void ABI_Canvas_draw(CanvasSFML::Ptr* self, sf::Drawable* drawable)'
+    extern 'void ABI_Canvas_display(CanvasSFML::Ptr* self)'
+    extern 'void ABI_Shape_setTexture(sf::Shape* self, Texture* texture)'
+    extern 'void* ABI_Shape_getTexture(sf::Shape* self)'
+    extern 'void ABI_Shape_setFillColor(sf::Shape* self, Color* color)'
+    extern 'void* ABI_Shape_getFillColor(sf::Shape* self)'
+    extern 'void ABI_Shape_setOutlineColor(sf::Shape* self, Color* color)'
+    extern 'void* ABI_Shape_getOutlineColor(sf::Shape* self)'
+    extern 'void ABI_Shape_setOutlineThickness(sf::Shape* self, float thickness)'
+    extern 'float ABI_Shape_getOutlineThickness(sf::Shape* self)'
+    extern 'void ABI_Shape_setPosition(sf::Shape* self, float x, float y)'
+    extern 'void* ABI_Shape_getPosition(sf::Shape* self)'
+    extern 'void ABI_Shape_setRotation(sf::Shape* self, float angle)'
+    extern 'float ABI_Shape_getRotation(sf::Shape* self)'
+    extern 'void ABI_Shape_setScale(sf::Shape* self, float factorX, float factorY)'
+    extern 'void* ABI_Shape_getScale(sf::Shape* self)'
+    extern 'void ABI_Shape_setOrigin(sf::Shape* self, float x, float y)'
+    extern 'void* ABI_Shape_getOrigin(sf::Shape* self)'
+    extern 'int ABI_CircleShape_getPointCount(sf::CircleShape* self)'
+    extern 'void* ABI_CircleShape_new()'
+    extern 'void ABI_CircleShape_setRadius(sf::CircleShape* self, float radius)'
+    extern 'float ABI_CircleShape_getRadius(sf::CircleShape* self)'
+    extern 'void ABI_CircleShape_setPointCount(sf::CircleShape* self, int pointCount)'
+    extern 'void* ABI_RectangleShape_new()'
+    extern 'void ABI_RectangleShape_setSize(sf::RectangleShape* self, float width, float height)'
+    extern 'void* ABI_RectangleShape_getSize(sf::RectangleShape* self)'
+    extern 'void* ABI_ConvexShape_new()'
+    extern 'void ABI_ConvexShape_setPoint(sf::ConvexShape* self, int index, float x, float y)'
+    extern 'void ABI_ConvexShape_setPointCount(sf::ConvexShape* self, int pointCount)'
+    extern 'void* ABI_Text_new()'
+    extern 'void ABI_Text_setString(sf::Text* self, char* string)'
+    extern 'void* ABI_Text_getString(sf::Text* self)'
+    extern 'void ABI_Text_setFont(sf::Text* self, Font* font)'
+    extern 'void ABI_Text_setCharacterSize(sf::Text* self, int size)'
+    extern 'int ABI_Text_getCharacterSize(sf::Text* self)'
+    extern 'void ABI_Text_setLineSpacing(sf::Text* self, float spacing)'
+    extern 'float ABI_Text_getLineSpacing(sf::Text* self)'
+    extern 'void ABI_Text_setLetterSpacing(sf::Text* self, float spacing)'
+    extern 'float ABI_Text_getLetterSpacing(sf::Text* self)'
+    extern 'void ABI_Text_setStyle(sf::Text* self, int style)'
+    extern 'int ABI_Text_getStyle(sf::Text* self)'
+    extern 'void ABI_Text_setFillColor(sf::Text* self, Color* color)'
+    extern 'void* ABI_Text_getFillColor(sf::Text* self)'
+    extern 'void ABI_Text_setOutlineColor(sf::Text* self, Color* color)'
+    extern 'void* ABI_Text_getOutlineColor(sf::Text* self)'
+    extern 'void ABI_Text_setOutlineThickness(sf::Text* self, float thickness)'
+    extern 'float ABI_Text_getOutlineThickness(sf::Text* self)'
+    extern 'void ABI_Text_setPosition(sf::Text* self, float x, float y)'
+    extern 'void* ABI_Text_getPosition(sf::Text* self)'
+    extern 'void ABI_Text_setRotation(sf::Text* self, float angle)'
+    extern 'float ABI_Text_getRotation(sf::Text* self)'
+    extern 'void ABI_Text_setScale(sf::Text* self, float factorX, float factorY)'
+    extern 'void* ABI_Text_getScale(sf::Text* self)'
+    extern 'void ABI_Text_setOrigin(sf::Text* self, float x, float y)'
+    extern 'void* ABI_Text_getOrigin(sf::Text* self)'
+    extern 'void* ABI_Text_findCharacterPos(sf::Text* self, int index)'
   end
 
   class Util
@@ -929,6 +990,7 @@ module Tgui
 
   class Font
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Font_new(*a)); end
+    def self._abi_get_global_font(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Font_getGlobalFont(*a); end
   end
 
   class Gui
@@ -1017,6 +1079,8 @@ module Tgui
     def _abi_scrolled(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_scrolled(@pointer, *a); end
     def _abi_ask_tool_tip(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_askToolTip(@pointer, *a); end
     def _abi_set_widget_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setWidgetName(@pointer, *a); end
+    def _abi_set_auto_layout(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setAutoLayout(@pointer, *a); end
+    def _abi_get_auto_layout(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getAutoLayout(@pointer, *a); end
     def _abi_get_widget_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getWidgetName(@pointer, *a); end
     def _abi_on_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onPositionChange(@pointer, *a); end
     def _abi_on_size_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onSizeChange(@pointer, *a); end
@@ -1819,5 +1883,81 @@ module Tgui
     def _abi_get_vertical_scroll(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getVerticalScroll(@pointer, *a); end
     def _abi_get_default_width(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_getDefaultWidth(@pointer, *a); end
     def _abi_on_value_change(*a);    Abi.call_arg_map! a; Abi.ABI_Scrollbar_onValueChange(@pointer, *a); end
+  end
+
+  class Canvas
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Canvas_new(*a)); end
+    def _abi_clear(*a);    Abi.call_arg_map! a; Abi.ABI_Canvas_clear(@pointer, *a); end
+    def _abi_draw(*a);    Abi.call_arg_map! a; Abi.ABI_Canvas_draw(@pointer, *a); end
+    def _abi_display(*a);    Abi.call_arg_map! a; Abi.ABI_Canvas_display(@pointer, *a); end
+  end
+
+  class Shape
+    def _abi_set_texture(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_setTexture(@pointer, *a); end
+    def _abi_get_texture(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_getTexture(@pointer, *a); end
+    def _abi_set_fill_color(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_setFillColor(@pointer, *a); end
+    def _abi_get_fill_color(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_getFillColor(@pointer, *a); end
+    def _abi_set_outline_color(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_setOutlineColor(@pointer, *a); end
+    def _abi_get_outline_color(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_getOutlineColor(@pointer, *a); end
+    def _abi_set_outline_thickness(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_setOutlineThickness(@pointer, *a); end
+    def _abi_get_outline_thickness(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_getOutlineThickness(@pointer, *a); end
+    def _abi_set_position(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_setPosition(@pointer, *a); end
+    def _abi_get_position(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_getPosition(@pointer, *a); end
+    def _abi_set_rotation(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_setRotation(@pointer, *a); end
+    def _abi_get_rotation(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_getRotation(@pointer, *a); end
+    def _abi_set_scale(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_setScale(@pointer, *a); end
+    def _abi_get_scale(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_getScale(@pointer, *a); end
+    def _abi_set_origin(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_setOrigin(@pointer, *a); end
+    def _abi_get_origin(*a);    Abi.call_arg_map! a; Abi.ABI_Shape_getOrigin(@pointer, *a); end
+  end
+
+  class CircleShape
+    def _abi_get_point_count(*a);    Abi.call_arg_map! a; Abi.ABI_CircleShape_getPointCount(@pointer, *a); end
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_CircleShape_new(*a)); end
+    def _abi_set_radius(*a);    Abi.call_arg_map! a; Abi.ABI_CircleShape_setRadius(@pointer, *a); end
+    def _abi_get_radius(*a);    Abi.call_arg_map! a; Abi.ABI_CircleShape_getRadius(@pointer, *a); end
+    def _abi_set_point_count(*a);    Abi.call_arg_map! a; Abi.ABI_CircleShape_setPointCount(@pointer, *a); end
+  end
+
+  class RectangleShape
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RectangleShape_new(*a)); end
+    def _abi_set_size(*a);    Abi.call_arg_map! a; Abi.ABI_RectangleShape_setSize(@pointer, *a); end
+    def _abi_get_size(*a);    Abi.call_arg_map! a; Abi.ABI_RectangleShape_getSize(@pointer, *a); end
+  end
+
+  class ConvexShape
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ConvexShape_new(*a)); end
+    def _abi_set_point(*a);    Abi.call_arg_map! a; Abi.ABI_ConvexShape_setPoint(@pointer, *a); end
+    def _abi_set_point_count(*a);    Abi.call_arg_map! a; Abi.ABI_ConvexShape_setPointCount(@pointer, *a); end
+  end
+
+  class Text
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Text_new(*a)); end
+    def _abi_set_string(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setString(@pointer, *a); end
+    def _abi_get_string(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getString(@pointer, *a); end
+    def _abi_set_font(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setFont(@pointer, *a); end
+    def _abi_set_character_size(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setCharacterSize(@pointer, *a); end
+    def _abi_get_character_size(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getCharacterSize(@pointer, *a); end
+    def _abi_set_line_spacing(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setLineSpacing(@pointer, *a); end
+    def _abi_get_line_spacing(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getLineSpacing(@pointer, *a); end
+    def _abi_set_letter_spacing(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setLetterSpacing(@pointer, *a); end
+    def _abi_get_letter_spacing(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getLetterSpacing(@pointer, *a); end
+    def _abi_set_style(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setStyle(@pointer, *a); end
+    def _abi_get_style(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getStyle(@pointer, *a); end
+    def _abi_set_fill_color(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setFillColor(@pointer, *a); end
+    def _abi_get_fill_color(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getFillColor(@pointer, *a); end
+    def _abi_set_outline_color(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setOutlineColor(@pointer, *a); end
+    def _abi_get_outline_color(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getOutlineColor(@pointer, *a); end
+    def _abi_set_outline_thickness(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setOutlineThickness(@pointer, *a); end
+    def _abi_get_outline_thickness(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getOutlineThickness(@pointer, *a); end
+    def _abi_set_position(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setPosition(@pointer, *a); end
+    def _abi_get_position(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getPosition(@pointer, *a); end
+    def _abi_set_rotation(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setRotation(@pointer, *a); end
+    def _abi_get_rotation(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getRotation(@pointer, *a); end
+    def _abi_set_scale(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setScale(@pointer, *a); end
+    def _abi_get_scale(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getScale(@pointer, *a); end
+    def _abi_set_origin(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setOrigin(@pointer, *a); end
+    def _abi_get_origin(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getOrigin(@pointer, *a); end
+    def _abi_find_character_pos(*a);    Abi.call_arg_map! a; Abi.ABI_Text_findCharacterPos(@pointer, *a); end
   end
 end

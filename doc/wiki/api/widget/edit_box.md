@@ -3,6 +3,8 @@ EditBox
 - `#absolute_position` - () => [float, float] - absolute widget position
 - `#alignment`
 - `#alignment=`
+- `#auto_layout`
+- `#auto_layout=`
 - `#back`
 - `#can_gain_focus?`
 - `#caret_position`
@@ -17,7 +19,6 @@ EditBox
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
-- `#flags=`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -33,6 +34,8 @@ EditBox
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#navigation`
+- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_caret_position_change`
