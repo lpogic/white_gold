@@ -38,62 +38,26 @@ def update_api_doc type
       end
       f << "\n"
     end
-    f << "## Theme\n"
-    public_api_instance_methods(type::Theme, ThemeComponent.instance_methods).each do |m|
-      f << "- `#" << m << "`\n"
+    type.constants.each do |const_symbol|
+      const = type.const_get(const_symbol)
+      if const.is_a?(Class)
+        if const < WidgetLike
+          f << "## #{const_symbol}\n"
+          public_api_instance_methods(const, WidgetLike.instance_methods).each do |m|
+            f << "- `#" << m << "`\n"
+          end
+        elsif const < ThemeComponent
+          f << "## #{const_symbol}\n"
+          public_api_instance_methods(const, ThemeComponent.instance_methods).each do |m|
+            f << "- `#" << m << "`\n"
+          end
+        end
+      end
     end
   end
   [type_name, file_name]
 end
 
-
-
-
-
-WIDGETS = [
-  BitmapButton,
-  Button,
-  ChatBox,
-  CheckBox,
-  ChildWindow,
-  ColorPicker,
-  ComboBox,
-  EditBox,
-  FileDialog,
-  Grid,
-  Group,
-  Gui,
-  HorizontalLayout,
-  HorizontalWrap,
-  Knob,
-  Label,
-  ListBox,
-  ListView,
-  MenuBar,
-  MessageBox,
-  PanelListBox,
-  Panel,
-  Picture,
-  ProgressBar,
-  RadioButtonGroup,
-  RadioButton,
-  RangeSlider,
-  RichTextLabel,
-  ScrollablePanel,
-  Scrollbar,
-  SeparatorLine,
-  Slider,
-  SpinButton,
-  SpinControl,
-  TabContainer,
-  Tabs,
-  TextArea,
-  ToggleButton,
-  ToolTip,
-  TreeView,
-  VerticalLayout,
-  Window
-].freeze
 
 write_file "#{base_dir}/doc/wiki/api/README.md" do |f|
   f << "Widgets" << "\n" << "===" << "\n"
