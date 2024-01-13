@@ -81,13 +81,6 @@ Tabs
 - `#visible?`
 - `#width`
 - `#width=`
-## Tab
-- `#enabled=`
-- `#enabled?`
-- `#text`
-- `#text=`
-- `#visible=`
-- `#visible?`
 ## Theme
 - `#background_color!`
 - `#background_color_disabled!`
@@ -114,6 +107,13 @@ Tabs
 - `#texture_tab!`
 - `#texture_tab_hover!`
 - `#transparent_texture!`
+## Tab
+- `#enabled=`
+- `#enabled?`
+- `#text`
+- `#text=`
+- `#visible=`
+- `#visible?`
 ## Robot
 - `#key_press`
 - `#mouse_move`

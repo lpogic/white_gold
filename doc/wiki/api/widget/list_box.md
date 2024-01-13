@@ -91,11 +91,6 @@ ListBox
 - `#visible?`
 - `#width`
 - `#width=`
-## Item
-- `#object`
-- `#object=`
-- `#remove`
-- `#text=`
 ## Theme
 - `#background_color!`
 - `#background_color_hover!`
@@ -117,6 +112,11 @@ ListBox
 - `#text_style!`
 - `#texture_background!`
 - `#transparent_texture!`
+## Item
+- `#object`
+- `#object=`
+- `#remove`
+- `#text=`
 ## Robot
 - `#key_press`
 - `#mouse_move`

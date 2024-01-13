@@ -1,4 +1,3 @@
-
 Welcome to the _white_gold_ documentation home page!
 ===
 

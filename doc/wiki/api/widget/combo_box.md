@@ -81,13 +81,6 @@ ComboBox
 - `#visible?`
 - `#width`
 - `#width=`
-## Item
-- `#object`
-- `#object=`
-- `#selected=`
-- `#selected?`
-- `#text`
-- `#text=`
 ## Theme
 - `#arrow_background_color!`
 - `#arrow_background_color_disabled!`
@@ -115,6 +108,13 @@ ComboBox
 - `#texture_background!`
 - `#texture_background_disabled!`
 - `#transparent_texture!`
+## Item
+- `#object`
+- `#object=`
+- `#selected=`
+- `#selected?`
+- `#text`
+- `#text=`
 ## Robot
 - `#key_press`
 - `#mouse_move`

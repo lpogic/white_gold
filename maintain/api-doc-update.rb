@@ -18,11 +18,7 @@ def public_api_instance_methods type, exlude = []
 end
 
 def base_dir
-  File.dirname(File.dirname(__FILE__))
-end
-
-def wiki_draft
-  "#{base_dir}/doc/draft/wiki.md"
+  Dir.getwd
 end
 
 def update_api_doc type
@@ -58,6 +54,22 @@ def update_api_doc type
   [type_name, file_name]
 end
 
+def compile_rbmd input_file, output_file
+  write_file output_file do |f|
+    File.foreach input_file do |line|
+      if line =~ /#\[(.*)\]/
+        f << "```RUBY\n"
+        File.foreach "#{base_dir}/#{$1}" do |line|
+          f << line
+        end
+        f << "\n```\n"
+      else
+        f << line.gsub(/\#{.*?}/){|group| eval group[2...-1] }
+      end
+    end
+  end
+end
+
 
 write_file "#{base_dir}/doc/wiki/api/README.md" do |f|
   f << "Widgets" << "\n" << "===" << "\n"
@@ -69,21 +81,5 @@ write_file "#{base_dir}/doc/wiki/api/README.md" do |f|
   end
 end
 
-write_file "#{base_dir}/doc/wiki/README.md" do |f|
-  warning_line = true
-  File.foreach wiki_draft do |line|
-    if warning_line
-      warning_line = false
-      next
-    end
-    if line =~ /#\[(.*)\]/
-      f << "```RUBY\n"
-      File.foreach "#{base_dir}/#{$1}" do |line|
-        f << line
-      end
-      f << "\n```\n"
-    else
-      f << line
-    end
-  end
-end
+compile_rbmd "#{base_dir}/doc/draft/wiki.rbmd", "#{base_dir}/doc/wiki/README.md"
+compile_rbmd "#{base_dir}/doc/draft/readme.rbmd", "#{base_dir}/README.md"

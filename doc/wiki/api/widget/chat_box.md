@@ -80,9 +80,6 @@ ChatBox
 - `#visible?`
 - `#width`
 - `#width=`
-## Line
-- `#color`
-- `#style`
 ## Theme
 - `#background_color!`
 - `#border_color!`
@@ -95,6 +92,9 @@ ChatBox
 - `#text_size!`
 - `#texture_background!`
 - `#transparent_texture!`
+## Line
+- `#color`
+- `#style`
 ## Robot
 - `#key_press`
 - `#mouse_move`

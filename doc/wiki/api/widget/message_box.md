@@ -166,9 +166,6 @@ MessageBox
 - `#widgets`
 - `#width`
 - `#width=`
-## Button
-- `#on_press=`
-- `#press_signal_execute`
 ## Theme
 - `#background_color!`
 - `#border_below_title_bar!`
@@ -193,6 +190,9 @@ MessageBox
 - `#title_bar_height!`
 - `#title_color!`
 - `#transparent_texture!`
+## Button
+- `#on_press=`
+- `#press_signal_execute`
 ## Robot
 - `#key_press`
 - `#mouse_move`

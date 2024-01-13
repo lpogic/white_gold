@@ -1,6 +1,8 @@
+require_relative "./lib/white_gold/version"
+
 Gem::Specification.new do |s|
   s.name        = "white_gold"
-  s.version     = "0.0.2"
+  s.version     = WhiteGold::VERSION
   s.summary     = "TGUI based Ruby gem for quick native application developing"
   s.description = <<-EOT
     Ruby gem for building pure ruby graphical user interface.
