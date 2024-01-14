@@ -51,7 +51,7 @@ button! position: :center, size: [300, 150] do
   text_size! 30
   text! "Exit"
   on_press! do
-    close!
+    window.close!
   end
 end
 ```
@@ -105,7 +105,7 @@ Custom widgets can be created by customizing and combining base widgets:
 require 'white_gold'
 
 def! :hello_world do
-  messagebox! text: "Hello wolrd" do |box|
+  messagebox! text: "Hello world" do |box|
     button! "Close" do
       on_press! do
         box.close
@@ -116,7 +116,7 @@ end
 
 hello_world!
 
-# If widget should be available in every Container, define it inside Container class
+# If widget should be available in every Container, define it inside the Container class
 
 class Tgui::Container
   def! :editbox_with_confirm do |confirm_text: "Save", **na, &b|
@@ -134,7 +134,7 @@ child_window! do
   editbox_with_confirm! position: :center, confirm_text: "Send"
 end
 ```
-Notice, that methods are not defined in common way (`def! :hello_world` instead of `def hello_world!`).
+Notice, that bang methods are not defined in common way (`def! :hello_world` instead of `def hello_world!`).
 
 DSL
 ---
@@ -262,13 +262,13 @@ require 'white_gold'
 button! text: "Button", position: [50, 50], on_press: proc{ puts "Have I been pressed?" }
 ```
 
-With the help of the 'upon!' method, these methods can also be used after initialization:
+With the help of the 'send!' method, these methods can also be used after initialization:
 
 ```RUBY
 require 'white_gold'
 
 button = button!
-upon! button, text: "Button", position: [50, 50] do # note: 'upon!' puts first argument on top of the bang stack
+button.send! text: "Button", position: [50, 50] do
   on_press! do
     puts "Have I been pressed?"
   end

@@ -1,5 +1,5 @@
 tgui-abi-update.rb
----
+===
 
 Script for updating tgui abi.<br>
 Requires configuration file to work.<br>
@@ -14,6 +14,26 @@ TGUI_TARGET_BIN = # absolute path to target shared library (.../ext/dll/tgui.dll
 
 ```
 
-available flags:
+options:
 
 **-c** - run TGUI-ABI compilation before generating abi loader file
+
+api-doc-update.rb
+===
+
+Compiles .rbmd files to .md (inserts code, evaluate expressions). Generates API reference pages.
+
+Current directory excepted to be .../white_gold (not .../white_gold/maintain)!
+
+No additional configuration required. No parameters excepted.
+
+run-samples.rb
+===
+
+Run selected scripts from samples folder sequentially. Simplifies manual testing.
+
+No additional configuration required. No parameters excepted.
+
+options:
+
+**-sSTART, --start=START** - First script to run. All previous will be skipped.

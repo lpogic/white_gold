@@ -38,7 +38,7 @@ Theme defines how widgets looks like. `theme!` method allows to set up global th
 List of base widgets with methods to create them can be found [here](./api). 
 Custom widgets can be created by customizing and combining base widgets:
 #[sample/basics/step_6.rb]
-Notice, that methods are not defined in common way (`def! :hello_world` instead of `def hello_world!`).
+Notice, that bang methods are not defined in common way (`def! :hello_world` instead of `def hello_world!`).
 
 DSL
 ---
@@ -84,7 +84,7 @@ Second one is passing attributes as named arguments:
 
 #[sample/dsl/attributing/attr_3.rb]
 
-With the help of the 'upon!' method, these methods can also be used after initialization:
+With the help of the 'send!' method, these methods can also be used after initialization:
 
 #[sample/dsl/attributing/attr_4.rb]
 

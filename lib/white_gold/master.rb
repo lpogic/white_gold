@@ -62,7 +62,9 @@ class WhiteGold
     when Class
       page = @preserved_pages[page_id] = page_id.new self
       init_page page
-      page.build
+      page.send! do
+        page.build
+      end
     when Proc
       page = @preserved_pages[page_id] = Page.new self
       init_page page

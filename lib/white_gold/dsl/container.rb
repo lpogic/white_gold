@@ -19,7 +19,7 @@ module Tgui
     abi_def :remove, Widget => nil
 
     def move_front widget, ceil = false
-      widget = abi_pack_widget widget
+      widget = abi_pack(Widget, widget)
       if ceil
         _abi_move_widget_to_front widget
       else
@@ -28,7 +28,7 @@ module Tgui
     end
 
     def move_back widget, floor = false
-      widget = abi_pack_widget widget
+      widget = abi_pack(Widget, widget)
       if floor
         _abi_move_widget_to_back widget
       else
@@ -37,7 +37,7 @@ module Tgui
     end
 
     def move_at index, widget
-      _abi_set_widget_index abi_pack_widget(widget), abi_pack_integer(index)
+      _abi_set_widget_index abi_pack(Widget, widget), abi_pack_integer(index)
     end
 
     abi_def :index, :get_widget_, Widget => Integer

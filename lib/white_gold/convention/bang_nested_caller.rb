@@ -2,58 +2,46 @@ module BangNestedCaller
 
   @@bang_stack = []
 
-  def self.push object
-    @@bang_stack.push object
-  end
-
-  def self.pop
-    @@bang_stack.pop
-  end
-
-  def self.peek
+  def self!
     @@bang_stack.last
   end
 
-  def self!
-    @bang_nest ? BangNestedCaller.peek : self
-  end
-
   def bang_respond_to? name
-    top = self!
+    top = @@bang_stack.include?(self) ? @@bang_stack.last : self
     top.respond_to?("#{name}=") || top.respond_to?("api_bang_#{name}")
   end
 
-  def bang_method_missing name, *a, **na, &b
-    top = self!
-    api_bang_name = "api_bang_#{name[...-1]}".to_sym
+  def bang_send name, *a, **na, &b
+    top = @@bang_stack.last
+    api_bang_name = "api_bang_#{name}".to_sym
     return top.send(api_bang_name, *a, **na, &b) if top.respond_to? api_bang_name
-    setter = "#{name[...-1]}=".to_sym
+    setter = "#{name}=".to_sym
     if top.respond_to? setter
       return top.send(setter, a) if !a.empty?
       return top.send(setter, na) if !na.empty?
       return top.send(setter, b) if block_given?
       return top.send(setter)
     end
-
-    no_method_error = NoMethodError.new("bang method missing `#{name}` for #{top.class}")
+    no_method_error = NoMethodError.new("bang method missing `#{name}!` for #{top.class}")
     raise no_method_error
   end
 
-  def nest! &b
-    @bang_nest = true
-    BangNestedCaller.push self
-    if b
-      b.call
-      BangNestedCaller.pop
-      @bang_nest = false
+  def bang_method_missing name, *a, **na, &b
+    if @@bang_stack.include?(self)
+      bang_send name, *a, **na, &b
+    else
+      @@bang_stack.push self
+      result = bang_send name, *a, **na, &b
+      @@bang_stack.pop
+      result
     end
   end
 
   def send! &b
     if b
-      BangNestedCaller.push self
+      @@bang_stack.push self
       b.call self
-      BangNestedCaller.pop
+      @@bang_stack.pop
     end
     self
   end

@@ -1,7 +1,7 @@
 require 'white_gold'
 
 def! :hello_world do
-  messagebox! text: "Hello wolrd" do |box|
+  messagebox! text: "Hello world" do |box|
     button! "Close" do
       on_press! do
         box.close
@@ -12,7 +12,7 @@ end
 
 hello_world!
 
-# If widget should be available in every Container, define it inside Container class
+# If widget should be available in every Container, define it inside the Container class
 
 class Tgui::Container
   def! :editbox_with_confirm do |confirm_text: "Save", **na, &b|

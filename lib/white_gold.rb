@@ -5,7 +5,7 @@ include Tgui
 
 class << self 
   include BangNestedCaller
-  extend BangDef
+  include BangDef
 
   def go page
     @white_gold_instance.go page.is_a?(Symbol) ? proc{ send(page) } : page
@@ -23,7 +23,7 @@ class << self
 
   def method_missing name, *a, **na, &b
     if name.end_with? "!"
-      bang_method_missing name, *a, **na, &b
+      bang_method_missing name[...-1], *a, **na, &b
     elsif @white_gold_instance.page.respond_to? name
       @white_gold_instance.page.send name, *a, **na, &b
     else super
@@ -31,14 +31,18 @@ class << self
   end
 end
 
+def! :run do |page = nil|
+  go page if page
+  @white_gold_instance.run
+  @white_gold_instance = nil
+end
+
 @white_gold_instance.init
 @white_gold_instance.load_page Page
 if $0 != 'irb'
   at_exit do
-    # go :main_page# if respond_to? :main_page
-    @white_gold_instance.run
+    @white_gold_instance&.run
   end
 end
 
-nest!
 BangNestedCaller.push self

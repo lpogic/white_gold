@@ -39,9 +39,7 @@ module Tgui
     def! :renderer do |seed = VOID, **na, &b|
       seed = page.custom_renderers[self] if seed == VOID
       if !na.empty? || b
-        page.theme.send! do
-          seed = custom! self.class::Theme, seed, **na, &b
-        end
+        seed = page.theme.custom! self.class::Theme, seed, **na, &b
         page.custom_renderers[self] = seed
       elsif !seed
         page.custom_renderers.delete self

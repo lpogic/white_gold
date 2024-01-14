@@ -9,7 +9,7 @@ module BangNest
 
   def method_missing name, *a, **na, &b
     if name.end_with? "!"
-      bang_method_missing name, *a, **na, &b
+      bang_method_missing name[...-1], *a, **na, &b
     else super
     end
   end

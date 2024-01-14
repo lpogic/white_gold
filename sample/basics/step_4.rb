@@ -4,6 +4,6 @@ button! position: :center, size: [300, 150] do
   text_size! 30
   text! "Exit"
   on_press! do
-    close!
+    window.close!
   end
 end

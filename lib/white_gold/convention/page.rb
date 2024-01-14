@@ -31,7 +31,7 @@ class Page < Tgui::Group
 
   def method_missing name, *a, **na, &b
     if name.end_with? "!"
-      bang_method_missing name, *a, **na, &b
+      bang_method_missing name[...-1], *a, **na, &b
     elsif @tgui.gui.respond_to? name
       @tgui.gui.send name, *a, **na, &b
     elsif @tgui.window.respond_to? name
