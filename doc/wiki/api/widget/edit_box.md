@@ -30,10 +30,12 @@ EditBox
 - `#hide`
 - `#limited_text_width=`
 - `#limited_text_width?`
+- `#messagebox!`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#msg!`
 - `#navigation`
 - `#navigation!`
 - `#on_animation_finish`

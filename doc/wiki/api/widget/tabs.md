@@ -29,12 +29,14 @@ Tabs
 - `#items`
 - `#max_tab_width`
 - `#max_tab_width=`
+- `#messagebox!`
 - `#min_tab_width`
 - `#min_tab_width=`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#msg!`
 - `#navigation`
 - `#navigation!`
 - `#objects`

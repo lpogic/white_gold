@@ -26,6 +26,9 @@ module Tgui
     abi_def :ignore_mouse_events?, :ignoring_mouse_events, nil => Boolean
     abi_enum "HorizontalAlignment", :left, :center, :right
     abi_attr :horizontal_alignment, HorizontalAlignment
+    def alignment=(a)
+      self.horizontal_alignment = a
+    end
     abi_enum "VerticalAlignment", :top, :center, :bottom
     abi_attr :vertical_alignment, VerticalAlignment
     abi_enum Scrollbar::Policy

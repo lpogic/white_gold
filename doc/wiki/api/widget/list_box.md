@@ -33,10 +33,12 @@ ListBox
 - `#items=`
 - `#max_items`
 - `#max_items=`
+- `#messagebox!`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#msg!`
 - `#navigation`
 - `#navigation!`
 - `#on_animation_finish`

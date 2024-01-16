@@ -45,4 +45,12 @@ module BangNestedCaller
     end
     self
   end
+
+  def self.push object
+    @@bang_stack.push object
+  end
+
+  def self.pop
+    @@bang_stack.pop
+  end
 end

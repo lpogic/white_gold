@@ -5,6 +5,13 @@ require_relative 'scrollbar'
 module Tgui
   class ScrollablePanel < Panel
 
+    class Theme < Panel::Theme
+
+      theme_comp :scrollbar, Tgui::Scrollbar::Theme
+      theme_attr :scrollbar_width, :float
+      
+    end
+
     abi_attr :content_size, Vector2f
     abi_def :content_offset, :get_, nil => Vector2f
     abi_def :scrollbar_width, :get_, nil => Float

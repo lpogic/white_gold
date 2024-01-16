@@ -11,6 +11,7 @@ module Tgui
     abi_def :self_draw, :draw
     abi_def :clear_color=, Color => nil
     abi_attr :clipboard, String
+    abi_def :screen_size, :get_, nil => Vector2u
         
   end
 end

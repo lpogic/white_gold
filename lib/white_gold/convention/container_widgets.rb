@@ -15,14 +15,13 @@ module Tgui
     file_dialog: Tgui::FileDialog,
     grid: Tgui::Grid,
     group: Tgui::Group,
-    hola: Tgui::HorizontalLayout,
-    howr: Tgui::HorizontalWrap,
+    hlayout: Tgui::HorizontalLayout,
+    hwrap: Tgui::HorizontalWrap,
     knob: Tgui::Knob,
     label: Tgui::Label,
     listbox: Tgui::ListBox,
     listview: Tgui::ListView,
     menu: Tgui::MenuBar,
-    messagebox: Tgui::MessageBox,
     panel: Tgui::Panel,
     panel_listbox: Tgui::PanelListBox,
     panel_tabs: Tgui::TabContainer,
@@ -40,10 +39,11 @@ module Tgui
     textarea: Tgui::TextArea,
     toggle_button: Tgui::ToggleButton,
     treeview: Tgui::TreeView,
-    vela: Tgui::VerticalLayout,
+    vlayout: Tgui::VerticalLayout,
   }.freeze
 
   UNORDINARY_WIDGETS = {
+    messagebox: Tgui::MessageBox,
     picture: Tgui::Picture
   }
 
@@ -127,17 +127,6 @@ module Tgui
       radio.object = object
       na[:text] ||= object.to_s
       self_common_widget_equip radio, *a, **na, &b
-    end
-
-    def! :msg do |text, **buttons|
-      buttons["OK"] = nil if buttons.empty?
-      api_bang_message_box text:, position: :center, label_alignment: :center, buttons: (buttons.map do |k, v| 
-        procedure = proc do |o, b, w|
-          v&.call
-          w.close true
-        end
-        [k, procedure]
-      end)
     end
 
     @@auto_button_name = "Button0"

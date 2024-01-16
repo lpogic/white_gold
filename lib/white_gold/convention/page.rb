@@ -1,6 +1,6 @@
 require_relative "club"
 
-class Page < Tgui::Group
+class Page < Tgui::Panel
 
   def initialize tgui
     super()
@@ -98,7 +98,7 @@ class Page < Tgui::Group
     if seed
       theme.reset_attributes
       theme.send! do
-        load Tgui::Theme.loadpath(seed)
+        eval File.read(Tgui::Theme.loadpath(seed))
       end
     end
     theme.send! **na, &b
@@ -110,5 +110,9 @@ class Page < Tgui::Group
     theme.reset_attributes
     theme.source = path
     theme.self_commit @custom_renderers
+  end
+
+  def! :messagebox do |*a, **na, &b|
+    self_common_widget_equip MessageBox.new, *a, **na, &b
   end
 end

@@ -22,10 +22,12 @@ Picture
 - `#hide`
 - `#ignore_mouse`
 - `#ignore_mouse?`
+- `#messagebox!`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#msg!`
 - `#navigation`
 - `#navigation!`
 - `#on_animation_finish`

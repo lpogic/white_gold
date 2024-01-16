@@ -1,4 +1,4 @@
-require_relative '../../lib/white_gold'
+require 'white_gold'
 
 title! "TGUI window"
 tgui_theme! "Black.txt"

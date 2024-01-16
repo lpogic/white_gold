@@ -45,8 +45,8 @@ RadioButtonGroup
 - `#height`
 - `#height=`
 - `#hide`
-- `#hola!`
-- `#howr!`
+- `#hlayout!`
+- `#hwrap!`
 - `#index`
 - `#inner_size`
 - `#knob!`
@@ -117,9 +117,9 @@ RadioButtonGroup
 - `#tooltip!`
 - `#treeview!`
 - `#uncheck`
-- `#vela!`
 - `#visible=`
 - `#visible?`
+- `#vlayout!`
 - `#widgets`
 - `#width`
 - `#width=`

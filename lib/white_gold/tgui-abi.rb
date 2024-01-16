@@ -56,6 +56,8 @@ class ExternObject
     :size_bottom_left, :size_top_right, :size_horizontal, :size_vertical,
     :crosshair, :help, :not_allowed
 
+  abi_bit_enum "WindowStyle", :none, :titlebar, :resize, :close, :fullscreen, :topmost, default: 7
+
 end
 
 def each_file_ancestor base, dir, &b
@@ -155,7 +157,7 @@ class ExternObject
     when Numeric then Unit.nominate o
     when :center then "(parent.innersize - size) / 2"
     when :begin then "0"
-    when :end then "parent.innersize - size / 2"
+    when :end then "parent.innersize - size"
     else raise "Invalid value `#{o}` given"
     end
   end
@@ -172,24 +174,29 @@ class ExternObject
     [abi_pack_float(x), abi_pack_float(y)]
   end
 
-  abi_packer Tgui::Abi::Vector2u do |o|
-    case o
-    when Array
-      raise "Invalid array size excepted: #{2}, given: #{o.size}" if o.size != 2
-      return o.map{ abi_pack_integer _1 }
-    else
-      raise "Unable to make Vector2u from #{o}"
+  abi_packer Tgui::Abi::Vector2u do |*arg|
+    case arg.size
+    when 1
+      a = arg.first
+      x = y = a
+    when 2
+      x, y = *arg
+    else raise "Unsupported argument #{arg}"
     end
+    [abi_pack_integer(x), abi_pack_integer(y)]
   end
 
-  abi_packer Tgui::Abi::UIntRect do |o|
-    case o
-    when Array
-      raise "Invalid array size excepted: #{4}, given: #{o.size}" if o.size != 4
-      return o.map{ abi_pack_integer _1 }
-    else
-      raise "Unable to make UIntRect from #{o}"
+  abi_packer Tgui::Abi::UIntRect do |*arg|
+    case arg.size
+    when 1
+      a = [arg.first] * 4
+    when 2
+      a = [arg[0], arg[0], arg[1], arg[1]]
+    when 4
+      a = arg
+    else raise "Unsupported argument #{arg}"
     end
+    a.map{ abi_pack_integer _1 }
   end
 
   abi_packer Tgui::Color
@@ -224,7 +231,7 @@ class ExternObject
   vector2f_unpacker = proc do |o|
     v = Tgui::Vector2f.new o
     r = [v.x, v.y]
-    Util.free(o)
+    Tgui::Util.free(o)
     r
   end
 
@@ -237,14 +244,14 @@ class ExternObject
   abi_unpacker Tgui::Vector2u do |o|
     v = Tgui::Vector2u.new o
     r = [v.x, v.y]
-    Util.free(o)
+    Tgui::Util.free(o)
     r
   end
 
   abi_unpacker Tgui::UIntRect do |o|
     v = Tgui::UIntRect.new o
     r = [v.left, v.top, v.width, v.height]
-    Util.free(o)
+    Tgui::Util.free(o)
     r
   end
 

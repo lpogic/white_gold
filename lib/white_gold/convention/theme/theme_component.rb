@@ -26,7 +26,7 @@ module Tgui
     end
 
     def to_theme
-      return "" if @attributes.empty? && !@custom_name
+      # return "" if @attributes.empty? && !@custom_name
       header = @custom_name ? "#{@custom_name} : #{base_name}" : name
       "#{header} {\n#{@attributes.values.map(&:to_theme).join("\n")}\n}"
     end

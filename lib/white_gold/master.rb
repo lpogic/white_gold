@@ -17,8 +17,14 @@ class WhiteGold
     @frame_delay = 1.0 / fps
   end
 
-  def init fps: nil, theme: nil
-    @window = Window.new
+  def init fps: nil, theme: nil, window_size: nil, window_style: nil
+    eo = ExternObject.new pointer: nil, autofree: false # object for packing
+    if window_size == :fullscreen
+      window_style = :fullscreen
+      window_size = nil
+    end
+    window_size ||= [800, 600]
+    @window = Window.new *eo.abi_pack(Vector2u, *window_size), *eo.abi_pack(ExternObject::WindowStyle, *(window_style || :default))
     @gui = Gui.new window
     @preserved_pages = {}
     Theme.default = theme if theme
@@ -28,8 +34,8 @@ class WhiteGold
     @initialized = true
   end
 
-  def run page = nil, fps: nil, theme: nil
-    self.init fps: fps, theme: theme if !@initialized
+  def run page = nil, fps: nil, theme: nil, window_size: nil, window_style: nil
+    self.init fps: fps, theme: theme, window_size: window_size, window_style: window_style if !@initialized
     load_page page if page
 
     next_frame_time = Time.now
@@ -39,6 +45,7 @@ class WhiteGold
       if @current_page_id != @next_page_id
         if @current_page_id
           page = @preserved_pages[@current_page_id]
+          BangNestedCaller.pop
           @gui.self_remove page
           page.disconnect
           @preserved_pages.delete(@current_page_id)
@@ -62,13 +69,11 @@ class WhiteGold
     when Class
       page = @preserved_pages[page_id] = page_id.new self
       init_page page
-      page.send! do
-        page.build
-      end
+      page.build
     when Proc
       page = @preserved_pages[page_id] = Page.new self
       init_page page
-      page_id.call
+      page.instance_eval &page_id
     end
   end
 
@@ -78,6 +83,7 @@ class WhiteGold
     ExternObject.callback_storage = page.widget_callbacks
     ExternObject.global_callback_storage = page.global_callbacks
     ExternObject.data_storage = page.custom_data
+    BangNestedCaller.push page
   end
 
   attr_accessor :next_page_id
@@ -99,6 +105,7 @@ class WhiteGold
       @repeat = repeat
       @job = b
       @result = NO_RESULT
+      @counter = 0
       self.run if run
     end
 
@@ -112,6 +119,7 @@ class WhiteGold
     def on_done &b
       @on_done = b
       b.(@result) if @thread && !@thread.alive?
+      self
     end
 
     def audit
@@ -121,6 +129,7 @@ class WhiteGold
         else
           @on_done.(@result) if @on_done
           if @repeat
+            @counter += 1
             run
             return true
           else
@@ -128,13 +137,20 @@ class WhiteGold
           end
         end
       else 
-        return true
+        return !!@job
       end
     end
 
     def finish result = NO_RESULT
       @repeat = false
       @result = result if result != NO_RESULT
+    end
+
+    attr :counter
+
+    def cancel
+      @thread.kill
+      @thread = @job = nil
     end
   end
 

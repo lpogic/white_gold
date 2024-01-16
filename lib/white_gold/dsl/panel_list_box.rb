@@ -5,6 +5,15 @@ require_relative 'signal/signal_panel_list_box_item'
 module Tgui
   class PanelListBox < ScrollablePanel
 
+    class Theme < ScrollablePanel::Theme
+
+      theme_attr :items_background_color, :color
+      theme_attr :items_background_color_hover, :color
+      theme_attr :selected_items_background_color, :color
+      theme_attr :selected_items_background_color_hover, :color
+
+    end
+
     class SignalPanelListBoxItem < Tgui::SignalPanelListBoxItem
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |id|

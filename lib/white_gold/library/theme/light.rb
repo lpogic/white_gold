@@ -41,7 +41,7 @@ editbox! do
   selected_text_background_color! 157, 185, 240
 end
 
-text_area! do
+textarea! do
   background_color! 220
   default_text_color! 100
   caret_width! 2
@@ -59,6 +59,9 @@ combobox! do
   arrow_background_color_hover! 200
 end
 
+label! do
+end
+
 listbox! do
   background_color! 240
   background_color_hover! 220
@@ -74,6 +77,10 @@ menu! do
   text_color_disabled! 80
   separator_color! 142
   separator_side_padding! 2
+end
+
+panel! do
+  background_color! 235
 end
 
 progressbar! do

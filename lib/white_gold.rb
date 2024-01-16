@@ -1,4 +1,5 @@
 require_relative 'white_gold/master'
+require_relative 'white_gold/path/array.path'
 include Tgui
 
 @white_gold_instance = WhiteGold.new
@@ -37,7 +38,7 @@ def! :run do |page = nil|
   @white_gold_instance = nil
 end
 
-@white_gold_instance.init
+@white_gold_instance.init window_size: $window_size, window_style: $window_style
 @white_gold_instance.load_page Page
 if $0 != 'irb'
   at_exit do

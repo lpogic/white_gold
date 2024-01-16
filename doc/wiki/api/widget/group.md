@@ -43,8 +43,8 @@ Group
 - `#height`
 - `#height=`
 - `#hide`
-- `#hola!`
-- `#howr!`
+- `#hlayout!`
+- `#hwrap!`
 - `#index`
 - `#inner_size`
 - `#knob!`
@@ -114,9 +114,9 @@ Group
 - `#toggle_button!`
 - `#tooltip!`
 - `#treeview!`
-- `#vela!`
 - `#visible=`
 - `#visible?`
+- `#vlayout!`
 - `#widgets`
 - `#width`
 - `#width=`

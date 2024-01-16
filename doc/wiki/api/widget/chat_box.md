@@ -28,10 +28,12 @@ ChatBox
 - `#line_limit=`
 - `#lines_start_from_top=`
 - `#lines_start_from_top?`
+- `#messagebox!`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#msg!`
 - `#navigation`
 - `#navigation!`
 - `#new_lines_below_others=`

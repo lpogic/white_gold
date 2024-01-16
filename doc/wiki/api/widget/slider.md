@@ -26,12 +26,14 @@ Slider
 - `#inverted?`
 - `#max`
 - `#max=`
+- `#messagebox!`
 - `#min`
 - `#min=`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#msg!`
 - `#navigation`
 - `#navigation!`
 - `#on_animation_finish`

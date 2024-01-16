@@ -65,8 +65,8 @@ FileDialog
 - `#height`
 - `#height=`
 - `#hide`
-- `#hola!`
-- `#howr!`
+- `#hlayout!`
+- `#hwrap!`
 - `#index`
 - `#inner_size`
 - `#keep_in_parent=`
@@ -182,9 +182,9 @@ FileDialog
 - `#toggle_button!`
 - `#tooltip!`
 - `#treeview!`
-- `#vela!`
 - `#visible=`
 - `#visible?`
+- `#vlayout!`
 - `#widgets`
 - `#width`
 - `#width=`

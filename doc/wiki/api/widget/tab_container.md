@@ -45,8 +45,8 @@ TabContainer
 - `#height`
 - `#height=`
 - `#hide`
-- `#hola!`
-- `#howr!`
+- `#hlayout!`
+- `#hwrap!`
 - `#index`
 - `#inner_size`
 - `#knob!`
@@ -122,9 +122,9 @@ TabContainer
 - `#toggle_button!`
 - `#tooltip!`
 - `#treeview!`
-- `#vela!`
 - `#visible=`
 - `#visible?`
+- `#vlayout!`
 - `#widgets`
 - `#width`
 - `#width=`

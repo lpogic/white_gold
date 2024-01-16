@@ -1,6 +1,7 @@
 Label
 ===
 - `#absolute_position` - () => [float, float] - absolute widget position
+- `#alignment=`
 - `#auto_layout`
 - `#auto_layout=`
 - `#auto_size=`
@@ -28,10 +29,12 @@ Label
 - `#ignore_mouse_events?`
 - `#max_width`
 - `#max_width=`
+- `#messagebox!`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#msg!`
 - `#navigation`
 - `#navigation!`
 - `#on_animation_finish`

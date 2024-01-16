@@ -22,7 +22,7 @@ class Enum
   end
 
   def pack *k
-    k.map{ @symbol_to_int[_1] }.reduce(0, &:|)
+    k.map{ sym_to_i _1 }.reduce(0, &:|)
   end
 
   def unpack m

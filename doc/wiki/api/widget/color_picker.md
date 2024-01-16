@@ -48,8 +48,8 @@ ColorPicker
 - `#height`
 - `#height=`
 - `#hide`
-- `#hola!`
-- `#howr!`
+- `#hlayout!`
+- `#hwrap!`
 - `#index`
 - `#inner_size`
 - `#keep_in_parent=`
@@ -153,9 +153,9 @@ ColorPicker
 - `#toggle_button!`
 - `#tooltip!`
 - `#treeview!`
-- `#vela!`
 - `#visible=`
 - `#visible?`
+- `#vlayout!`
 - `#widgets`
 - `#width`
 - `#width=`

@@ -32,11 +32,13 @@ TextArea
 - `#horizontal_scrollbar_value`
 - `#horizontal_scrollbar_value=`
 - `#lines_count`
+- `#messagebox!`
 - `#monospace_boost=`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
+- `#msg!`
 - `#navigation`
 - `#navigation!`
 - `#on_animation_finish`

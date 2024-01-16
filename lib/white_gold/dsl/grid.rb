@@ -27,21 +27,45 @@ module Tgui
       abi_unpack(Outline, _abi_get_widget_padding(w))
     end
 
-    abi_enum "Alignment", :center, :upper_left, :up, :upper_right, :right, :bottom_right, :bottom, :bottom_left, :left,
-      top_left: :upper_left, left_top: :upper_left,
-      top_right: :upper_right, right_top: :upper_right,
-      right_bottom: :bottom_right, left_bottom: :bottom_left
+    abi_enum "Alignment", :center, :top_left, :top, :top_right, :right, :bottom_right, :bottom, :bottom_left, :left,
+      left_top: :top_left, right_top: :upper_right, right_bottom: :bottom_right, left_bottom: :bottom_left
+
+    abi_packer Alignment do |*arg|
+      case arg.size
+      when 1
+        o = arg.first
+      when 2
+        a = case arg[0]
+        when :begin then :left
+        when :end then :right
+        else arg[0]
+        end
+        b = case arg[1]
+        when :begin then :top
+        when :end then :bottom
+        else arg[1]
+        end
+        o = if a == :center && b == :center
+          :center
+        elsif a == :center
+          b
+        elsif b == :center
+          a
+        else
+          "#{a}_#{b}".to_sym
+        end
+      else raise "Unsupported argument #{arg}"
+      end
+      Alignment.sym_to_i o
+    end
 
     api_child :alignment= do |w, alignment|
-      _abi_set_widget_alignment w, abi_pack(Alignment, alignment)
+      p abi_pack(Alignment, *alignment)
+      _abi_set_widget_alignment w, abi_pack(Alignment, *alignment)
     end
 
     api_child :alignment do |w|
       abi_unpack(Alignment, _abi_get_widget_alignment(w))
-    end
-
-    api_child :alignment do |w|
-      Alignment[_abi_get_widget_alignment]
     end
 
     api_child :cell= do |w, cell|

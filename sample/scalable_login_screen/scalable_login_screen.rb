@@ -1,4 +1,4 @@
-require_relative '../../lib/white_gold'
+require 'white_gold'
 
 Unit.default = :pc
 

@@ -36,10 +36,16 @@ module Tgui
     extern 'int ABI_SignalTypedIntBoolPtr_connect(SignalTypedIntBoolPtr* self, void(*f)(int, bool*))'
     extern 'int ABI_SignalTypedSizeT_connect(SignalTypedSizeT* self, void(*f)(int))'
     extern 'int ABI_SignalPanelListBoxItem_connect(SignalPanelListBoxItem* self, void(*f)(const char32_t*))'
-    extern 'void* ABI_Window_new()'
+    extern 'void* ABI_Window_new(int width, int height, int style)'
     extern 'void ABI_Window_close(sf::WindowBase* self)'
     extern 'int ABI_Window_isOpen(sf::WindowBase* self)'
     extern 'void ABI_Window_setTitle(sf::WindowBase* self, char* title)'
+    extern 'void ABI_Window_setSize(sf::WindowBase* self, int width, int height)'
+    extern 'void* ABI_Window_getSize(sf::WindowBase* self)'
+    extern 'void ABI_Window_setPosition(sf::WindowBase* self, int x, int y)'
+    extern 'void* ABI_Window_getPosition(sf::WindowBase* self)'
+    extern 'void ABI_Window_requestFocus(sf::WindowBase* self)'
+    extern 'int ABI_Window_hasFocus(sf::WindowBase* self)'
     extern 'void ABI_BackendGui_setTextSize(BackendGui* self, int textSize)'
     extern 'int ABI_BackendGui_getTextSize(BackendGui* self)'
     extern 'void ABI_BackendGui_setAbsoluteView(BackendGui* self, int x, int y, int w, int h)'
@@ -76,6 +82,7 @@ module Tgui
     extern 'void ABI_Gui_setClearColor(Gui* self, Color* color)'
     extern 'void ABI_Gui_setClipboard(Gui* self, char* text)'
     extern 'void* ABI_Gui_getClipboard(Gui* self)'
+    extern 'void* ABI_Gui_getScreenSize(Gui* self)'
     extern 'void ABI_STATIC_Theme_setDefault(char* theme)'
     extern 'void* ABI_STATIC_Theme_getDefault()'
     extern 'void ABI_STATIC_Theme_finalizer(std::shared_ptr<Theme>* pointer)'
@@ -961,6 +968,12 @@ module Tgui
     def _abi_close(*a);    Abi.call_arg_map! a; Abi.ABI_Window_close(@pointer, *a); end
     def _abi_is_open(*a);    Abi.call_arg_map! a; Abi.ABI_Window_isOpen(@pointer, *a); end
     def _abi_set_title(*a);    Abi.call_arg_map! a; Abi.ABI_Window_setTitle(@pointer, *a); end
+    def _abi_set_size(*a);    Abi.call_arg_map! a; Abi.ABI_Window_setSize(@pointer, *a); end
+    def _abi_get_size(*a);    Abi.call_arg_map! a; Abi.ABI_Window_getSize(@pointer, *a); end
+    def _abi_set_position(*a);    Abi.call_arg_map! a; Abi.ABI_Window_setPosition(@pointer, *a); end
+    def _abi_get_position(*a);    Abi.call_arg_map! a; Abi.ABI_Window_getPosition(@pointer, *a); end
+    def _abi_request_focus(*a);    Abi.call_arg_map! a; Abi.ABI_Window_requestFocus(@pointer, *a); end
+    def _abi_has_focus(*a);    Abi.call_arg_map! a; Abi.ABI_Window_hasFocus(@pointer, *a); end
   end
 
   class BackendGui
@@ -1006,6 +1019,7 @@ module Tgui
     def _abi_set_clear_color(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_setClearColor(@pointer, *a); end
     def _abi_set_clipboard(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_setClipboard(@pointer, *a); end
     def _abi_get_clipboard(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_getClipboard(@pointer, *a); end
+    def _abi_get_screen_size(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_getScreenSize(@pointer, *a); end
   end
 
   class Theme

@@ -39,11 +39,14 @@ module Tgui
     def! :renderer do |seed = VOID, **na, &b|
       seed = page.custom_renderers[self] if seed == VOID
       if !na.empty? || b
-        seed = page.theme.custom! self.class::Theme, seed, **na, &b
-        page.custom_renderers[self] = seed
-      elsif !seed
-        page.custom_renderers.delete self
-      else
+        if seed.is_a?(String) && seed =~ /_\d+/
+          page.theme.attributes[seed].send! **na, &b
+          page.theme.self_commit
+        else
+          seed = page.theme.custom! self.class::Theme, seed, **na, &b
+          page.custom_renderers[self] = seed
+        end
+      elsif seed
         page.custom_renderers[self] = seed
       end
       self.self_renderer = seed
@@ -260,6 +263,21 @@ module Tgui
       robot = Robot.new self
       robot.send! **na, &b if block_given?
       robot
+    end
+
+    def! :messagebox do |*a, **na, &b|
+      page.api_bang_messagebox *a, **na, &b
+    end
+
+    def! :msg do |text, **buttons|
+      buttons["OK"] = nil if buttons.empty?
+      page.api_bang_message_box text:, position: :center, label_alignment: :center, buttons: (buttons.map do |k, v| 
+        procedure = proc do |o, b, w|
+          v&.call
+          w.close true
+        end
+        [k, procedure]
+      end)
     end
 
     def self.api_attr name, &init
