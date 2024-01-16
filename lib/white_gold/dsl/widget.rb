@@ -280,6 +280,10 @@ module Tgui
       end)
     end
 
+    def! :page do |*a, **na, &b|
+      page.send! *a, **na, &b
+    end
+
     def self.api_attr name, &init
       define_method "#{name}=" do |value|
         @@data_storage[Widget.get_unshared(@pointer).to_i][name] = value
