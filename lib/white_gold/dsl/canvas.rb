@@ -10,29 +10,29 @@ module Tgui
       end
 
       def! :rectangle do |**na, &b|
-        shape = RectangleShape.new.send! **na, &b
+        shape = scope! RectangleShape.new, **na, &b
         host._abi_draw shape
       end
 
       def! :circle do |**na, &b|
-        shape = CircleShape.new.send! **na, &b
+        shape = scope! CircleShape.new, **na, &b
         host._abi_draw shape
       end
 
       def! :convex do |**na, &b|
-        shape = ConvexShape.new.send! **na, &b
+        shape = scope! ConvexShape.new, **na, &b
         host._abi_draw shape
       end
 
       def! :text do |**na, &b|
-        text = Text.new.send! **na, &b
+        text = scope! Text.new, **na, &b
         host._abi_draw text
       end
 
     end
 
     def! :draw do |&b|
-      Draw.new(self, nil).send! &b
+      scope! Draw.new(self, nil), &b
       _abi_display
     end
 

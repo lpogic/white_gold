@@ -97,11 +97,11 @@ class Page < Tgui::Panel
     theme = self.theme
     if seed
       theme.reset_attributes
-      theme.send! do
+      scope! theme do
         eval File.read(Tgui::Theme.loadpath(seed))
       end
     end
-    theme.send! **na, &b
+    scope! theme, **na, &b
     theme.self_commit @custom_renderers
   end
 

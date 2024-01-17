@@ -46,6 +46,7 @@ class WhiteGold
         if @current_page_id
           page = @preserved_pages[@current_page_id]
           BangNestedCaller.pop
+          BangNestedCaller.close_scope page
           @gui.self_remove page
           page.disconnect
           @preserved_pages.delete(@current_page_id)
@@ -83,6 +84,7 @@ class WhiteGold
     ExternObject.callback_storage = page.widget_callbacks
     ExternObject.global_callback_storage = page.global_callbacks
     ExternObject.data_storage = page.custom_data
+    BangNestedCaller.open_scope page
     BangNestedCaller.push page
   end
 

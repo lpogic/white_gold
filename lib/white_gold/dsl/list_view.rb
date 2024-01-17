@@ -93,14 +93,14 @@ module Tgui
       index = _abi_add_column
       column = Column.new self, index
       columns << column
-      column.send! **na, &b
+      scope! column, **na, &b
     end
 
     def! :item do |object, **na, &b|
       self_add_object object, na[:index]
       item = Item.new self, object
       na.delete :index
-      item.send! **na, &b
+      scope! item, **na, &b
     end
     
     def items=(items)
@@ -173,7 +173,7 @@ module Tgui
     
     def! :grid_lines do | **na, &b|
       lines = GridLines.new self
-      lines.send! **na, &b
+      scope! lines, **na, &b
     end
 
     def grid_lines=(grid_lines)
@@ -199,7 +199,7 @@ module Tgui
 
     def! :header do |**na, &b|
       header = Header.new self
-      header.send! **na, &b
+      scope! header, **na, &b
     end
 
     def header=(header)

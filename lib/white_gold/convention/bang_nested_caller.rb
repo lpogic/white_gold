@@ -1,18 +1,49 @@
 module BangNestedCaller
 
   @@bang_stack = []
+  @@bang_roots = []
+
+  class << self
+    def stack
+      @@bang_stack
+    end
+
+    def roots
+      @@bang_roots
+    end
+
+    def current root
+      @@bang_roots.include?(root) ? @@bang_stack.last : root
+    end
+
+    def push object
+      @@bang_stack.push object
+    end
+  
+    def pop
+      @@bang_stack.pop
+    end
+
+    def open_scope object
+      @@bang_roots << object
+    end
+
+    def close_scope object
+      @@bang_roots.delete_at @@bang_roots.index(object)
+    end
+  end
 
   def self!
-    @@bang_stack.last
+    BangNestedCaller.current self
   end
 
   def bang_respond_to? name
-    top = @@bang_stack.include?(self) ? @@bang_stack.last : self
+    top = BangNestedCaller.current self
     top.respond_to?("#{name}=") || top.respond_to?("api_bang_#{name}")
   end
 
-  def bang_send name, *a, **na, &b
-    top = @@bang_stack.last
+  def bang_method_missing name, *a, **na, &b
+    top = BangNestedCaller.current self
     api_bang_name = "api_bang_#{name}".to_sym
     return top.send(api_bang_name, *a, **na, &b) if top.respond_to? api_bang_name
     setter = "#{name}=".to_sym
@@ -26,31 +57,21 @@ module BangNestedCaller
     raise no_method_error
   end
 
-  def bang_method_missing name, *a, **na, &b
-    if @@bang_stack.include?(self)
-      bang_send name, *a, **na, &b
-    else
-      @@bang_stack.push self
-      result = bang_send name, *a, **na, &b
-      @@bang_stack.pop
-      result
-    end
-  end
-
   def send! &b
     if b
-      @@bang_stack.push self
+      BangNestedCaller.push self
       b.call self
-      @@bang_stack.pop
+      BangNestedCaller.pop
     end
     self
   end
 
-  def self.push object
-    @@bang_stack.push object
+  def scope! scoped = nil, *a, **na, &b
+    scoped ||= self
+    BangNestedCaller.open_scope self
+    scoped.send! *a, **na, &b
+    BangNestedCaller.close_scope self
+    scoped
   end
-
-  def self.pop
-    @@bang_stack.pop
-  end
+  
 end

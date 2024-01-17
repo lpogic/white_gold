@@ -79,7 +79,7 @@ module Tgui
           host._abi_add_menu_item _1, _2
         end
         item = Item.new host, item_path
-        item.send! **na, &b
+        scope! item, **na, &b
       end
 
       def! :separator do
@@ -165,7 +165,7 @@ module Tgui
       self_tree[object, grow: true].text = text
       _abi_add_menu abi_pack_string(text)
       item = Menu.new self, object
-      item.send! **na, &b
+      scope! item, **na, &b
     end
 
     def items=(items)

@@ -61,7 +61,7 @@ module Tgui
       end
       objects.insert index, object
       tab = Tab.new self, index
-      tab.send! **na, &b
+      scope! tab, **na, &b
     end
 
     def remove object

@@ -31,7 +31,7 @@ module Tgui
       panel = Panel.new pointer: _abi_add_item(id, abi_pack_integer(index))
       panel.page = page
       self_objects[object] = id
-      panel.send! **na, &b
+      scope! panel, **na, &b
     end
 
     def [](object)
@@ -80,7 +80,7 @@ module Tgui
     def! :template do |**na, &b|
       panel = Panel.new(pointer: _abi_get_panel_template)
       panel.page = page
-      panel.send! **na, &b
+      scope! panel, **na, &b
     end
 
     # internal

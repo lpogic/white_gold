@@ -102,7 +102,7 @@ module Tgui
       if block_given?
         tooltip = ToolTip.new
         tooltip.page = page
-        tooltip.send! **na, &b
+        scope! tooltip, **na, &b
         _abi_set_tool_tip tooltip.widget if tooltip.widget
       else
         widget = _abi_get_tool_tip
@@ -201,7 +201,7 @@ module Tgui
     end
 
     def! :navigation do |**na, &b|
-      navigation.send! **na, &b
+      scope! navigation, **na, &b
     end
 
     def navigation
@@ -261,7 +261,7 @@ module Tgui
 
     def! :robot do |**na, &b|
       robot = Robot.new self
-      robot.send! **na, &b if block_given?
+      scope! robot, **na, &b if block_given?
       robot
     end
 

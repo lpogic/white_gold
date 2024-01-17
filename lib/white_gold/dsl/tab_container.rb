@@ -75,7 +75,7 @@ module Tgui
       objects.insert index, object
       tab_panel = TabPanel.new self, index, panel_pointer
       tab_panel.page = page
-      tab_panel.send! **na, &b
+      scope! tab_panel, **na, &b
     end
     
     def [](object)
@@ -93,7 +93,7 @@ module Tgui
     def! :tabs do |**na, &b|
       tabs = Tabs.new self, _abi_get_tabs
       tabs.page = page
-      tabs.send! **na, &b
+      scope! tabs, **na, &b
     end
 
     def remove object

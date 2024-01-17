@@ -99,7 +99,7 @@ module Tgui
       _abi_add_item abi_pack_string(text), abi_pack_string(id)
       item = Item.new self, id
       self_objects[id] = object
-      item.send! **na, &b
+      scope! item, **na, &b
     end
 
     def selected

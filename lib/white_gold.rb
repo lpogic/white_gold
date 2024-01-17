@@ -46,4 +46,5 @@ if $0 != 'irb'
   end
 end
 
+BangNestedCaller.open_scope self
 BangNestedCaller.push self

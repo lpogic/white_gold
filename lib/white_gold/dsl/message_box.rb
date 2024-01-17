@@ -52,7 +52,7 @@ module Tgui
       _abi_add_button abi_pack_string(text)
       button = Button.new self, object
       self_buttons[text] = button
-      button.send! **na, &b
+      scope! button, **na, &b
     end
 
     def [](object)

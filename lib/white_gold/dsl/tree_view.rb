@@ -176,7 +176,7 @@ module Tgui
         self_tree[*new_path, grow: true].text = _3
       end
       item = Item.new self, new_path
-      item.send! **na, &b
+      scope! item, **na, &b
     end
 
     def self_change_item path, text, **na, &b
