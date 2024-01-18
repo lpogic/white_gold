@@ -61,6 +61,7 @@ ToggleButton
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
@@ -81,6 +82,7 @@ ToggleButton
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#background_color!`
 - `#background_color_disabled!`
@@ -130,6 +132,15 @@ ToggleButton
 - `#texture_focused!`
 - `#texture_hover!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -140,12 +151,3 @@ ToggleButton
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

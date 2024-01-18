@@ -108,6 +108,7 @@ ColorPicker
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#panel!`
 - `#panel_listbox!`
@@ -119,8 +120,7 @@ ColorPicker
 - `#position_locked?`
 - `#progressbar!`
 - `#radio!`
-- `#radio_button!`
-- `#radio_button_group!`
+- `#radio_group!`
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
@@ -136,8 +136,8 @@ ColorPicker
 - `#size`
 - `#size=`
 - `#slider!`
-- `#spin_button!`
-- `#spin_control!`
+- `#spinbox!`
+- `#spinner!`
 - `#tabs!`
 - `#text_size`
 - `#text_size=`
@@ -159,6 +159,7 @@ ColorPicker
 - `#widgets`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#background_color!`
 - `#border_below_title_bar!`
@@ -184,6 +185,15 @@ ColorPicker
 - `#title_bar_height!`
 - `#title_color!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -194,12 +204,3 @@ ColorPicker
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

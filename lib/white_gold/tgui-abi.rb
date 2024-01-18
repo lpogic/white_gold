@@ -77,6 +77,7 @@ end
 
 # ABI loader should be required after dsl directory files because of class hierarchy
 require_relative 'generated/tgui-abi-loader.gf'
+require_relative 'convention/widget_class_aliases'
 require_relative 'convention/container_widgets'
 require_relative 'convention/theme_attributes'
 
@@ -208,11 +209,10 @@ class ExternObject
     a = []
     (0..).each do |i|
       i *= 4
-      ch = (o[i]) | (o[i + 1] << 8) | (o[i + 2] << 16) | (o[i + 3] << 24)
+      ch = (o[i] & 0xFF) | ((o[i + 1] & 0xFF) << 8) | ((o[i + 2] & 0xFF) << 16) | ((o[i + 3] & 0xFF) << 24)
       break if ch == 0
       a << ch
     end
-    raise "deleted string!" if a[0] == 572653601
     a.pack("N*").encode("UTF-8", "UTF-32BE")
   end
 

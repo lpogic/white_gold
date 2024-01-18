@@ -73,7 +73,7 @@ module Tgui
         self_buttons[text] = button
         text
       end
-      self_change_buttons names
+      self_change_buttons *names
     end
 
     def buttons

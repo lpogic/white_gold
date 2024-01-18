@@ -75,6 +75,7 @@ EditBox
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#password_character`
 - `#password_character=`
@@ -102,6 +103,7 @@ EditBox
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#background_color!`
 - `#background_color_disabled!`
@@ -133,6 +135,15 @@ EditBox
 - `#texture_focused!`
 - `#texture_hover!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -143,12 +154,3 @@ EditBox
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

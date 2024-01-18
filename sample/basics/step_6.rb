@@ -14,13 +14,11 @@ hello_world!
 
 # If widget should be available in every Container, define it inside the Container class
 
-class Tgui::Container
-  def! :editbox_with_confirm do |confirm_text: "Save", **na, &b|
-    grid! **na do
-      editbox!
-      button! text: confirm_text
-      b&.call
-    end
+Container.def! :editbox_with_confirm do |confirm_text: "Save", **na, &b|
+  grid! **na do
+    editbox!
+    button! text: confirm_text
+    b&.call
   end
 end
 

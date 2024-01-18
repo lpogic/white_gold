@@ -66,6 +66,7 @@ RichTextLabel
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
@@ -91,6 +92,7 @@ RichTextLabel
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#background_color!`
 - `#border_color!`
@@ -107,6 +109,15 @@ RichTextLabel
 - `#text_style!`
 - `#texture_background!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -117,12 +128,3 @@ RichTextLabel
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

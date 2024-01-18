@@ -55,6 +55,7 @@ Slider
 - `#on_value_change`
 - `#on_value_change=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
@@ -80,6 +81,7 @@ Slider
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#border_color!`
 - `#border_color_hover!`
@@ -97,6 +99,15 @@ Slider
 - `#track_color!`
 - `#track_color_hover!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -107,12 +118,3 @@ Slider
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

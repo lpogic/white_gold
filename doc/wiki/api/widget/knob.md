@@ -55,6 +55,7 @@ Knob
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
@@ -76,6 +77,7 @@ Knob
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#background_color!`
 - `#border_color!`
@@ -88,6 +90,15 @@ Knob
 - `#texture_foreground!`
 - `#thumb_color!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -98,12 +109,3 @@ Knob
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

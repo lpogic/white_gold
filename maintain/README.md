@@ -18,7 +18,7 @@ options:
 
 **-c** - run TGUI-ABI compilation before generating abi loader file
 
-api-doc-update.rb
+doc-update.rb
 ===
 
 Compiles .rbmd files to .md (inserts code, evaluate expressions). Generates API reference pages.

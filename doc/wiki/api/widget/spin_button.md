@@ -65,6 +65,7 @@ SpinButton
 - `#on_value_change`
 - `#on_value_change=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
@@ -88,6 +89,7 @@ SpinButton
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#arrow_color!`
 - `#arrow_color_hover!`
@@ -104,6 +106,15 @@ SpinButton
 - `#texture_arrow_up!`
 - `#texture_arrow_up_hover!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -114,12 +125,3 @@ SpinButton
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

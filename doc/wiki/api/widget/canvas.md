@@ -58,6 +58,7 @@ Canvas
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
@@ -75,6 +76,7 @@ Canvas
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Draw
 - `#circle!`
 - `#convex!`
@@ -86,6 +88,15 @@ Canvas
 - `#opacity_disabled!`
 - `#text_size!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -96,12 +107,3 @@ Canvas
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

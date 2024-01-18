@@ -51,6 +51,7 @@ RangeSlider
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
@@ -74,6 +75,7 @@ RangeSlider
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#border_color!`
 - `#border_color_hover!`
@@ -95,6 +97,15 @@ RangeSlider
 - `#track_color!`
 - `#track_color_hover!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -105,12 +116,3 @@ RangeSlider
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

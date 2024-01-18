@@ -102,6 +102,7 @@ ChildWindow
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#panel!`
 - `#panel_listbox!`
@@ -113,8 +114,7 @@ ChildWindow
 - `#position_locked?`
 - `#progressbar!`
 - `#radio!`
-- `#radio_button!`
-- `#radio_button_group!`
+- `#radio_group!`
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
@@ -130,8 +130,8 @@ ChildWindow
 - `#size`
 - `#size=`
 - `#slider!`
-- `#spin_button!`
-- `#spin_control!`
+- `#spinbox!`
+- `#spinner!`
 - `#tabs!`
 - `#text_size`
 - `#text_size=`
@@ -153,6 +153,7 @@ ChildWindow
 - `#widgets`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#background_color!`
 - `#border_below_title_bar!`
@@ -175,6 +176,15 @@ ChildWindow
 - `#title_bar_height!`
 - `#title_color!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -185,12 +195,3 @@ ChildWindow
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

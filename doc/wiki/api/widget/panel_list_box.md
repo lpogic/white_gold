@@ -108,6 +108,7 @@ PanelListBox
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#panel!`
 - `#panel_listbox!`
@@ -117,8 +118,7 @@ PanelListBox
 - `#position=`
 - `#progressbar!`
 - `#radio!`
-- `#radio_button!`
-- `#radio_button_group!`
+- `#radio_group!`
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
@@ -135,8 +135,8 @@ PanelListBox
 - `#size`
 - `#size=`
 - `#slider!`
-- `#spin_button!`
-- `#spin_control!`
+- `#spinbox!`
+- `#spinner!`
 - `#tabs!`
 - `#template!`
 - `#text_size`
@@ -152,6 +152,7 @@ PanelListBox
 - `#widgets`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#background_color!`
 - `#border_color!`
@@ -177,6 +178,15 @@ PanelListBox
 - `#shown?`
 - `#value`
 - `#value=`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -187,12 +197,3 @@ PanelListBox
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

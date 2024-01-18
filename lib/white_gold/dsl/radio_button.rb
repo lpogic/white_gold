@@ -28,6 +28,10 @@ module Tgui
       theme_attr :text_style, :text_styles
       theme_attr :text_style_checked, :text_styles
     end
+
+    api_attr :format do
+      :to_s
+    end
     
     abi_attr :checked?
     abi_attr :text, String
@@ -35,9 +39,18 @@ module Tgui
     abi_signal :on_check, Signal
     abi_signal :on_uncheck, Signal
     abi_signal :on_change, SignalBoolean
-    api_attr :object do
+
+    def object
+      self_object
+    end
+
+    def object=(object)
+      self.self_object = object
+      self.text = object.then(&format)
+    end
+
+    api_attr :self_object do
       nil
     end
-    
   end
 end

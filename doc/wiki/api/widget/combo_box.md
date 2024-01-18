@@ -60,6 +60,7 @@ ComboBox
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
@@ -83,6 +84,7 @@ ComboBox
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#arrow_background_color!`
 - `#arrow_background_color_disabled!`
@@ -117,6 +119,15 @@ ComboBox
 - `#selected?`
 - `#text`
 - `#text=`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -127,12 +138,3 @@ ComboBox
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

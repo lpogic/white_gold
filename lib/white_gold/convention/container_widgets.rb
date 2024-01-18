@@ -6,44 +6,44 @@ module Tgui
     bitmap_button: Tgui::BitmapButton,
     button: Tgui::Button,
     canvas: Tgui::Canvas,
-    chatbox: Tgui::ChatBox,
-    checkbox: Tgui::CheckBox,
+    chatbox: Tgui::Chatbox,
+    checkbox: Tgui::Checkbox,
     child_window: Tgui::ChildWindow,
     color_picker: Tgui::ColorPicker,
-    combobox: Tgui::ComboBox,
-    editbox: Tgui::EditBox,
+    combobox: Tgui::Combobox,
+    editbox: Tgui::Editbox,
     file_dialog: Tgui::FileDialog,
     grid: Tgui::Grid,
     group: Tgui::Group,
-    hlayout: Tgui::HorizontalLayout,
-    hwrap: Tgui::HorizontalWrap,
+    hlayout: Tgui::Hlayout,
+    hwrap: Tgui::Hwrap,
     knob: Tgui::Knob,
     label: Tgui::Label,
-    listbox: Tgui::ListBox,
-    listview: Tgui::ListView,
-    menu: Tgui::MenuBar,
+    listbox: Tgui::Listbox,
+    listview: Tgui::Listview,
+    menu: Tgui::Menu,
     panel: Tgui::Panel,
-    panel_listbox: Tgui::PanelListBox,
-    panel_tabs: Tgui::TabContainer,
-    progressbar: Tgui::ProgressBar,
-    radio_button: Tgui::RadioButton,
-    radio_button_group: Tgui::RadioButtonGroup,
+    panel_listbox: Tgui::PanelListbox,
+    panel_tabs: Tgui::PanelTabs,
+    progressbar: Tgui::Progressbar,
+    radio: Tgui::RadioButton,
+    radio_group: Tgui::RadioGroup,
     range_slider: Tgui::RangeSlider,
-    fancy_label: Tgui::RichTextLabel,
+    fancy_label: Tgui::FancyLabel,
     scrollbar: Tgui::Scrollbar,
-    separator: Tgui::SeparatorLine,
+    separator: Tgui::Separator,
     slider: Tgui::Slider,
-    spin_button: Tgui::SpinButton,
-    spin_control: Tgui::SpinControl,
+    spinner: Tgui::Spinner,
+    spinbox: Tgui::Spinbox,
     tabs: Tgui::Tabs,
-    textarea: Tgui::TextArea,
+    textarea: Tgui::Textarea,
     toggle_button: Tgui::ToggleButton,
-    treeview: Tgui::TreeView,
-    vlayout: Tgui::VerticalLayout,
+    treeview: Tgui::Treeview,
+    vlayout: Tgui::Vlayout,
   }.freeze
 
   UNORDINARY_WIDGETS = {
-    messagebox: Tgui::MessageBox,
+    messagebox: Tgui::Messagebox,
     picture: Tgui::Picture
   }
 
@@ -121,18 +121,10 @@ module Tgui
       self_common_widget_equip pic, *a, **na.except(:url, :part_rect, :smooth, :transparent), &b
     end
 
-    def! :radio do |object, *a, **na, &b|
-      radio = RadioButton.new
-      self_equip_child_widget radio
-      radio.object = object
-      na[:text] ||= object.to_s
-      self_common_widget_equip radio, *a, **na, &b
-    end
-
-    @@auto_button_name = "Button0"
+    @@auto_btn_name = "Button0"
 
     def! :btn do |text = nil, **na, &on_press|
-      text = @@auto_button_name = @@auto_button_name.next if !text
+      text = @@auto_btn_name = @@auto_btn_name.next if !text
       api_bang_button text:, on_press:, **na
     end
   end

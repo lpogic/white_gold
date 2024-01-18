@@ -132,6 +132,7 @@ FileDialog
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#panel!`
 - `#panel_listbox!`
@@ -145,8 +146,7 @@ FileDialog
 - `#position_locked?`
 - `#progressbar!`
 - `#radio!`
-- `#radio_button!`
-- `#radio_button_group!`
+- `#radio_group!`
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
@@ -165,8 +165,8 @@ FileDialog
 - `#size_label`
 - `#size_label=`
 - `#slider!`
-- `#spin_button!`
-- `#spin_control!`
+- `#spinbox!`
+- `#spinner!`
 - `#tabs!`
 - `#text_size`
 - `#text_size=`
@@ -188,6 +188,7 @@ FileDialog
 - `#widgets`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#arrow_on_navigation_buttons_visible!`
 - `#back_button!`
@@ -219,6 +220,15 @@ FileDialog
 - `#title_color!`
 - `#transparent_texture!`
 - `#up_button!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -229,12 +239,3 @@ FileDialog
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

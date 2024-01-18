@@ -54,6 +54,7 @@ Scrollbar
 - `#on_value_change`
 - `#on_value_change=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
@@ -79,6 +80,7 @@ Scrollbar
 - `#visible?`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#arrow_background_color!`
 - `#arrow_background_color_hover!`
@@ -100,6 +102,15 @@ Scrollbar
 - `#track_color!`
 - `#track_color_hover!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -110,12 +121,3 @@ Scrollbar
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

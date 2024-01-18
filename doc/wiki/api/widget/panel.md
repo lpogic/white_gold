@@ -95,6 +95,7 @@ Panel
 - `#on_unfocus`
 - `#on_unfocus=`
 - `#page`
+- `#page!`
 - `#page=`
 - `#panel!`
 - `#panel_listbox!`
@@ -104,8 +105,7 @@ Panel
 - `#position=`
 - `#progressbar!`
 - `#radio!`
-- `#radio_button!`
-- `#radio_button_group!`
+- `#radio_group!`
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
@@ -119,8 +119,8 @@ Panel
 - `#size`
 - `#size=`
 - `#slider!`
-- `#spin_button!`
-- `#spin_control!`
+- `#spinbox!`
+- `#spinner!`
 - `#tabs!`
 - `#text_size`
 - `#text_size=`
@@ -134,6 +134,7 @@ Panel
 - `#widgets`
 - `#width`
 - `#width=`
+- `#window`
 ## Theme
 - `#background_color!`
 - `#border_color!`
@@ -145,6 +146,15 @@ Panel
 - `#text_size!`
 - `#texture_background!`
 - `#transparent_texture!`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -155,12 +165,3 @@ Panel
 - `#scroll`
 - `#text`
 - `#tooltip`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`

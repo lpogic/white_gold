@@ -29,6 +29,10 @@ module Tgui
 
     attr_accessor :page
 
+    def window
+      page.window
+    end
+
     abi_attr :text_size, Integer
     abi_attr :enabled?
 
@@ -271,13 +275,14 @@ module Tgui
 
     def! :msg do |text, **buttons|
       buttons["OK"] = nil if buttons.empty?
-      page.api_bang_message_box text:, position: :center, label_alignment: :center, buttons: (buttons.map do |k, v| 
+      buttons = buttons.map do |k, v| 
         procedure = proc do |o, b, w|
           v&.call
           w.close true
         end
         [k, procedure]
-      end)
+      end
+      page.api_bang_messagebox text:, position: :center, label_alignment: :center, buttons: buttons
     end
 
     def! :page do |*a, **na, &b|
