@@ -2,7 +2,7 @@ MessageBox
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
-- `#add`
+- `#add!`
 - `#auto_layout`
 - `#auto_layout=`
 - `#back`
@@ -34,6 +34,7 @@ MessageBox
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
+- `#focus!`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -58,6 +59,7 @@ MessageBox
 - `#inner_size`
 - `#keep_in_parent=`
 - `#keep_in_parent?`
+- `#keyboard_control!`
 - `#knob!`
 - `#label!`
 - `#label_alignment`
@@ -129,8 +131,6 @@ MessageBox
 - `#remove`
 - `#remove_all`
 - `#remove_buttons`
-- `#renderer!`
-- `#renderer=`
 - `#resizable=`
 - `#resizable?`
 - `#resize`
@@ -149,6 +149,8 @@ MessageBox
 - `#text_size`
 - `#text_size=`
 - `#textarea!`
+- `#theme!`
+- `#theme=`
 - `#title`
 - `#title=`
 - `#title_alignment`
@@ -194,15 +196,6 @@ MessageBox
 - `#title_bar_height!`
 - `#title_color!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -213,3 +206,12 @@ MessageBox
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

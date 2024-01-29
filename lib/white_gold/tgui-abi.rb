@@ -71,8 +71,11 @@ def each_file_ancestor base, dir, &b
   end
 end
 
-each_file_ancestor File.dirname(__FILE__), "dsl" do |dsl_file|
-  require_relative dsl_file
+each_file_ancestor File.dirname(__FILE__), "dsl" do |file|
+  require_relative file
+end
+each_file_ancestor File.dirname(__FILE__), "convention/widget" do |file|
+  require_relative file
 end
 
 # ABI loader should be required after dsl directory files because of class hierarchy

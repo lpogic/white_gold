@@ -11,6 +11,7 @@ SeparatorLine
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
+- `#focus!`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -61,8 +62,6 @@ SeparatorLine
 - `#page=`
 - `#position`
 - `#position=`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#show`
@@ -70,6 +69,8 @@ SeparatorLine
 - `#size=`
 - `#text_size`
 - `#text_size=`
+- `#theme!`
+- `#theme=`
 - `#tooltip!`
 - `#visible=`
 - `#visible?`
@@ -82,15 +83,6 @@ SeparatorLine
 - `#opacity_disabled!`
 - `#text_size!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -101,3 +93,12 @@ SeparatorLine
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

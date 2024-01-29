@@ -17,6 +17,6 @@ on_view_change! &proc.update_text_size
 
 picture! url: "xubuntu_bg_aluminium.jpg", size: [100, 100]
 
-editbox! :username, size: [66.67, 12.5], position: [16.67, 16.67], default_text: "Username"
-editbox! :password, size: [66.67, 12.5], position: [16.67, 41.6], password_character: "*", default_text: "Password"
-button! text: "Login", size: [50, 16.67], position: [25, 70], on_press: proc{ login page[:username], page[:password] }
+@username = editbox! size: [66.67, 12.5], position: [16.67, 16.67], default_text: "Username"
+@password = editbox! size: [66.67, 12.5], position: [16.67, 41.6], password_character: "*", default_text: "Password"
+button! text: "Login", size: [50, 16.67], position: [25, 70], on_press: proc{ login @username, @password }

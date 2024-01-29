@@ -70,7 +70,7 @@ module Tgui
       self.next_renderer_id = renderer_id = next_renderer_id.next
       attribute = type.new(seed, renderer_id)
       attributes[attribute.name] = attribute
-      attribute.send! **na, &b
+      attribute.host! **na, &b
       self_commit
       renderer_id
     end
@@ -97,7 +97,7 @@ module Tgui
         _abi_load @source if @source
       end
       custom_rendered&.each do |widget, renderer|
-        widget.self_renderer = renderer
+        widget.self_set_renderer renderer
       end
     end
   end

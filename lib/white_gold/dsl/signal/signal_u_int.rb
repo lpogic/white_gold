@@ -6,7 +6,7 @@ module Tgui
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |uint|
         int = @widget.abi_unpack Integer, uint
-        @widget.send! do
+        @widget.host! do
           b.(int, @widget)
         end
       end

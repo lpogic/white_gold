@@ -832,16 +832,20 @@ module Tgui
     extern 'void* ABI_Shape_getOrigin(sf::Shape* self)'
     extern 'int ABI_CircleShape_getPointCount(sf::CircleShape* self)'
     extern 'void* ABI_CircleShape_new()'
+    extern 'void ABI_STATIC_CircleShape_delete(sf::CircleShape* self)'
     extern 'void ABI_CircleShape_setRadius(sf::CircleShape* self, float radius)'
     extern 'float ABI_CircleShape_getRadius(sf::CircleShape* self)'
     extern 'void ABI_CircleShape_setPointCount(sf::CircleShape* self, int pointCount)'
     extern 'void* ABI_RectangleShape_new()'
+    extern 'void ABI_STATIC_RectangleShape_delete(sf::RectangleShape* self)'
     extern 'void ABI_RectangleShape_setSize(sf::RectangleShape* self, float width, float height)'
     extern 'void* ABI_RectangleShape_getSize(sf::RectangleShape* self)'
     extern 'void* ABI_ConvexShape_new()'
+    extern 'void ABI_STATIC_ConvexShape_delete(sf::ConvexShape* self)'
     extern 'void ABI_ConvexShape_setPoint(sf::ConvexShape* self, int index, float x, float y)'
     extern 'void ABI_ConvexShape_setPointCount(sf::ConvexShape* self, int pointCount)'
     extern 'void* ABI_Text_new()'
+    extern 'void ABI_STATIC_Text_delete(sf::Text* self)'
     extern 'void ABI_Text_setString(sf::Text* self, char* string)'
     extern 'void* ABI_Text_getString(sf::Text* self)'
     extern 'void ABI_Text_setFont(sf::Text* self, Font* font)'
@@ -868,6 +872,31 @@ module Tgui
     extern 'void ABI_Text_setOrigin(sf::Text* self, float x, float y)'
     extern 'void* ABI_Text_getOrigin(sf::Text* self)'
     extern 'void* ABI_Text_findCharacterPos(sf::Text* self, int index)'
+    extern 'void* ABI_CustomWidget_new()'
+    extern 'void ABI_CustomWidget_implPositionChanged(CustomWidgetForBindings::Ptr* self, void(*f)(float x, float y))'
+    extern 'void ABI_CustomWidget_implSizeChanged(CustomWidgetForBindings::Ptr* self, void(*f)(float width, float height))'
+    extern 'void ABI_CustomWidget_implVisibleChanged(CustomWidgetForBindings::Ptr* self, void(*f)(int visible))'
+    extern 'void ABI_CustomWidget_implEnableChanged(CustomWidgetForBindings::Ptr* self, void(*f)(int enable))'
+    extern 'void ABI_CustomWidget_implFocusChanged(CustomWidgetForBindings::Ptr* self, void(*f)(int focus))'
+    extern 'void ABI_CustomWidget_implCanGainFocus(CustomWidgetForBindings::Ptr* self, int(*f)(void))'
+    extern 'void ABI_CustomWidget_implGetFullSize(CustomWidgetForBindings::Ptr* self, float(*f)(void))'
+    extern 'void ABI_CustomWidget_implGetWidgetOffset(CustomWidgetForBindings::Ptr* self, float(*f)(void))'
+    extern 'void ABI_CustomWidget_implUpdateTimeFunction(CustomWidgetForBindings::Ptr* self, int(*f)(int time))'
+    extern 'void ABI_CustomWidget_implMouseOnWidget(CustomWidgetForBindings::Ptr* self, int(*f)(float x, float y))'
+    extern 'void ABI_CustomWidget_implLeftMousePressed(CustomWidgetForBindings::Ptr* self, int(*f)(float x, float y))'
+    extern 'void ABI_CustomWidget_implLeftMouseReleased(CustomWidgetForBindings::Ptr* self, void(*f)(float x, float y))'
+    extern 'void ABI_CustomWidget_implRightMousePressed(CustomWidgetForBindings::Ptr* self, void(*f)(float x, float y))'
+    extern 'void ABI_CustomWidget_implRightMouseReleased(CustomWidgetForBindings::Ptr* self, void(*f)(float x, float y))'
+    extern 'void ABI_CustomWidget_implMouseMoved(CustomWidgetForBindings::Ptr* self, void(*f)(float x, float y))'
+    extern 'void ABI_CustomWidget_implKeyPressed(CustomWidgetForBindings::Ptr* self, void(*f)(int key, int alt, int control, int shift, int system))'
+    extern 'void ABI_CustomWidget_implTextEntered(CustomWidgetForBindings::Ptr* self, void(*f)(int character))'
+    extern 'void ABI_CustomWidget_implScrolled(CustomWidgetForBindings::Ptr* self, int(*f)(float delta, float x, float y, int touch))'
+    extern 'void ABI_CustomWidget_implMouseNoLongerOnWidget(CustomWidgetForBindings::Ptr* self, void(*f)(void))'
+    extern 'void ABI_CustomWidget_implLeftMouseButtonNoLongerDown(CustomWidgetForBindings::Ptr* self, void(*f)(void))'
+    extern 'void ABI_CustomWidget_implMouseEnteredWidget(CustomWidgetForBindings::Ptr* self, void(*f)(void))'
+    extern 'void ABI_CustomWidget_implMouseLeftWidget(CustomWidgetForBindings::Ptr* self, void(*f)(void))'
+    extern 'void ABI_CustomWidget_implRendererChanged(CustomWidgetForBindings::Ptr* self, int(*f)(const char32_t* property))'
+    extern 'void ABI_CustomWidget_implDrawFunction(CustomWidgetForBindings::Ptr* self, void(*f)(BackendRenderTarget* target, RenderStates* states))'
   end
 
   class Util
@@ -1928,6 +1957,7 @@ module Tgui
   class CircleShape
     def _abi_get_point_count(*a);    Abi.call_arg_map! a; Abi.ABI_CircleShape_getPointCount(@pointer, *a); end
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_CircleShape_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_CircleShape_delete(*a); end
     def _abi_set_radius(*a);    Abi.call_arg_map! a; Abi.ABI_CircleShape_setRadius(@pointer, *a); end
     def _abi_get_radius(*a);    Abi.call_arg_map! a; Abi.ABI_CircleShape_getRadius(@pointer, *a); end
     def _abi_set_point_count(*a);    Abi.call_arg_map! a; Abi.ABI_CircleShape_setPointCount(@pointer, *a); end
@@ -1935,18 +1965,21 @@ module Tgui
 
   class RectangleShape
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_RectangleShape_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_RectangleShape_delete(*a); end
     def _abi_set_size(*a);    Abi.call_arg_map! a; Abi.ABI_RectangleShape_setSize(@pointer, *a); end
     def _abi_get_size(*a);    Abi.call_arg_map! a; Abi.ABI_RectangleShape_getSize(@pointer, *a); end
   end
 
   class ConvexShape
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_ConvexShape_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_ConvexShape_delete(*a); end
     def _abi_set_point(*a);    Abi.call_arg_map! a; Abi.ABI_ConvexShape_setPoint(@pointer, *a); end
     def _abi_set_point_count(*a);    Abi.call_arg_map! a; Abi.ABI_ConvexShape_setPointCount(@pointer, *a); end
   end
 
   class Text
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Text_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Text_delete(*a); end
     def _abi_set_string(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setString(@pointer, *a); end
     def _abi_get_string(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getString(@pointer, *a); end
     def _abi_set_font(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setFont(@pointer, *a); end
@@ -1973,5 +2006,33 @@ module Tgui
     def _abi_set_origin(*a);    Abi.call_arg_map! a; Abi.ABI_Text_setOrigin(@pointer, *a); end
     def _abi_get_origin(*a);    Abi.call_arg_map! a; Abi.ABI_Text_getOrigin(@pointer, *a); end
     def _abi_find_character_pos(*a);    Abi.call_arg_map! a; Abi.ABI_Text_findCharacterPos(@pointer, *a); end
+  end
+
+  class CustomWidget
+    def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_CustomWidget_new(*a)); end
+    def _abi_impl_position_changed(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implPositionChanged(@pointer, *a); end
+    def _abi_impl_size_changed(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implSizeChanged(@pointer, *a); end
+    def _abi_impl_visible_changed(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implVisibleChanged(@pointer, *a); end
+    def _abi_impl_enable_changed(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implEnableChanged(@pointer, *a); end
+    def _abi_impl_focus_changed(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implFocusChanged(@pointer, *a); end
+    def _abi_impl_can_gain_focus(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implCanGainFocus(@pointer, *a); end
+    def _abi_impl_get_full_size(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implGetFullSize(@pointer, *a); end
+    def _abi_impl_get_widget_offset(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implGetWidgetOffset(@pointer, *a); end
+    def _abi_impl_update_time_function(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implUpdateTimeFunction(@pointer, *a); end
+    def _abi_impl_mouse_on_widget(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implMouseOnWidget(@pointer, *a); end
+    def _abi_impl_left_mouse_pressed(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implLeftMousePressed(@pointer, *a); end
+    def _abi_impl_left_mouse_released(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implLeftMouseReleased(@pointer, *a); end
+    def _abi_impl_right_mouse_pressed(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implRightMousePressed(@pointer, *a); end
+    def _abi_impl_right_mouse_released(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implRightMouseReleased(@pointer, *a); end
+    def _abi_impl_mouse_moved(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implMouseMoved(@pointer, *a); end
+    def _abi_impl_key_pressed(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implKeyPressed(@pointer, *a); end
+    def _abi_impl_text_entered(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implTextEntered(@pointer, *a); end
+    def _abi_impl_scrolled(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implScrolled(@pointer, *a); end
+    def _abi_impl_mouse_no_longer_on_widget(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implMouseNoLongerOnWidget(@pointer, *a); end
+    def _abi_impl_left_mouse_button_no_longer_down(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implLeftMouseButtonNoLongerDown(@pointer, *a); end
+    def _abi_impl_mouse_entered_widget(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implMouseEnteredWidget(@pointer, *a); end
+    def _abi_impl_mouse_left_widget(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implMouseLeftWidget(@pointer, *a); end
+    def _abi_impl_renderer_changed(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implRendererChanged(@pointer, *a); end
+    def _abi_impl_draw_function(*a);    Abi.call_arg_map! a; Abi.ABI_CustomWidget_implDrawFunction(@pointer, *a); end
   end
 end

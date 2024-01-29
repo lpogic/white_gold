@@ -2,7 +2,7 @@ FileDialog
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
-- `#add`
+- `#add!`
 - `#allow_create_folder=`
 - `#allow_create_folder?`
 - `#auto_layout`
@@ -49,6 +49,7 @@ FileDialog
 - `#filename_label`
 - `#filename_label=`
 - `#finish_animations`
+- `#focus!`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -71,6 +72,7 @@ FileDialog
 - `#inner_size`
 - `#keep_in_parent=`
 - `#keep_in_parent?`
+- `#keyboard_control!`
 - `#knob!`
 - `#label!`
 - `#leaf_at_position`
@@ -150,8 +152,6 @@ FileDialog
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
-- `#renderer!`
-- `#renderer=`
 - `#resizable=`
 - `#resizable?`
 - `#resize`
@@ -171,6 +171,8 @@ FileDialog
 - `#text_size`
 - `#text_size=`
 - `#textarea!`
+- `#theme!`
+- `#theme=`
 - `#title`
 - `#title=`
 - `#title_alignment`
@@ -220,15 +222,6 @@ FileDialog
 - `#title_color!`
 - `#transparent_texture!`
 - `#up_button!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -239,3 +232,12 @@ FileDialog
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

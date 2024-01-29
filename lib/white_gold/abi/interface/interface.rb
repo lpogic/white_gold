@@ -1,5 +1,3 @@
-require_relative '../reducer'
-
 module Interface
 
   def self.abi_const_string_method_suffix str
@@ -8,17 +6,15 @@ module Interface
 
   def self.parse_packer packer
     case packer
-    when Proc, Reducer
+    when Proc
       packer
     when Array
       packers = packer.map{ parse_packer _1 }
       proc do |host, *a|
-        ai = a.each
-        packers.map do |packer|
+        packers.zip(a).map do |packer, arg|
           case packer
-          when Proc then packer.call host, *ai.next
+          when Proc then packer.call host, *arg
           when nil then ai.next
-          when Reducer then packer.call host, *(0..packer.reduction).map{ ai.next }
           else packer
           end
         end.flatten

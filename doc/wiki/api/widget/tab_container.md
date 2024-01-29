@@ -2,7 +2,7 @@ TabContainer
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
-- `#add`
+- `#add!`
 - `#auto_layout`
 - `#auto_layout=`
 - `#back`
@@ -27,6 +27,7 @@ TabContainer
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
+- `#focus!`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -49,6 +50,7 @@ TabContainer
 - `#hwrap!`
 - `#index`
 - `#inner_size`
+- `#keyboard_control!`
 - `#knob!`
 - `#label!`
 - `#leaf_at_position`
@@ -100,8 +102,6 @@ TabContainer
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#scrollbar!`
@@ -119,6 +119,8 @@ TabContainer
 - `#text_size`
 - `#text_size=`
 - `#textarea!`
+- `#theme!`
+- `#theme=`
 - `#toggle_button!`
 - `#tooltip!`
 - `#treeview!`
@@ -134,15 +136,6 @@ TabContainer
 - `#opacity_disabled!`
 - `#text_size!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -153,3 +146,12 @@ TabContainer
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

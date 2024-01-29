@@ -29,7 +29,7 @@ module Tgui
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP]) do |str1, str2|
           id = @widget.abi_unpack_string(str2)
-          @widget.send! do
+          @widget.host! do
             b.(@widget.self_get_object_by_id(id), @widget)
           end
         end

@@ -2,7 +2,7 @@ RadioButtonGroup
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
-- `#add`
+- `#add!`
 - `#auto_layout`
 - `#auto_layout=`
 - `#back`
@@ -29,6 +29,7 @@ RadioButtonGroup
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
+- `#focus!`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -49,6 +50,7 @@ RadioButtonGroup
 - `#hwrap!`
 - `#index`
 - `#inner_size`
+- `#keyboard_control!`
 - `#knob!`
 - `#label!`
 - `#leaf_at_position`
@@ -97,8 +99,6 @@ RadioButtonGroup
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#scrollbar!`
@@ -113,6 +113,8 @@ RadioButtonGroup
 - `#text_size`
 - `#text_size=`
 - `#textarea!`
+- `#theme!`
+- `#theme=`
 - `#toggle_button!`
 - `#tooltip!`
 - `#treeview!`
@@ -129,15 +131,6 @@ RadioButtonGroup
 - `#opacity_disabled!`
 - `#text_size!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -148,3 +141,12 @@ RadioButtonGroup
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

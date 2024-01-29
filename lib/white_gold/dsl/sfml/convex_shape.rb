@@ -11,5 +11,9 @@ module Tgui
       _abi_set_point @point_count, *abi_pack(Vector2f, x, y)
       @point_count += 1
     end
+
+    def self.finalizer pointer
+      _abi_delete pointer
+    end
   end
 end

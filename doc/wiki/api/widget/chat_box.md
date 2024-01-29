@@ -12,6 +12,7 @@ ChatBox
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
+- `#focus!`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -63,8 +64,6 @@ ChatBox
 - `#position=`
 - `#remove`
 - `#remove_all`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#scrollbar_value`
@@ -78,6 +77,8 @@ ChatBox
 - `#text_size=`
 - `#text_style`
 - `#text_style=`
+- `#theme!`
+- `#theme=`
 - `#tooltip!`
 - `#visible=`
 - `#visible?`
@@ -99,15 +100,6 @@ ChatBox
 ## Line
 - `#color`
 - `#style`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -118,3 +110,12 @@ ChatBox
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

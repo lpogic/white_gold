@@ -18,6 +18,7 @@ TextArea
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
+- `#focus!`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -70,8 +71,6 @@ TextArea
 - `#position=`
 - `#read_only=`
 - `#read_only?`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#selected_text`
@@ -88,6 +87,8 @@ TextArea
 - `#text_limit`
 - `#text_size`
 - `#text_size=`
+- `#theme!`
+- `#theme=`
 - `#tooltip!`
 - `#vertical_scrollbar_policy`
 - `#vertical_scrollbar_policy=`
@@ -116,15 +117,6 @@ TextArea
 - `#text_size!`
 - `#texture_background!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -135,3 +127,12 @@ TextArea
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

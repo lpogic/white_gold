@@ -15,6 +15,7 @@ Knob
 - `#end`
 - `#end=`
 - `#finish_animations`
+- `#focus!`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -59,8 +60,6 @@ Knob
 - `#page=`
 - `#position`
 - `#position=`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#show`
@@ -70,6 +69,8 @@ Knob
 - `#start=`
 - `#text_size`
 - `#text_size=`
+- `#theme!`
+- `#theme=`
 - `#tooltip!`
 - `#value`
 - `#value=`
@@ -90,15 +91,6 @@ Knob
 - `#texture_foreground!`
 - `#thumb_color!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -109,3 +101,12 @@ Knob
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

@@ -80,6 +80,7 @@ class WhiteGold
 
   def init_page page
     @gui.self_add page, "main_container"
+    @gui.page = page
     @current_page = page
     ExternObject.callback_storage = page.widget_callbacks
     ExternObject.global_callback_storage = page.global_callbacks
@@ -144,11 +145,12 @@ class WhiteGold
     end
 
     def finish result = NO_RESULT
-      @repeat = false
+      @thread.kill
       @result = result if result != NO_RESULT
     end
 
     attr :counter
+    attr_accessor :repeat
 
     def cancel
       @thread.kill

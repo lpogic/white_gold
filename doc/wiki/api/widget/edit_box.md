@@ -19,6 +19,7 @@ EditBox
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
+- `#focus!`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -83,8 +84,6 @@ EditBox
 - `#position=`
 - `#read_only=`
 - `#read_only?`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#select_text`
@@ -98,6 +97,8 @@ EditBox
 - `#text=`
 - `#text_size`
 - `#text_size=`
+- `#theme!`
+- `#theme=`
 - `#tooltip!`
 - `#visible=`
 - `#visible?`
@@ -135,15 +136,6 @@ EditBox
 - `#texture_focused!`
 - `#texture_hover!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -154,3 +146,12 @@ EditBox
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

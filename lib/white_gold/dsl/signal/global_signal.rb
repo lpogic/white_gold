@@ -6,7 +6,7 @@ module Tgui
 
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [0]) do
-        @widget.send! do
+        @widget.host! do
           b.(@widget)
         end
       end

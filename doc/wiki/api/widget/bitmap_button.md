@@ -11,6 +11,7 @@ BitmapButton
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
+- `#focus!`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -67,8 +68,6 @@ BitmapButton
 - `#page=`
 - `#position`
 - `#position=`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#show`
@@ -79,6 +78,8 @@ BitmapButton
 - `#text_position=`
 - `#text_size`
 - `#text_size=`
+- `#theme!`
+- `#theme=`
 - `#tooltip!`
 - `#visible=`
 - `#visible?`
@@ -134,15 +135,6 @@ BitmapButton
 - `#texture_focused!`
 - `#texture_hover!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -153,3 +145,12 @@ BitmapButton
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

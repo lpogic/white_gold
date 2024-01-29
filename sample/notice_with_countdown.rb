@@ -42,12 +42,12 @@ def countdown_job
 end
 
 @cd_job = countdown_job
-page.on_mouse_enter! do
+on_mouse_enter! do
   @cd_job.cancel
   @l.text! "Wybierz co chcesz zrobić:"
 end
 
-page.on_mouse_leave! do
+on_mouse_leave! do
   @cd_job = countdown_job
 end
 

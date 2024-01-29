@@ -31,7 +31,7 @@ module Tgui
     class ListViewItemSignal < Tgui::SignalInt
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |index|
-          @widget.send! do
+          @widget.host! do
             b.(@widget.self_objects[index], @widget)
           end
         end
@@ -41,7 +41,7 @@ module Tgui
     class ListViewColumnSignal < Tgui::SignalInt
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |index|
-          @widget.send! do
+          @widget.host! do
             b.(@widget.columns[index], @widget)
           end
         end

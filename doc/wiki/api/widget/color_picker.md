@@ -2,7 +2,7 @@ ColorPicker
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
-- `#add`
+- `#add!`
 - `#auto_layout`
 - `#auto_layout=`
 - `#back`
@@ -32,6 +32,7 @@ ColorPicker
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
+- `#focus!`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -54,6 +55,7 @@ ColorPicker
 - `#inner_size`
 - `#keep_in_parent=`
 - `#keep_in_parent?`
+- `#keyboard_control!`
 - `#knob!`
 - `#label!`
 - `#leaf_at_position`
@@ -124,8 +126,6 @@ ColorPicker
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
-- `#renderer!`
-- `#renderer=`
 - `#resizable=`
 - `#resizable?`
 - `#resize`
@@ -142,6 +142,8 @@ ColorPicker
 - `#text_size`
 - `#text_size=`
 - `#textarea!`
+- `#theme!`
+- `#theme=`
 - `#title`
 - `#title=`
 - `#title_alignment`
@@ -185,15 +187,6 @@ ColorPicker
 - `#title_bar_height!`
 - `#title_color!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -204,3 +197,12 @@ ColorPicker
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

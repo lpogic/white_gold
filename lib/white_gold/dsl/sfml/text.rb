@@ -18,5 +18,9 @@ module Tgui
     abi_attr :rotation, Float
     abi_attr :scale, Vector2f
     abi_attr :origin, Vector2f
+
+    def self.finalizer pointer
+      _abi_delete pointer
+    end
   end
 end

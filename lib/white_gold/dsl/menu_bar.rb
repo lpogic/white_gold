@@ -30,7 +30,7 @@ module Tgui
 
       def connect &b
         on_press = Fiddle::Closure::BlockCaller.new(0, [0]) do
-          @menu_bar.send! do
+          @menu_bar.host! do
             b.(@path.last, @path, @menu_bar)
           end
         end
@@ -57,7 +57,7 @@ module Tgui
           end
           SignalItemHierarchy.fetch_path vector, loader
           object_path = @widget.self_object_path path
-          @widget.send! do
+          @widget.host! do
             b.(object_path.last, object_path, @widget)
           end
         end

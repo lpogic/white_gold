@@ -2,7 +2,7 @@ ChildWindow
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
-- `#add`
+- `#add!`
 - `#auto_layout`
 - `#auto_layout=`
 - `#back`
@@ -30,6 +30,7 @@ ChildWindow
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
+- `#focus!`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -52,6 +53,7 @@ ChildWindow
 - `#inner_size`
 - `#keep_in_parent=`
 - `#keep_in_parent?`
+- `#keyboard_control!`
 - `#knob!`
 - `#label!`
 - `#leaf_at_position`
@@ -118,8 +120,6 @@ ChildWindow
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
-- `#renderer!`
-- `#renderer=`
 - `#resizable=`
 - `#resizable?`
 - `#resize`
@@ -136,6 +136,8 @@ ChildWindow
 - `#text_size`
 - `#text_size=`
 - `#textarea!`
+- `#theme!`
+- `#theme=`
 - `#title`
 - `#title=`
 - `#title_alignment`
@@ -176,15 +178,6 @@ ChildWindow
 - `#title_bar_height!`
 - `#title_color!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -195,3 +188,12 @@ ChildWindow
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

@@ -15,6 +15,7 @@ Widgets
 - `#group!` => [Group](./widget/group.md)
 - `#hlayout!` => [HorizontalLayout](./widget/horizontal_layout.md)
 - `#hwrap!` => [HorizontalWrap](./widget/horizontal_wrap.md)
+- `#keyboard_control!` => [KeyboardControl](./widget/keyboard_control.md)
 - `#knob!` => [Knob](./widget/knob.md)
 - `#label!` => [Label](./widget/label.md)
 - `#listbox!` => [ListBox](./widget/list_box.md)

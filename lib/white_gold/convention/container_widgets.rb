@@ -44,7 +44,8 @@ module Tgui
 
   UNORDINARY_WIDGETS = {
     messagebox: Tgui::Messagebox,
-    picture: Tgui::Picture
+    picture: Tgui::Picture,
+    keyboard_control: Tgui::KeyboardControl
   }
 
   def self.widget_set
@@ -54,40 +55,12 @@ module Tgui
   module WidgetOwner
     extend BangDef
 
-    def self_common_widget_nest widget, *keys, id: nil, **na, &b
-      club_params = {}
-      Enumerator.new do |e|
-        cl = widget.class
-        while cl != Object
-          e << cl
-          cl = cl.superclass
-        end
-        e << Object
-      end.to_a.reverse!.each do |key|
-        if key == widget.class
-          club = page.club key
-          club.join id if id
-        else
-          club = page.club key, create_on_missing: false
-        end
-        club_params.merge! club.params if club
-      end
-  
-      keys.each do |key|
-        club = page.club key
-        club.join id if id
-        club_params.merge! club.params
-      end
-  
-      scope! widget, **club_params, **na, &b
-    end
-
     def self_child_methods
       ## TO OPTIMIZE
       methods.filter{ _1.start_with? ApiChild::API_CHILD_PREFIX }
     end
 
-    def self_equip_child_widget widget
+    def self_equip_widget widget
       widget.page = page
       parent = self
       self_child_methods.each do |method|
@@ -99,10 +72,10 @@ module Tgui
     end
 
     ORDINARY_WIDGETS.each do |m, c|
-      if c
-        def! m do |*a, **na, &b|
-          self_common_widget_equip self_equip_child_widget(c.new), *a, **na, &b
-        end
+      def! m do |*a, **na, &b|
+        widget = c.new
+        add! widget
+        scope! widget, *a, **na, &b
       end
     end
 
@@ -117,8 +90,8 @@ module Tgui
       )
       transparent = na[:transparent] || false
       pic = Tgui::Picture.new texture, transparent
-      self_equip_child_widget pic
-      self_common_widget_equip pic, *a, **na.except(:url, :part_rect, :smooth, :transparent), &b
+      add! pic
+      scope! pic, *a, **na.except(:url, :part_rect, :smooth, :transparent), &b
     end
 
     @@auto_btn_name = "Button0"
@@ -127,6 +100,13 @@ module Tgui
       text = @@auto_btn_name = @@auto_btn_name.next if !text
       api_bang_button text:, on_press:, **na
     end
+
+    def! :keyboard_control do |*a, focus: true, **na, &b|
+      keyboard_control = KeyboardControl.new
+      add! keyboard_control
+      keyboard_control.focus! if focus
+      scope! keyboard_control, *a, **na, &b
+    end
   end
 
   class Container
@@ -134,17 +114,16 @@ module Tgui
 
     @@auto_widget_id = "@/"
 
-    def self_common_widget_equip widget, *keys, **na, &b
+    def! :add do |widget|
+      self_equip_widget widget
       @@auto_widget_id = id = @@auto_widget_id.next
-      add widget, id
-      self_common_widget_nest widget, *keys, id:, **na, &b
+      self_add widget, id
     end
-
   end
 
   class TabContainer
 
-    def add widget, name
+    def self_add widget, name
       raise NoMethodError.new("Widget can't be added to TabContainer directly. Add it to TabContainer panel instead.")
     end
     
@@ -155,9 +134,9 @@ module Tgui
 
     attr :widget
 
-    def self_common_widget_equip widget, *keys, **na, &b
+    def! :add do |widget, *keys, **na, &b|
       @widget = widget
-      self_common_widget_nest widget, *keys, **na, &b
+      scope! widget, *keys, **na, &b
     end
   end
 

@@ -11,6 +11,7 @@ RangeSlider
 - `#enabled=`
 - `#enabled?`
 - `#finish_animations`
+- `#focus!`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -55,8 +56,6 @@ RangeSlider
 - `#page=`
 - `#position`
 - `#position=`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#selection_end`
@@ -70,6 +69,8 @@ RangeSlider
 - `#step=`
 - `#text_size`
 - `#text_size=`
+- `#theme!`
+- `#theme=`
 - `#tooltip!`
 - `#visible=`
 - `#visible?`
@@ -97,15 +98,6 @@ RangeSlider
 - `#track_color!`
 - `#track_color_hover!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -116,3 +108,12 @@ RangeSlider
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

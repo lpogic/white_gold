@@ -17,7 +17,7 @@ module Tgui
     class SignalPanelListBoxItem < Tgui::SignalPanelListBoxItem
       def block_caller &b
         Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_VOIDP]) do |id|
-          @widget.send! do
+          @widget.host! do
             b.(@widget.self_objects.key(@widget.abi_unpack_string(id)), @widget)
           end
         end

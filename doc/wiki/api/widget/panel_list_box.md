@@ -2,7 +2,7 @@ PanelListBox
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
-- `#add`
+- `#add!`
 - `#auto_layout`
 - `#auto_layout=`
 - `#back`
@@ -31,6 +31,7 @@ PanelListBox
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
+- `#focus!`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -56,6 +57,7 @@ PanelListBox
 - `#item_height`
 - `#item_height=`
 - `#item_width`
+- `#keyboard_control!`
 - `#knob!`
 - `#label!`
 - `#leaf_at_position`
@@ -122,8 +124,6 @@ PanelListBox
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#scrollbar!`
@@ -142,6 +142,8 @@ PanelListBox
 - `#text_size`
 - `#text_size=`
 - `#textarea!`
+- `#theme!`
+- `#theme=`
 - `#toggle_button!`
 - `#tooltip!`
 - `#treeview!`
@@ -178,15 +180,6 @@ PanelListBox
 - `#shown?`
 - `#value`
 - `#value=`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -197,3 +190,12 @@ PanelListBox
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

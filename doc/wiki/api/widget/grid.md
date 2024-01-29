@@ -2,7 +2,7 @@ Grid
 ===
 - `#[]`
 - `#absolute_position` - () => [float, float] - absolute widget position
-- `#add`
+- `#add!`
 - `#alignment`
 - `#alignment=`
 - `#auto_layout`
@@ -35,6 +35,7 @@ Grid
 - `#fancy_label!`
 - `#file_dialog!`
 - `#finish_animations`
+- `#focus!`
 - `#focus_next`
 - `#focus_previous`
 - `#focusable=`
@@ -55,6 +56,7 @@ Grid
 - `#hwrap!`
 - `#index`
 - `#inner_size`
+- `#keyboard_control!`
 - `#knob!`
 - `#label!`
 - `#leaf_at_position`
@@ -110,8 +112,6 @@ Grid
 - `#range_slider!`
 - `#remove`
 - `#remove_all`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#scrollbar!`
@@ -126,6 +126,8 @@ Grid
 - `#text_size`
 - `#text_size=`
 - `#textarea!`
+- `#theme!`
+- `#theme=`
 - `#toggle_button!`
 - `#tooltip!`
 - `#treeview!`
@@ -141,15 +143,6 @@ Grid
 - `#opacity_disabled!`
 - `#text_size!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -160,3 +153,12 @@ Grid
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

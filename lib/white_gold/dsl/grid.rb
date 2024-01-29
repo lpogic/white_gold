@@ -106,7 +106,7 @@ module Tgui
       return widgets
     end
 
-    def add widget, id
+    def self_add widget, id
       super
       _abi_set_widget_cell abi_pack(Widget, widget), *cell
       _abi_set_widget_alignment abi_pack(Widget, widget), abi_pack(Alignment, alignment) if alignment

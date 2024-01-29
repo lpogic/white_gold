@@ -27,9 +27,9 @@ end
 
 label! text: "This is a label.\nAnd these are radio buttons:", position: [10, 90], text_size: 18
 
-radio_button! position: [20, 140], text: "Yep!", size: [25, 25]
-radio_button! position: [20, 170], text: "Nope!", size: [25, 25]
-radio_button! position: [20, 200], text: "Don't know!", size: [25, 25]
+radio! position: [20, 140], text: "Yep!", size: [25, 25]
+radio! position: [20, 170], text: "Nope!", size: [25, 25]
+radio! position: [20, 200], text: "Don't know!", size: [25, 25]
 
 label! text: "We've got some edit boxes:", position: [10, 240], text_size: 18
 

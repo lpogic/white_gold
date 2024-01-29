@@ -13,6 +13,7 @@ ProgressBar
 - `#fill_direction`
 - `#fill_direction=`
 - `#finish_animations`
+- `#focus!`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -73,8 +74,6 @@ ProgressBar
 - `#page=`
 - `#position`
 - `#position=`
-- `#renderer!`
-- `#renderer=`
 - `#resize`
 - `#robot!`
 - `#show`
@@ -84,6 +83,8 @@ ProgressBar
 - `#text=`
 - `#text_size`
 - `#text_size=`
+- `#theme!`
+- `#theme=`
 - `#tooltip!`
 - `#value`
 - `#value=`
@@ -108,15 +109,6 @@ ProgressBar
 - `#texture_background!`
 - `#texture_fill!`
 - `#transparent_texture!`
-## Navigation
-- `#down`
-- `#down=`
-- `#left`
-- `#left=`
-- `#right`
-- `#right=`
-- `#up`
-- `#up=`
 ## Robot
 - `#key_press`
 - `#mouse_move`
@@ -127,3 +119,12 @@ ProgressBar
 - `#scroll`
 - `#text`
 - `#tooltip`
+## Navigation
+- `#down`
+- `#down=`
+- `#left`
+- `#left=`
+- `#right`
+- `#right=`
+- `#up`
+- `#up=`

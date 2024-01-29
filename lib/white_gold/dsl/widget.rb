@@ -40,11 +40,11 @@ module Tgui
       self.enabled = !disabled
     end
 
-    def! :renderer do |seed = VOID, **na, &b|
+    def! :theme do |seed = VOID, **na, &b|
       seed = page.custom_renderers[self] if seed == VOID
       if !na.empty? || b
         if seed.is_a?(String) && seed =~ /_\d+/
-          page.theme.attributes[seed].send! **na, &b
+          page.theme.attributes[seed].host! **na, &b
           page.theme.self_commit
         else
           seed = page.theme.custom! self.class::Theme, seed, **na, &b
@@ -53,24 +53,27 @@ module Tgui
       elsif seed
         page.custom_renderers[self] = seed
       end
-      self.self_renderer = seed
+      self_set_renderer seed
     end
 
-    def renderer=(renderer)
-      case renderer
+    def theme=(theme)
+      case theme
       when Hash
-        api_bang_renderer **renderer
+        api_bang_theme **theme
       when Proc
-        api_bang_renderer &renderer
+        api_bang_theme &theme
       else
-        page.custom_renderers[self] = renderer
-        self.self_renderer = renderer
+        page.custom_renderers[self] = theme
+        self_set_renderer theme
       end
     end
 
-    abi_def :self_renderer=, :set_renderer, proc.self_renderer => nil
+    abi_def :self_set_renderer, :set_renderer, proc.self_theme_name => nil
     
     abi_attr :focused?
+    def! :focus do |focus = VOID|
+      self.focused = focus
+    end
     abi_attr :focusable?
     abi_signal :on_position_change, Tgui::SignalVector2f
     abi_signal :on_size_change, Tgui::SignalVector2f
@@ -212,7 +215,7 @@ module Tgui
       Navigation.new self, nil
     end
 
-    abi_enum "KeyCode", nil, :a, :b, :c, :d, :e, :f, :g, :h, :i, :j, :k, 
+    abi_enum "KeyCode", :a, :b, :c, :d, :e, :f, :g, :h, :i, :j, :k, 
       :l, :m, :n, :o, :p, :q, :r, :s, :t, :u, :v, :w, :x, :y, :z,
       :num0, :num1, :num2, :num3, :num4, :num5, :num6, :num7, :num8, :num9,
       :escape, :left_control, :left_shift, :left_alt, :left_system,
@@ -286,7 +289,7 @@ module Tgui
     end
 
     def! :page do |*a, **na, &b|
-      page.send! *a, **na, &b
+      page.host! *a, **na, &b
     end
 
     def self.api_attr name, &init
@@ -329,14 +332,14 @@ module Tgui
     class << self
       include ApiChild
 
-      def self_renderer widget, renderer = nil
-        case renderer
+      def self_theme_name widget, theme = nil
+        case theme
         when Module
-          renderer.name.split("::").last
+          theme.name.split("::").last
         when nil, false, VOID
-          self_renderer widget, widget.class
+          self_theme_name widget, widget.class
         else
-          renderer.to_s
+          theme.to_s
         end
       end
 

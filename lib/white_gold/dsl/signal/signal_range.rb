@@ -5,7 +5,7 @@ module Tgui
 
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_FLOAT, Fiddle::TYPE_FLOAT]) do |min, max|
-        @widget.send! do
+        @widget.host! do
           b.(min..max, @widget)
         end
       end

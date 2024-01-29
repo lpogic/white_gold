@@ -113,6 +113,8 @@ class Page < Tgui::Panel
   end
 
   def! :messagebox do |*a, **na, &b|
-    self_common_widget_equip MessageBox.new, *a, **na, &b
+    messagebox = MessageBox.new
+    add! messagebox
+    scope! messagebox, *a, **na, &b
   end
 end

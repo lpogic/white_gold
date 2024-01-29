@@ -14,7 +14,7 @@ module BangNest
     end
   end
 
-  def send! *a, **na, &b
+  def host! *a, **na, &b
     a.each do |k|
       send("#{k}=", true)
     end

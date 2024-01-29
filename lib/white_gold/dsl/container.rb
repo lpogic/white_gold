@@ -12,7 +12,7 @@ module Tgui
       return widgets
     end
     
-    abi_def :add, [Object, String] => nil
+    abi_def :self_add, :add, [Object, String] => nil
     abi_def :remove_all
     abi_def :inner_size, :get_, nil => Vector2f
     abi_def :child_offset, :get_, nil => Vector2f

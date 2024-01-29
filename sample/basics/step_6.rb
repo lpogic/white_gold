@@ -22,6 +22,8 @@ Container.def! :editbox_with_confirm do |confirm_text: "Save", **na, &b|
   end
 end
 
+# Root container is also Container
+
 editbox_with_confirm! position: :center
 
 child_window! do

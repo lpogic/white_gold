@@ -9,7 +9,9 @@ module Tgui
       blue: [0, 0, 200, 255],
       yellow: [200, 200, 0, 255],
       white: [255, 255, 255, 255],
-      black: [0, 0, 0, 255]
+      black: [0, 0, 0, 255],
+      gray: [100, 100, 100, 255],
+      transparent: [255, 255, 255, 0]
     }
 
     def self.from *arg
