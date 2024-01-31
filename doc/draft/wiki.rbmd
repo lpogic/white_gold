@@ -84,7 +84,7 @@ Second one is passing attributes as named arguments:
 
 #[sample/dsl/attributing/attr_3.rb]
 
-With the help of the 'send!' method, these methods can also be used after initialization:
+With the help of the 'host!' method, these methods can also be used after initialization:
 
 #[sample/dsl/attributing/attr_4.rb]
 

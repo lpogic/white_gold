@@ -262,7 +262,7 @@ require 'white_gold'
 button! text: "Button", position: [50, 50], on_press: proc{ puts "Have I been pressed?" }
 ```
 
-With the help of the 'send!' method, these methods can also be used after initialization:
+With the help of the 'host!' method, these methods can also be used after initialization:
 
 ```RUBY
 require 'white_gold'

@@ -52,7 +52,7 @@ gem install white_gold
 git clone https://github.com/lpogic/white_gold
 cd white_gold
 gem build white_gold.gemspec
-gem install white_gold-0.0.3.gem
+gem install white_gold-0.0.4.gem
 ```
 
 Basic usage
