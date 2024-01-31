@@ -1,4 +1,6 @@
 require_relative '../../abi/extern_object'
+require_relative '../font'
+require_relative '../color'
 
 module Tgui
   class Text < ExternObject

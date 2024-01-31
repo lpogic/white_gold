@@ -1,5 +1,7 @@
 require_relative '../../abi/extern_object'
 require_relative '../../convention/bang_nest'
+require_relative '../color'
+require_relative '../texture'
 
 module Tgui
   class Shape < ExternObject
