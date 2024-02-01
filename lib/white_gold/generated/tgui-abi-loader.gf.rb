@@ -3,14 +3,18 @@
 
 module Tgui
   module Abi
-    extern 'void ABI_STATIC_Util_free(void* pointer)'
+    extern 'void ABI_STATIC_Util_deleteVector2f(Vector2f* vector)'
+    extern 'void ABI_STATIC_Util_deleteVector2i(Vector2i* vector)'
+    extern 'void ABI_STATIC_Util_deleteUIntRect(UIntRect* rect)'
     extern 'void* ABI_Color_new(int r, int g, int b, int a)'
+    extern 'void ABI_STATIC_Color_delete(Color* color)'
     extern 'int ABI_Color_get_red(Color* self)'
     extern 'int ABI_Color_get_green(Color* self)'
     extern 'int ABI_Color_get_blue(Color* self)'
     extern 'int ABI_Color_get_alpha(Color* self)'
     extern 'void* ABI_Color_applyOpacity(Color* self, float fade)'
     extern 'void* ABI_Outline_new(char* left, char* right, char* top, char* bottom)'
+    extern 'void ABI_STATIC_Outline_delete(Outline* outline)'
     extern 'float ABI_Outline_getLeft(Outline* self)'
     extern 'float ABI_Outline_getRight(Outline* self)'
     extern 'float ABI_Outline_getTop(Outline* self)'
@@ -37,6 +41,7 @@ module Tgui
     extern 'int ABI_SignalTypedSizeT_connect(SignalTypedSizeT* self, void(*f)(int))'
     extern 'int ABI_SignalPanelListBoxItem_connect(SignalPanelListBoxItem* self, void(*f)(const char32_t*))'
     extern 'void* ABI_Window_new(int width, int height, int style)'
+    extern 'void ABI_STATIC_Window_delete(sf::RenderWindow* self)'
     extern 'void ABI_Window_close(sf::WindowBase* self)'
     extern 'int ABI_Window_isOpen(sf::WindowBase* self)'
     extern 'void ABI_Window_setTitle(sf::WindowBase* self, char* title)'
@@ -69,8 +74,10 @@ module Tgui
     extern 'int ABI_BackendGui_isKeyboardNavigationEnabled(BackendGui* self)'
     extern 'void* ABI_BackendGui_onViewChange(BackendGui* self)'
     extern 'void* ABI_Font_new(char * id)'
+    extern 'void ABI_STATIC_Font_delete(Font* font)'
     extern 'void* ABI_STATIC_Font_getGlobalFont()'
     extern 'void* ABI_Gui_new(sf::RenderWindow* window)'
+    extern 'void ABI_STATIC_Gui_delete(Gui* self)'
     extern 'int ABI_Gui_isActive(Gui* self)'
     extern 'void ABI_Gui_pollEvents(Gui* self)'
     extern 'void ABI_Gui_draw(Gui* self)'
@@ -89,6 +96,7 @@ module Tgui
     extern 'void ABI_Theme_load(std::shared_ptr<Theme>* self, char* primary)'
     extern 'void* ABI_STATIC_Theme_getUnshared(std::shared_ptr<Theme>* pointer)'
     extern 'void* ABI_Texture_new(char* id, int partRectX, int partRectY, int partRectW, int partRectH, int middlePartX, int middlePartY, int middlePartW, int middlePartH, int smooth)'
+    extern 'void ABI_STATIC_Texture_delete(Texture* texture)'
     extern 'void* ABI_Texture_getId(Texture* self)'
     extern 'void* ABI_Texture_getImageSize(Texture* self)'
     extern 'void* ABI_Texture_getPartRect(Texture* self)'
@@ -900,11 +908,14 @@ module Tgui
   end
 
   class Util
-    def self._abi_free(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Util_free(*a); end
+    def self._abi_delete_vector2f(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Util_deleteVector2f(*a); end
+    def self._abi_delete_vector2i(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Util_deleteVector2i(*a); end
+    def self._abi_delete_u_int_rect(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Util_deleteUIntRect(*a); end
   end
 
   class Color
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Color_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Color_delete(*a); end
     def _abi_get_red(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_red(@pointer, *a); end
     def _abi_get_green(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_green(@pointer, *a); end
     def _abi_get_blue(*a);    Abi.call_arg_map! a; Abi.ABI_Color_get_blue(@pointer, *a); end
@@ -914,6 +925,7 @@ module Tgui
 
   class Outline
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Outline_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Outline_delete(*a); end
     def _abi_get_left(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getLeft(@pointer, *a); end
     def _abi_get_right(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getRight(@pointer, *a); end
     def _abi_get_top(*a);    Abi.call_arg_map! a; Abi.ABI_Outline_getTop(@pointer, *a); end
@@ -994,6 +1006,7 @@ module Tgui
 
   class Window
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Window_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Window_delete(*a); end
     def _abi_close(*a);    Abi.call_arg_map! a; Abi.ABI_Window_close(@pointer, *a); end
     def _abi_is_open(*a);    Abi.call_arg_map! a; Abi.ABI_Window_isOpen(@pointer, *a); end
     def _abi_set_title(*a);    Abi.call_arg_map! a; Abi.ABI_Window_setTitle(@pointer, *a); end
@@ -1032,11 +1045,13 @@ module Tgui
 
   class Font
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Font_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Font_delete(*a); end
     def self._abi_get_global_font(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Font_getGlobalFont(*a); end
   end
 
   class Gui
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Gui_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Gui_delete(*a); end
     def _abi_is_active(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_isActive(@pointer, *a); end
     def _abi_poll_events(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_pollEvents(@pointer, *a); end
     def _abi_draw(*a);    Abi.call_arg_map! a; Abi.ABI_Gui_draw(@pointer, *a); end
@@ -1061,6 +1076,7 @@ module Tgui
 
   class Texture
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Texture_new(*a)); end
+    def self._abi_delete(*a);    Abi.call_arg_map! a; Abi.ABI_STATIC_Texture_delete(*a); end
     def _abi_get_id(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getId(@pointer, *a); end
     def _abi_get_image_size(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getImageSize(@pointer, *a); end
     def _abi_get_part_rect(*a);    Abi.call_arg_map! a; Abi.ABI_Texture_getPartRect(@pointer, *a); end

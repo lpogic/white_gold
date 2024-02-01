@@ -3,7 +3,9 @@ require_relative '../abi/extern_object'
 module Tgui
   class Util < ExternObject
 
-    abi_static :free
+    abi_static :delete_vector2f
+    abi_static :delete_vector2i
+    abi_static :delete_u_int_rect
 
     def self.expand_path path, exist: true
       if !path.match?(/^\w:\//) # TODO UNIX

@@ -29,7 +29,7 @@ module Tgui
       'float y'
     ]
 
-    Vector2u = struct [
+    Vector2i = struct [
       'int x',
       'int y'
     ]
@@ -43,7 +43,7 @@ module Tgui
   end
 
   Vector2f = Abi::Vector2f
-  Vector2u = Abi::Vector2u
+  Vector2i = Abi::Vector2i
   UIntRect = Abi::UIntRect
 end
 
@@ -85,11 +85,6 @@ require_relative 'convention/container_widgets'
 require_relative 'convention/theme_attributes'
 
 class ExternObject
-  class << self
-    def finalizer pointer
-      Tgui::Util.free(pointer)
-    end
-  end
 
   abi_packer Object do |o|
     o = o.first if o.is_a? Array
@@ -178,7 +173,7 @@ class ExternObject
     [abi_pack_float(x), abi_pack_float(y)]
   end
 
-  abi_packer Tgui::Abi::Vector2u do |*arg|
+  abi_packer Tgui::Abi::Vector2i do |*arg|
     case arg.size
     when 1
       a = arg.first
@@ -234,7 +229,7 @@ class ExternObject
   vector2f_unpacker = proc do |o|
     v = Tgui::Vector2f.new o
     r = [v.x, v.y]
-    Tgui::Util.free(o)
+    Tgui::Util.delete_vector2f(o)
     r
   end
 
@@ -244,17 +239,17 @@ class ExternObject
 
   abi_unpacker Tgui::Vector2f, &vector2f_unpacker
 
-  abi_unpacker Tgui::Vector2u do |o|
-    v = Tgui::Vector2u.new o
+  abi_unpacker Tgui::Vector2i do |o|
+    v = Tgui::Vector2i.new o
     r = [v.x, v.y]
-    Tgui::Util.free(o)
+    Tgui::Util.delete_vector2i(o)
     r
   end
 
   abi_unpacker Tgui::UIntRect do |o|
     v = Tgui::UIntRect.new o
     r = [v.left, v.top, v.width, v.height]
-    Tgui::Util.free(o)
+    Tgui::Util.delete_u_int_rect(o)
     r
   end
 

@@ -24,7 +24,7 @@ class WhiteGold
       window_size = nil
     end
     window_size ||= [800, 600]
-    @window = Window.new *eo.abi_pack(Vector2u, *window_size), *eo.abi_pack(ExternObject::WindowStyle, *(window_style || :default))
+    @window = Window.new *eo.abi_pack(Vector2i, *window_size), *eo.abi_pack(ExternObject::WindowStyle, *(window_style || :default))
     @gui = Gui.new window
     @preserved_pages = {}
     Theme.default = theme if theme

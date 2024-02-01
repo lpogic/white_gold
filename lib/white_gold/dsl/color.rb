@@ -14,6 +14,10 @@ module Tgui
       transparent: [255, 255, 255, 0]
     }
 
+    def self.finalizer pointer
+      _abi_delete pointer
+    end
+
     def self.from *arg
       case arg.size
       when 1

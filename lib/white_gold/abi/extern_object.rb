@@ -14,6 +14,7 @@ class ExternObject
       cl = self.class
       while !cl.respond_to?(:finalizer)
         cl = cl.superclass
+        raise "Undefined finalizer for #{self.class}" if cl == ExternObject
       end
       ObjectSpace.define_finalizer(self, cl.proc.finalizer(pointer))
     end

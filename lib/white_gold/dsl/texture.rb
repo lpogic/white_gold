@@ -3,6 +3,11 @@ require_relative 'color'
 
 module Tgui
   class Texture < ExternObject
+
+    def self.finalizer pointer
+      _abi_delete pointer
+    end
+
     def self.from *arg
       case arg.size
       when 1
@@ -33,7 +38,7 @@ module Tgui
     end
 
     abi_def :id, :get_, nil => String
-    abi_def :image_size, :get_, nil => Vector2u
+    abi_def :image_size, :get_, nil => Vector2i
     abi_def :part_rect, :get_, nil => UIntRect
     abi_def :smooth?, nil => Boolean
     abi_attr :color, Color
