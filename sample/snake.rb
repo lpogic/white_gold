@@ -1,7 +1,7 @@
 $window_style = [:titlebar, :close]
+$window_size = [799, 599]
 require 'white_gold'
 
-window.size = [799, 599]
 gui.tab_focus_enabled! false
 
 theme! do
@@ -150,7 +150,7 @@ class GamePage < Page
 
     # Pause the game if gui lost focus
     gui.on_unfocus! do
-      @timer.cancel
+      @timer&.cancel
     end
     gui.on_focus! do
       @timer = timer 40, &step if @timer

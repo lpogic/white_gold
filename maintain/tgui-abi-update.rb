@@ -76,4 +76,5 @@ loader_file.write "end\n"
 loader_file.close
 
 ## copy generated shared library
-FileUtils.cp TGUI_COMPILED_BIN, TGUI_TARGET_BIN
+bin = Dir[TGUI_COMPILED_BIN].max
+FileUtils.cp bin, TGUI_TARGET_BIN
