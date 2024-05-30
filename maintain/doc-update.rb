@@ -15,7 +15,7 @@ def public_api_instance_methods type, exlude = []
   methods = type.instance_methods.reject do |m| 
     m =~ /^abi_|_abi_|api_child|self_/
   end - exlude
-  methods.map{|m| m =~ /^api_bang_(.*)/ ? "#{$1}!" : m.to_s }.sort
+  methods.map{|m| m =~ /^extree_branch_(.*)/ ? "#{$1}!" : m.to_s }.sort
 end
 
 def base_dir
