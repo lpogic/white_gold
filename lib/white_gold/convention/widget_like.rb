@@ -1,9 +1,6 @@
-require_relative 'bang_def'
-require_relative 'bang_nest'
 
 class WidgetLike
-  extend BangDef
-  include BangNest
+  include Extree
 
   class << self
     def abi_def name, original_name = nil, id: false, **na

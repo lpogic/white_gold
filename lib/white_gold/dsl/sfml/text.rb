@@ -4,7 +4,7 @@ require_relative '../color'
 
 module Tgui
   class Text < ExternObject
-    include BangNest
+    include Extree
 
     abi_attr :string, String
     abi_attr :font, Font

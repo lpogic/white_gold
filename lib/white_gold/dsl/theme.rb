@@ -1,11 +1,10 @@
 require 'tempfile'
 require_relative '../abi/extern_object'
-require_relative '../convention/bang_nest'
 require_relative '../convention/theme/theme_attributed'
 
 module Tgui
   class Theme < ExternObject
-    include BangNest
+    include Extree
     extend ThemeAttributed
     
     class << self

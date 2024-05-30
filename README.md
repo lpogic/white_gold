@@ -1,14 +1,11 @@
-
-White Gold
+white_gold - TGUI based Ruby gem for quick native application developing
 ===
 
 Ruby gem for building pure ruby graphical user interface.<br>
 Uses [TGUI](https://tgui.eu/) & [SFML](https://www.sfml-dev.org/) as a backend.<br>
-Dedicated to creating single-file applications and learning programming.
+Dedicated to creating simple applications and learning programming.
 
-Taste
----
-
+### 1. Taste
 ```RUBY
 require 'white_gold'
 
@@ -27,6 +24,7 @@ button! text: "Then press the button", position: [200, 250] do
   end
 end
 ```
+
 ### Output:<br>
 <img src="./.github/img/screen_1.PNG" width="30%">   <img src="./.github/img/screen_2.PNG" width="30%">
 
@@ -39,7 +37,7 @@ Requirements
 - Ruby >= 3.2.2
 - Fiddle >= 1.1.1
 
-Binaries for Windows and Linux os are bundled with the gem.
+Binaries for Windows and Linux are bundled with the gem.
 
 Installation
 ---
@@ -52,11 +50,10 @@ gem install white_gold
 git clone https://github.com/lpogic/white_gold
 cd white_gold
 gem build white_gold.gemspec
-gem install white_gold-0.0.4.gem
+gem install white_gold-0.1.0.gem
 ```
 
-Basic usage
----
+### 2. Basic usage
 ```RUBY
 require 'white_gold'
 
@@ -67,8 +64,7 @@ def exit
 end
 ```
 
-Advanced usage
----
+### 3. Advanced usage
 ```RUBY
 require 'white_gold/master'
 
@@ -92,12 +88,13 @@ end
 WhiteGold.new.run FirstPage
 ```
 
+
 Check out [documentation](https://github.com/lpogic/white_gold/tree/master/doc/wiki) for more info.
 
 Status
 ---
-A hobby project maintained by one person.
+A hobby project.
 
 Authors
 ---
-Łukasz Pomietło(oficjalnyadreslukasza@gmail.com)
+- Łukasz Pomietło (oficjalnyadreslukasza@gmail.com)

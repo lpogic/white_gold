@@ -24,14 +24,14 @@ class Page < Tgui::Panel
 
   def respond_to? name
     super || 
-    (name.end_with?("!") && bang_respond_to?(name[...-1])) ||
+    (name.end_with?("!") && extree_respond_to?(name[...-1])) ||
     @tgui.gui.respond_to?(name) ||
     @tgui.window.respond_to?(name)
   end
 
   def method_missing name, *a, **na, &b
     if name.end_with? "!"
-      bang_method_missing name[...-1], *a, **na, &b
+      extree_method_missing name[...-1], *a, **na, &b
     elsif @tgui.gui.respond_to? name
       @tgui.gui.send name, *a, **na, &b
     elsif @tgui.window.respond_to? name
@@ -52,12 +52,16 @@ class Page < Tgui::Panel
     @tgui.next_page_id = page
   end
 
-  def job **na, &b
-    @tgui.job **na, &b
+  def job *a, **na, &b
+    @tgui.job *a, **na, &b
   end
 
   def timer *a, **na, &b
     @tgui.timer *a, **na, &b
+  end
+
+  def after *a, **na, &b
+    @tgui.after *a, **na, &b
   end
 
   def gui

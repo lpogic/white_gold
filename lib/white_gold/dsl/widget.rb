@@ -1,5 +1,4 @@
 require_relative '../abi/extern_object'
-require_relative '../convention/bang_nest'
 require_relative '../convention/unit'
 require_relative '../convention/widget_like'
 require_relative '../convention/api_child'
@@ -15,8 +14,7 @@ require_relative 'tool_tip'
 
 module Tgui
   class Widget < ExternObject
-    include BangNest
-    extend BangDef
+    include Extree
 
     class Theme < ThemeComponent
     
@@ -59,9 +57,9 @@ module Tgui
     def theme=(theme)
       case theme
       when Hash
-        api_bang_theme **theme
+        send! :theme, **theme
       when Proc
-        api_bang_theme &theme
+        send! :theme, &theme
       else
         page.custom_renderers[self] = theme
         self_set_renderer theme
@@ -73,6 +71,9 @@ module Tgui
     abi_attr :focused?
     def! :focus do |focus = VOID|
       self.focused = focus
+    end
+    def! :unfocus do
+      self.focused = false
     end
     abi_attr :focusable?
     abi_signal :on_position_change, Tgui::SignalVector2f
@@ -123,12 +124,13 @@ module Tgui
     abi_attr :mouse_cursor, CursorType
     abi_def :draggable?, :is_widget_, nil => Boolean
     abi_def :mouse_down?, nil => Boolean
+    abi_attr :ignore_mouse_events?, Boolean, :get_
 
     abi_enum "ShowEffectType", :fade, :scale, :slide_to_right, :slide_to_left, :slide_to_bottom,
     :slide_to_top, slide_from_left: :slide_to_right, slide_from_right: :slide_to_left,
     slide_from_top: :slide_to_bottom, slide_from_bottom: :slide_to_top
 
-    def visible=(a)
+    def visible=(a = true)
       if a.is_a? Array
         if a[0]
           show *a[1..]
@@ -273,7 +275,7 @@ module Tgui
     end
 
     def! :messagebox do |*a, **na, &b|
-      page.api_bang_messagebox *a, **na, &b
+      page.send! :messagebox, *a, **na, &b
     end
 
     def! :msg do |text, **buttons|
@@ -285,7 +287,7 @@ module Tgui
         end
         [k, procedure]
       end
-      page.api_bang_messagebox text:, position: :center, label_alignment: :center, buttons: buttons
+      page.send! :messagebox, text:, position: :center, label_alignment: :center, buttons: buttons
     end
 
     def! :page do |*a, **na, &b|

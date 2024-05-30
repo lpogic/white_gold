@@ -14,40 +14,44 @@ module Tgui
       transparent: [255, 255, 255, 0]
     }
 
-    def self.finalizer pointer
-      _abi_delete pointer
-    end
-
-    def self.from *arg
-      case arg.size
-      when 1
-        arg = arg.first
-        case arg
-        when Color
-          return arg
-        when String
-          r, g, b, a = *tones_from_string(arg)
-        when :random
-          r, g, b = 5.times.map{ rand 255 }
-          a = 255
-        when Symbol
-          r, g, b, a = *PREDEFINED_COLORS[arg]
-        when Numeric
-          r = g = b = arg
-          a = 255
-        else raise "Unsupported argument #{arg} #{arg.class}"
-        end
-      when 2
-        r = g = b = arg[0]
-        a = arg[1]
-      when 3
-        r, g, b = *arg
-        a = 255
-      when 4
-        r, g, b, a = *arg
-      else raise "Unsupported argument #{arg}"
+    class << self
+      def finalizer pointer
+        _abi_delete pointer
       end
-      Color.new r, g, b, a
+
+      def from *arg
+        case arg.size
+        when 1
+          arg = arg.first
+          case arg
+          when Color
+            return arg
+          when String
+            r, g, b, a = *tones_from_string(arg)
+          when :random
+            r, g, b = 5.times.map{ rand 255 }
+            a = 255
+          when Symbol
+            r, g, b, a = *PREDEFINED_COLORS[arg]
+          when Numeric
+            r = g = b = arg
+            a = 255
+          else raise "Unsupported argument #{arg} #{arg.class}"
+          end
+        when 2
+          r = g = b = arg[0]
+          a = arg[1]
+        when 3
+          r, g, b = *arg
+          a = 255
+        when 4
+          r, g, b, a = *arg
+        else raise "Unsupported argument #{arg}"
+        end
+        Color.new r, g, b, a
+      end
+
+      alias_method :[], :from
     end
 
     abi_def :red, :get_, nil => Integer

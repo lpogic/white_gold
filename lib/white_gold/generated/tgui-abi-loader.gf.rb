@@ -73,6 +73,8 @@ module Tgui
     extern 'void ABI_BackendGui_setKeyboardNavigationEnabled(BackendGui* self, int enabled)'
     extern 'int ABI_BackendGui_isKeyboardNavigationEnabled(BackendGui* self)'
     extern 'void* ABI_BackendGui_onViewChange(BackendGui* self)'
+    extern 'void* ABI_BackendGui_onWindowFocus(BackendGui* self)'
+    extern 'void* ABI_BackendGui_onWindowUnfocus(BackendGui* self)'
     extern 'void* ABI_Font_new(char * id)'
     extern 'void ABI_STATIC_Font_delete(Font* font)'
     extern 'void* ABI_STATIC_Font_getGlobalFont()'
@@ -158,6 +160,8 @@ module Tgui
     extern 'void ABI_Widget_setAutoLayout(Widget::Ptr* self, int autoLayout)'
     extern 'int ABI_Widget_getAutoLayout(Widget::Ptr* self)'
     extern 'void* ABI_Widget_getWidgetName(Widget::Ptr* self)'
+    extern 'void ABI_Widget_setIgnoreMouseEvents(Widget::Ptr* self, int ignore)'
+    extern 'int ABI_Widget_getIgnoreMouseEvents(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onPositionChange(Widget::Ptr* self)'
     extern 'void* ABI_Widget_onSizeChange(Widget::Ptr* self)'
     extern 'void ABI_Widget_setColorRendererProperty(Widget::Ptr* self, char* property, Color* value)'
@@ -211,7 +215,7 @@ module Tgui
     extern 'unsigned int ABI_EditBox_getMaximumCharacters(EditBox::Ptr* self)'
     extern 'void ABI_EditBox_setAlignment(EditBox::Ptr* self, int alignment)'
     extern 'int ABI_EditBox_getAlignment(EditBox::Ptr* self)'
-    extern 'void ABI_EditBox_limitTextWidth(EditBox::Ptr* self, int limit)'
+    extern 'void ABI_EditBox_setTextWidthLimited(EditBox::Ptr* self, int limit)'
     extern 'int ABI_EditBox_isTextWidthLimited(EditBox::Ptr* self)'
     extern 'void ABI_EditBox_setReadOnly(EditBox::Ptr* self, int read_only)'
     extern 'int ABI_EditBox_isReadOnly(EditBox::Ptr* self)'
@@ -238,8 +242,6 @@ module Tgui
     extern 'int ABI_Label_getAutoSize(Label::Ptr* self)'
     extern 'void ABI_Label_setMaximumTextWidth(Label::Ptr* self, float maximumWidth)'
     extern 'float ABI_Label_getMaximumTextWidth(Label::Ptr* self)'
-    extern 'void ABI_Label_ignoreMouseEvents(Label::Ptr* self, int ignore)'
-    extern 'int ABI_Label_ignoringMouseEvents(Label::Ptr* self)'
     extern 'void* ABI_RadioButton_new()'
     extern 'void ABI_RadioButton_setText(RadioButton::Ptr* self, char* text)'
     extern 'void* ABI_RadioButton_getText(RadioButton::Ptr* self)'
@@ -325,7 +327,7 @@ module Tgui
     extern 'void ABI_ChildWindow_setPositionLocked(ChildWindow::Ptr* self, int positionLocked)'
     extern 'int ABI_ChildWindow_isPositionLocked(ChildWindow::Ptr* self)'
     extern 'void ABI_ChildWindow_setKeepInParent(ChildWindow::Ptr* self, int enabled)'
-    extern 'int ABI_ChildWindow_isKeptInParent(ChildWindow::Ptr* self)'
+    extern 'int ABI_ChildWindow_getKeepInParent(ChildWindow::Ptr* self)'
     extern 'void* ABI_ChildWindow_onMousePress(ChildWindow::Ptr* self)'
     extern 'void* ABI_ChildWindow_onClose(ChildWindow::Ptr* self)'
     extern 'void* ABI_ChildWindow_onMinimize(ChildWindow::Ptr* self)'
@@ -565,8 +567,6 @@ module Tgui
     extern 'int ABI_MessageBox_getButtonAlignment(MessageBox::Ptr* self)'
     extern 'void* ABI_MessageBox_onButtonPress(MessageBox::Ptr* self)'
     extern 'void* ABI_Picture_new(Texture* texture, int transparent)'
-    extern 'void ABI_Picture_ignoreMouseEvents(Picture::Ptr* self, int ignore)'
-    extern 'int ABI_Picture_isIgnoringMouseEvents(Picture::Ptr* self)'
     extern 'void* ABI_Picture_onDoubleClick(Picture::Ptr* self)'
     extern 'void* ABI_MenuBar_new()'
     extern 'void ABI_MenuBar_addMenu(MenuBar::Ptr* self, char* text)'
@@ -1041,6 +1041,8 @@ module Tgui
     def _abi_set_keyboard_navigation_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_setKeyboardNavigationEnabled(@pointer, *a); end
     def _abi_is_keyboard_navigation_enabled(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_isKeyboardNavigationEnabled(@pointer, *a); end
     def _abi_on_view_change(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_onViewChange(@pointer, *a); end
+    def _abi_on_window_focus(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_onWindowFocus(@pointer, *a); end
+    def _abi_on_window_unfocus(*a);    Abi.call_arg_map! a; Abi.ABI_BackendGui_onWindowUnfocus(@pointer, *a); end
   end
 
   class Font
@@ -1141,6 +1143,8 @@ module Tgui
     def _abi_set_auto_layout(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setAutoLayout(@pointer, *a); end
     def _abi_get_auto_layout(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getAutoLayout(@pointer, *a); end
     def _abi_get_widget_name(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getWidgetName(@pointer, *a); end
+    def _abi_set_ignore_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setIgnoreMouseEvents(@pointer, *a); end
+    def _abi_get_ignore_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_getIgnoreMouseEvents(@pointer, *a); end
     def _abi_on_position_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onPositionChange(@pointer, *a); end
     def _abi_on_size_change(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_onSizeChange(@pointer, *a); end
     def _abi_set_color_renderer_property(*a);    Abi.call_arg_map! a; Abi.ABI_Widget_setColorRendererProperty(@pointer, *a); end
@@ -1209,7 +1213,7 @@ module Tgui
     def _abi_get_maximum_characters(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getMaximumCharacters(@pointer, *a); end
     def _abi_set_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setAlignment(@pointer, *a); end
     def _abi_get_alignment(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_getAlignment(@pointer, *a); end
-    def _abi_limit_text_width(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_limitTextWidth(@pointer, *a); end
+    def _abi_set_text_width_limited(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setTextWidthLimited(@pointer, *a); end
     def _abi_is_text_width_limited(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isTextWidthLimited(@pointer, *a); end
     def _abi_set_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_setReadOnly(@pointer, *a); end
     def _abi_is_read_only(*a);    Abi.call_arg_map! a; Abi.ABI_EditBox_isReadOnly(@pointer, *a); end
@@ -1239,8 +1243,6 @@ module Tgui
     def _abi_get_auto_size(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getAutoSize(@pointer, *a); end
     def _abi_set_maximum_text_width(*a);    Abi.call_arg_map! a; Abi.ABI_Label_setMaximumTextWidth(@pointer, *a); end
     def _abi_get_maximum_text_width(*a);    Abi.call_arg_map! a; Abi.ABI_Label_getMaximumTextWidth(@pointer, *a); end
-    def _abi_ignore_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Label_ignoreMouseEvents(@pointer, *a); end
-    def _abi_ignoring_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Label_ignoringMouseEvents(@pointer, *a); end
   end
 
   class RadioButton
@@ -1344,7 +1346,7 @@ module Tgui
     def _abi_set_position_locked(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setPositionLocked(@pointer, *a); end
     def _abi_is_position_locked(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isPositionLocked(@pointer, *a); end
     def _abi_set_keep_in_parent(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_setKeepInParent(@pointer, *a); end
-    def _abi_is_kept_in_parent(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_isKeptInParent(@pointer, *a); end
+    def _abi_get_keep_in_parent(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_getKeepInParent(@pointer, *a); end
     def _abi_on_mouse_press(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMousePress(@pointer, *a); end
     def _abi_on_close(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onClose(@pointer, *a); end
     def _abi_on_minimize(*a);    Abi.call_arg_map! a; Abi.ABI_ChildWindow_onMinimize(@pointer, *a); end
@@ -1635,8 +1637,6 @@ module Tgui
 
   class Picture
     def initialize(*a, pointer: nil);    Abi.call_arg_map! a; super(pointer: pointer || Abi.ABI_Picture_new(*a)); end
-    def _abi_ignore_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_ignoreMouseEvents(@pointer, *a); end
-    def _abi_is_ignoring_mouse_events(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_isIgnoringMouseEvents(@pointer, *a); end
     def _abi_on_double_click(*a);    Abi.call_arg_map! a; Abi.ABI_Picture_onDoubleClick(@pointer, *a); end
   end
 

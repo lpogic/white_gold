@@ -1,9 +1,8 @@
 require_relative '../abi/extern_object'
-require_relative '../convention/bang_nest'
 
 module Tgui
   class Window < ExternObject
-    include BangNest
+    include Extree
 
     def self.finalizer(pointer)
       _abi_delete pointer

@@ -1,15 +1,12 @@
-#{ require './lib/white_gold/version.rb'; nil }
-White Gold
+#| require './lib/white_gold/version.rb'
+#{ gemspec.name }#{ " - #{ gemspec.summary }" if gemspec.summary }
 ===
 
 Ruby gem for building pure ruby graphical user interface.<br>
 Uses [TGUI](https://tgui.eu/) & [SFML](https://www.sfml-dev.org/) as a backend.<br>
-Dedicated to creating single-file applications and learning programming.
+Dedicated to creating simple applications and learning programming.
 
-Taste
----
-
-#[sample/readme/taste.rb]
+#{ sample.call "Taste", "sample/readme/taste.rb" }
 ### Output:<br>
 <img src="./.github/img/screen_1.PNG" width="30%">   <img src="./.github/img/screen_2.PNG" width="30%">
 
@@ -22,13 +19,13 @@ Requirements
 - Ruby >= 3.2.2
 - Fiddle >= 1.1.1
 
-Binaries for Windows and Linux os are bundled with the gem.
+Binaries for Windows and Linux are bundled with the gem.
 
 Installation
 ---
 1) From official
 ```
-gem install white_gold
+gem install #{ gemspec.name }
 ```
 2) From source
 ```
@@ -38,20 +35,15 @@ gem build white_gold.gemspec
 gem install white_gold-#{ WhiteGold::VERSION }.gem
 ```
 
-Basic usage
----
-#[sample/readme/basic.rb]
-
-Advanced usage
----
-#[sample/readme/advanced.rb]
+#{ sample.call "Basic usage", "sample/readme/basic.rb" }
+#{ sample.call "Advanced usage", "sample/readme/advanced.rb" }
 
 Check out [documentation](https://github.com/lpogic/white_gold/tree/master/doc/wiki) for more info.
 
 Status
 ---
-A hobby project maintained by one person.
+A hobby project.
 
 Authors
 ---
-Łukasz Pomietło(oficjalnyadreslukasza@gmail.com)
+#{ gemspec.authors.zip(Array(gemspec.email)).map{ "- #{_1} (#{_2})" }.join("\n") }

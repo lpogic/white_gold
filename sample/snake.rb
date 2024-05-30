@@ -1,12 +1,21 @@
 $window_style = [:titlebar, :close]
 require 'white_gold'
 
+window.size = [799, 599]
+gui.tab_focus_enabled! false
+
+theme! do
+  label! do
+    text_color! :white
+    background_color! 10, 10, 10, 10
+  end
+end
 
 title! "Snake"
 SQUARE_SIZE = 25
 
 class Snake
-  def initialize head = [5, 10], tail = [:d, :d]
+  def initialize head = [5, 10], tail = [:d, :d, :d, :d]
     @head = head
     @tail = tail
     @alive = true
@@ -76,7 +85,7 @@ class GamePage < Page
     @static_canvas = canvas!
     @dynamic_canvas = canvas!
 
-    @grid = window.size.map{ (_1 / SQUARE_SIZE).floor - 1 }
+    @grid = window.size.map{ (_1 / SQUARE_SIZE).floor }
     @snake = Snake.new
     @food = generate_food @grid, @snake.coordinates(@grid)
 
@@ -89,9 +98,17 @@ class GamePage < Page
       end
     end
 
-    @game_over = label! position: :center, text_size: 40, text: "GAME OVER", alignment: :center, visible: false
+    @dialog = label! position: :center, text_size: 40, alignment: :center, text: <<~TEXT.chomp
+      ~Snake~
 
-    @timer = timer 30, repeat: true do
+      [←, ↑, →, ↓]: control the snake
+            [Space]: restart the game
+              [Esc]: close the game
+
+      Press [SPACE] to start
+    TEXT
+
+    step = proc do
       @snake.step @last_dir_key, @grid, @food
       snake_crd = @snake.coordinates @grid
       @food = generate_food @grid, snake_crd if snake_crd.include? @food
@@ -104,10 +121,13 @@ class GamePage < Page
         rectangle! position: [@food.x * SQUARE_SIZE, @food.y * SQUARE_SIZE], size: SQUARE_SIZE - 1, color: :green
       end
       if !@snake.alive?
-        @game_over.text! "GAME OVER\nscore: #{snake_crd.size - 3}"
-        @game_over.visible! true
+        @timer.cancel
+        @dialog.text! "GAME OVER\nscore: #{snake_crd.size - 3}"
+        @dialog.visible! true
       end
     end
+
+    step.call
 
     @kc = keyboard_control! do
       on_key! :w, :s, :a, :d do |key|
@@ -115,41 +135,33 @@ class GamePage < Page
       end
       on_key! :up, :down, :left, :right do |key|
         @last_dir_key = ARROW_KEY_MAP[key]
-        @timer.finish
       end
       on_key! :escape do
         window.close!
       end
       on_key! :space do
-        @game_over.visible! false
+        @dialog.visible! false
         @snake = Snake.new
-        @food = generate_food @grid, @snake.coordinates(@grid)  
+        @last_dir_key = :d
+        @timer&.cancel
+        @timer = timer 40, &step
       end
     end
 
-    @dynamic_canvas.on_focus! do
-      @kc.focus!
+    # Pause the game if gui lost focus
+    gui.on_unfocus! do
+      @timer.cancel
     end
-    on_focus! do
-      @kc.focus!
+    gui.on_focus! do
+      @timer = timer 40, &step if @timer
     end
-  end
-end
-
-def intro
-  label! position: :center, text_size: 40, alignment: :center, text: <<-TEXT
-    Snake Game
-    arrows - control the snake
-    escape - exit
-    space - restart the game
-    Press SPACE to start
-  TEXT
-
-  keyboard_control! do
-    on_key! :space do
-      go GamePage
+    # Keep focus on KeyboardControl
+    @kc.on_unfocus! do
+      after do
+        @kc.focus!
+      end
     end
   end
 end
 
-go :intro
+go GamePage

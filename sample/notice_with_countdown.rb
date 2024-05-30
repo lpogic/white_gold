@@ -1,5 +1,6 @@
 $window_style = [:none, :topmost]
-require 'white_gold'
+# require 'white_gold'
+require_relative "../lib/white_gold"
 
 window.position! *gui.screen_size.then{ [_1[0] - 346, _1[1] - 250] }
 window.size! 344, 208
@@ -26,13 +27,12 @@ def countdown_label
 end
 
 def countdown_job
-  @seconds = 60
+  @seconds = 5
   job repeat: true do |j|
-    if j.counter > 0
-      sleep 1
-      @seconds -= 1
-    end
-  end.on_done do
+    j << 1
+    sleep 1
+    @seconds -= 1
+  end.tip do
     if @seconds > 0
       @l.text = countdown_label
     else

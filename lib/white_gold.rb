@@ -5,8 +5,7 @@ include Tgui
 @white_gold_instance = WhiteGold.new
 
 class << self 
-  include BangNestedCaller
-  include BangDef
+  include Extree
 
   def go page
     @white_gold_instance.go page.is_a?(Symbol) ? proc{ send(page) } : page
@@ -18,19 +17,20 @@ class << self
 
   def respond_to? name
     super || 
-    (name.end_with?("!") && bang_respond_to?(name[...-1])) ||
+    (name.end_with?("!") && extree_respond_to?(name[...-1])) ||
     @white_gold_instance.page.respond_to?(name)
   end
 
   def method_missing name, *a, **na, &b
     if name.end_with? "!"
-      bang_method_missing name[...-1], *a, **na, &b
+      extree_method_missing name[...-1], *a, **na, &b
     elsif @white_gold_instance.page.respond_to? name
       @white_gold_instance.page.send name, *a, **na, &b
     else super
     end
   end
 end
+extend Extree::Branch
 
 def! :run do |page = nil|
   go page if page
@@ -46,5 +46,5 @@ if $0 != 'irb'
   end
 end
 
-BangNestedCaller.open_scope self
-BangNestedCaller.push self
+Extree::Seed.open_scope self
+Extree::Seed.push self

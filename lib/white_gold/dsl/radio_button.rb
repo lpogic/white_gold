@@ -38,7 +38,7 @@ module Tgui
     abi_attr :text_clickable?
     abi_signal :on_check, Signal
     abi_signal :on_uncheck, Signal
-    abi_signal :on_change, SignalBoolean
+    abi_signal :on_change, SignalBool
 
     def object
       self_object

@@ -1,3 +1,5 @@
+require 'extree'
+require 'procify'
 require_relative 'convention/boolean'
 require_relative 'path/kernel.path'
 require_relative 'path/numeric.path'
@@ -8,10 +10,6 @@ require_relative 'convention/page'
 
 class WhiteGold
   include Tgui
-
-  def [](method_name)
-    method(method_name)
-  end
 
   def fps=(fps)
     @frame_delay = 1.0 / fps
@@ -45,8 +43,8 @@ class WhiteGold
       if @current_page_id != @next_page_id
         if @current_page_id
           page = @preserved_pages[@current_page_id]
-          BangNestedCaller.pop
-          BangNestedCaller.close_scope page
+          Extree::Seed.pop
+          Extree::Seed.close_scope page
           @gui.self_remove page
           page.disconnect
           @preserved_pages.delete(@current_page_id)
@@ -85,8 +83,8 @@ class WhiteGold
     ExternObject.callback_storage = page.widget_callbacks
     ExternObject.global_callback_storage = page.global_callbacks
     ExternObject.data_storage = page.custom_data
-    BangNestedCaller.open_scope page
-    BangNestedCaller.push page
+    Extree::Seed.open_scope page
+    Extree::Seed.push page
   end
 
   attr_accessor :next_page_id
@@ -101,71 +99,86 @@ class WhiteGold
   end
 
   class Job
-    NO_RESULT = Object.new
 
-    def initialize delay:, repeat:, run: true, &b
-      @delay = delay
+    def initialize repeat:, run: true, &b
+      @queue = Thread::Queue.new
+      @mutex = Thread::Mutex.new
       @repeat = repeat
       @job = b
-      @result = NO_RESULT
-      @counter = 0
       self.run if run
     end
 
     def run
-      @thread = Thread.new do
-        sleep(@delay / 1000.0) if @delay
-        @result = @job.(self)
+      if !@thread || !@thread.alive?
+        @thread = Thread.new do
+          loop do
+            last_spin = false
+            @mutex.synchronize do
+              last_spin = !@repeat
+            end
+            @job.call self
+            break if last_spin
+          end
+        end
       end
     end
 
-    def on_done &b
-      @on_done = b
-      b.(@result) if @thread && !@thread.alive?
+    def tip &b
+      @tip = b
+      b.(self) if @thread && !@thread.alive?
       self
     end
 
     def audit
-      if @thread
-        if @thread.alive?
-          return true
-        else
-          @on_done.(@result) if @on_done
-          if @repeat
-            @counter += 1
-            run
-            return true
-          else
-            return false
-          end
-        end
-      else 
-        return !!@job
+      @tip&.call @queue.pop, self if !@queue.empty?
+      @thread ? @thread.alive? : !!@job
+    end
+
+    attr_accessor :queue
+    attr :repeat
+
+    def <<(value)
+      @queue << value
+      self
+    end
+
+    def repeat=(repeat)
+      @mutex.synchronize do
+        @repeat = repeat
       end
     end
 
-    def finish result = NO_RESULT
-      @thread.kill
-      @result = result if result != NO_RESULT
-    end
-
-    attr :counter
-    attr_accessor :repeat
-
     def cancel
-      @thread.kill
+      @thread&.kill
       @thread = @job = nil
     end
   end
 
-  def job delay: nil, repeat: false, &b
-    job = Job.new delay:, repeat:, &b
+  def job repeat: false, run: true, &b
+    job = Job.new repeat:, run:, &b
     @jobs << job
     job
   end
 
-  def timer delay_ = nil, delay: nil, repeat: false, &b
-    job delay: delay || delay_, repeat: do
-    end.on_done &b
+  def after delay = nil, run: true, &b
+    if delay
+      job run: do |j|
+        sleep(delay / 1000.0)
+        j.queue << nil
+      end.tip &b
+    else
+      job(run: false).tip(&b).tap{ _1.queue << nil }
+    end
+  end
+
+  def timer target_pulse_time, run: true, &b
+    nms = nil
+    target_pulse_time /= 1000.0 # ms => s
+    job repeat: true, run: do |j|
+      ms = Time.now
+      nms = (nms || ms) + target_pulse_time
+      j.queue << ms if j.queue.empty?
+      sleep(nms - ms) if nms > ms
+    end.tip &b
   end
 end

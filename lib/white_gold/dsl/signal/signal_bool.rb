@@ -1,13 +1,13 @@
 require_relative 'signal'
 
 module Tgui
-  class SignalBoolean < Signal
+  class SignalBool < Signal
 
     def block_caller &b
       Fiddle::Closure::BlockCaller.new(0, [Fiddle::TYPE_INT]) do |int|
-        b = @widget.abi_unpack Boolean, int
+        bool = @widget.abi_unpack Boolean, int
         @widget.host! do
-          b.(b, @widget)
+          b.(bool, @widget)
         end
       end
     end

@@ -7,7 +7,7 @@ require_relative 'texture_attribute'
 
 module Tgui
   module ThemeAttributed
-    include BangDef
+    include Extree
 
     ATTRIBUTE_TYPES = {
       boolean: BooleanAttribute,

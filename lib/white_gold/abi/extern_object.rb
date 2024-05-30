@@ -1,11 +1,10 @@
-require_relative '../convention/bang_def'
 require_relative 'packer'
 require_relative 'unpacker'
 
 class ExternObject
   extend Packer
   extend Unpacker
-  extend BangDef
+  include Extree
 
   def initialize pointer:, autofree: true
     @pointer = pointer

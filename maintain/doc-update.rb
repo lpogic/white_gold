@@ -1,5 +1,6 @@
+require 'rebus'
 require_relative '../lib/white_gold/master'
-require_relative '../doc/draft/doc'
+gemspec = Gem::Specification.load("./#{Dir["*.gemspec"].first}")
 include Tgui
 
 def write_file filepath, &b
@@ -26,7 +27,7 @@ def update_api_doc type
   file_name = type_name.gsub(/([A-Z])/, '_\1').downcase.delete_prefix("_") + ".md"
   write_file "#{base_dir}/doc/wiki/api/widget/#{file_name}" do |f|
     f << type_name << "\n" << "===" << "\n"
-    public_api_instance_methods(type, ExternObject.instance_methods + BangNest.instance_methods).each do |m|
+    public_api_instance_methods(type, ExternObject.instance_methods + Extree.instance_methods).each do |m|
       f << "- `#" << m << "`"
       doc_method = "doc_#{m}".to_sym
       if type.respond_to? doc_method
@@ -54,22 +55,24 @@ def update_api_doc type
   [type_name, file_name]
 end
 
-def compile_rbmd input_file, output_file
+def compile input_file, output_file, gemspec
+  code = proc do |path|
+    "```RUBY\n" +  File.read("#{base_dir}/#{path}") + "\n```"
+  end
+  sample_index = 1
+  sample = proc do |title, source|
+    result = "### #{sample_index}. #{title}\n#{ code.(source) }\n"
+    sample_index += 1
+    result
+  end
+  base_dir = self.base_dir
+
   write_file output_file do |f|
-    File.foreach input_file do |line|
-      if line =~ /#\[(.*)\]/
-        f << "```RUBY\n"
-        File.foreach "#{base_dir}/#{$1}" do |line|
-          f << line
-        end
-        f << "\n```\n"
-      else
-        f << line.gsub(/\#{.*?}/){|group| eval group[2...-1] }
-      end
+    Rebus.compile_file input_file do |line|
+      f << line << "\n"
     end
   end
 end
-
 
 write_file "#{base_dir}/doc/wiki/api/README.md" do |f|
   f << "Widgets" << "\n" << "===" << "\n"
@@ -81,5 +84,5 @@ write_file "#{base_dir}/doc/wiki/api/README.md" do |f|
   end
 end
 
-compile_rbmd "#{base_dir}/doc/draft/wiki.rbmd", "#{base_dir}/doc/wiki/README.md"
-compile_rbmd "#{base_dir}/doc/draft/readme.rbmd", "#{base_dir}/README.md"
+compile "#{base_dir}/doc/draft/wiki.rbs", "#{base_dir}/doc/wiki/README.md", gemspec
+compile "#{base_dir}/doc/draft/readme.rbs", "#{base_dir}/README.md", gemspec

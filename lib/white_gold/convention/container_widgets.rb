@@ -53,7 +53,7 @@ module Tgui
   end
 
   module WidgetOwner
-    extend BangDef
+    include Extree
 
     def self_child_methods
       ## TO OPTIMIZE
@@ -98,7 +98,7 @@ module Tgui
 
     def! :btn do |text = nil, **na, &on_press|
       text = @@auto_btn_name = @@auto_btn_name.next if !text
-      api_bang_button text:, on_press:, **na
+      send! :button, text:, on_press:, **na
     end
 
     def! :keyboard_control do |*a, focus: true, **na, &b|

@@ -2,7 +2,7 @@ require_relative 'theme_attributed'
 
 module Tgui
   class ThemeComponent
-    include BangNest
+    include Extree
     extend ThemeAttributed
 
     def initialize name, custom_name

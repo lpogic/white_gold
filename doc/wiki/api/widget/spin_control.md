@@ -1,6 +1,6 @@
 SpinControl
 ===
-- `#absolute_position` - () => [float, float] - absolute widget position
+- `#absolute_position`
 - `#auto_layout`
 - `#auto_layout=`
 - `#back`
@@ -9,12 +9,20 @@ SpinControl
 - `#container?`
 - `#decimals`
 - `#decimals=`
-- `#disabled!`
 - `#draggable?`
 - `#enabled=`
 - `#enabled?`
+- `#extree_branch_disabled`
+- `#extree_branch_focus`
+- `#extree_branch_messagebox`
+- `#extree_branch_msg`
+- `#extree_branch_navigation`
+- `#extree_branch_page`
+- `#extree_branch_robot`
+- `#extree_branch_theme`
+- `#extree_branch_tooltip`
+- `#extree_branch_unfocus`
 - `#finish_animations`
-- `#focus!`
 - `#focusable=`
 - `#focusable?`
 - `#focused=`
@@ -24,18 +32,17 @@ SpinControl
 - `#height`
 - `#height=`
 - `#hide`
+- `#ignore_mouse_events=`
+- `#ignore_mouse_events?`
 - `#max`
 - `#max=`
-- `#messagebox!`
 - `#min`
 - `#min=`
 - `#mouse_cursor`
 - `#mouse_cursor=`
 - `#mouse_down?`
 - `#move`
-- `#msg!`
 - `#navigation`
-- `#navigation!`
 - `#on_animation_finish`
 - `#on_animation_finish=`
 - `#on_focus`
@@ -55,12 +62,10 @@ SpinControl
 - `#on_value_change`
 - `#on_value_change=`
 - `#page`
-- `#page!`
 - `#page=`
 - `#position`
 - `#position=`
 - `#resize`
-- `#robot!`
 - `#show`
 - `#size`
 - `#size=`
@@ -68,9 +73,7 @@ SpinControl
 - `#step=`
 - `#text_size`
 - `#text_size=`
-- `#theme!`
 - `#theme=`
-- `#tooltip!`
 - `#value`
 - `#value=`
 - `#visible=`
@@ -81,10 +84,10 @@ SpinControl
 - `#width=`
 - `#window`
 ## Theme
-- `#opacity!`
-- `#opacity_disabled!`
-- `#text_size!`
-- `#transparent_texture!`
+- `#extree_branch_opacity`
+- `#extree_branch_opacity_disabled`
+- `#extree_branch_text_size`
+- `#extree_branch_transparent_texture`
 ## Robot
 - `#key_press`
 - `#mouse_move`

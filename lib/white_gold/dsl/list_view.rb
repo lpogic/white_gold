@@ -179,11 +179,11 @@ module Tgui
     def grid_lines=(grid_lines)
       case grid_lines
       when Numeric
-        api_bang_grid_lines width: grid_lines
+        send! :grid_lines, width: grid_lines
       when false
-        api_bang_grid_lines horizontal: false, vertical: false
+        send! :grid_lines, horizontal: false, vertical: false
       when Hash
-        api_bang_grid_lines **grid_lines
+        send! :grid_lines, **grid_lines
       end
     end
 
@@ -205,11 +205,11 @@ module Tgui
     def header=(header)
       case header
       when true, false
-        api_bang_header visible: header
+        send! :header, visible: header
       when Hash
-        api_bang_header **header
+        send! :header, **header
       when Proc
-        api_bang_header &header
+        send! :header, &header
       end
     end
 

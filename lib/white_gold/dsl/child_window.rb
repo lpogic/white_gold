@@ -47,7 +47,7 @@ module Tgui
     abi_attr :title_buttons, TitleButtons
     abi_attr :resizable?
     abi_attr :position_locked?
-    abi_attr :keep_in_parent?
+    abi_attr :keep_in_parent?, Boolean, :get_
 
     def close destroy = false
       if destroy
